@@ -1,12 +1,37 @@
 package com.example.searchstudy.util
 
+import android.content.Context
 import android.content.SharedPreferences
+import com.example.searchstudy.network.models.dto.search.SearchData
+import com.google.gson.Gson
 import javax.inject.Inject
 
 class Pref @Inject constructor(private val pref: SharedPreferences) {
+//    private val pref = PreferenceManager.getDefaultSharedPreferences(context)
     //commit() 동기 처리
     //apply() 비동기 처리, 구글 권장
     //확장함수 사용 방법
+
+
+    fun saveSearchList(searchList: MutableList<SearchData>) {
+        val searchListString: String = Gson().toJson(searchList)
+        val editor: SharedPreferences.Editor = pref.edit()
+        editor.putString(Constants.KEY_SEARCH, searchListString)
+        editor.apply()
+    }
+
+    fun getSearchList(): MutableList<SearchData> {
+        var saveSearchList = ArrayList<SearchData>()
+        pref.getString(Constants.KEY_SEARCH, "")?.let {
+            if (it.isNotEmpty()) {
+                saveSearchList = Gson().fromJson(it, Array<SearchData>::class.java)
+                    .toMutableList() as ArrayList<SearchData>
+            }
+        }
+        return saveSearchList
+
+    }
+
     fun putData(key: String, value: Any) {
         when (value) {
             is String -> putString(key, value)

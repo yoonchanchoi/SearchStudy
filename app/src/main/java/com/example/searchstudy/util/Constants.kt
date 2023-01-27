@@ -7,4 +7,7 @@ object Constants {
 
 //    //Intent
 //    const val RECENT_SEARCH_DATA = "recentSearchData"
+
+    //Sharedpreference
+    const val KEY_SEARCH = "key_search"
 }

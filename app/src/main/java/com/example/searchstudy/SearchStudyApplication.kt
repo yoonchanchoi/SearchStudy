@@ -5,9 +5,9 @@ import dagger.hilt.android.HiltAndroidApp
 
 
 @HiltAndroidApp
-class SearchApplication : Application() {
+class SearchStudyApplication : Application() {
     companion object {
-        lateinit var instance: SearchApplication
+        lateinit var instance: SearchStudyApplication
             private set
     }
 
