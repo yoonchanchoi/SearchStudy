@@ -9,12 +9,13 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.searchstudy.databinding.ActivityMainBinding
 import com.example.searchstudy.network.models.dto.search.SearchData
-import com.example.searchstudy.ui.recyclerview.SearchAdapter
-import com.example.searchstudy.ui.recyclerview.SearchRecyclerListener
+import com.example.searchstudy.ui.recyclerview.search.SearchAdapter
+import com.example.searchstudy.ui.recyclerview.search.SearchRecyclerListener
+import com.example.searchstudy.ui.recyclerview.viewpager.ViewpagerFragmentAdapter
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
-import com.example.searchstudy.util.Constants
 import com.example.searchstudy.util.Pref
 import com.example.searchstudy.util.toDateString
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
@@ -44,19 +45,33 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         initListener()
     }
 
+    /**
+     * Data 초기화
+     */
     private fun initData() {
+        //최근 검색어 데이터 가져와서 어댑터에 세팅
         searchDataList = pref.getSearchList() as ArrayList<SearchData>
         searchAdapterSetting(searchDataList)
+        Log.e("cyc", "searchDataList.size-->${searchDataList.size}")
+        Log.e("cyc", "searchAdapter.itemCount()-->${searchAdapter.itemCount}")
+        checkSearchData()
+        viewPagerSetting()
 
     }
 
+    /**
+     * 리스너
+     */
     private fun initListener() {
-
+        //서치뷰 리스너
         binding.svSearch.apply {
             this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(searchText: String?): Boolean {
                     searchText?.let {
                         saveSearchData(it)
+                        searchAdapter.notifyDataSetChanged()
+                        viewModel.searchQury(searchText)
+                        checkSearchData()
                     }
                     return true
                 }
@@ -72,30 +87,41 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
                 when (focus) {
                     true -> {
                         binding.clSearch.visibility = View.VISIBLE
+//                        binding.clSearchResult.visibility = View.INVISIBLE
                     }
                     false -> {
                         binding.clSearch.visibility = View.INVISIBLE
-                        checkSearchData()
+//                        binding.clSearchResult.visibility = View.VISIBLE
                     }
                 }
             }
         }
-        binding.tvDeleteAll.apply {
 
+        binding.tvDeleteAll.setOnClickListener {
+            Log.e("cyc","")
+            searchDataList.clear()
+            pref.clear()
+            searchAdapter.notifyDataSetChanged()
+            checkSearchData()
         }
 
     }
-
+    /**
+     * 최근 검색어에 데이터의 유무에 따른 뷰 보여주기
+     */
     private fun checkSearchData() {
-        if (searchDataList.size>0) {
-            binding.tvSearchEmpty.visibility = View.VISIBLE
-        } else {
+        Log.e("cyc","checkSearchData")
+        if (searchAdapter.itemCount>0) {
             binding.tvSearchEmpty.visibility = View.INVISIBLE
+        } else {
+            binding.tvSearchEmpty.visibility = View.VISIBLE
         }
     }
-
+    /**
+     * 최근 검색어에 저장
+     */
     private fun saveSearchData(searchTerm: String) {
-        var indexListToRemove = ArrayList<Int>()
+        val indexListToRemove = ArrayList<Int>()
 
         this.searchDataList.forEachIndexed { index, searchDataItem ->
 
@@ -118,6 +144,9 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
 //            this.mySearchHistoryRecyclerViewAdapter.notifyDataSetChanged()
     }
 
+    /**
+     * 최근 검색어 어댑터 세팅
+     */
     private fun searchAdapterSetting(searchDataList: ArrayList<SearchData>) {
         searchAdapter = SearchAdapter(this, searchDataList)
         val searchLinearLayoutManager =
@@ -130,15 +159,32 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         }
     }
 
+    /**
+     * 아이템 삭제
+     */
     override fun onItemDelete(position: Int) {
+        Log.e("cyc","onItemDelete")
         searchDataList.removeAt(position)
         pref.saveSearchList(searchDataList)
         searchAdapter.notifyDataSetChanged()
-//        checkSearchData()
+        checkSearchData()
     }
 
+
+    /**
+     * 아이템 클릭
+     */
     override fun onItemClick(position: Int) {
+
     }
+
+   private fun viewPagerSetting(){
+       val tabTitle = listOf<String>("통합","VIEW", "백과사전","이미지")
+       binding.vp2.adapter = ViewpagerFragmentAdapter(this)
+       TabLayoutMediator(binding.tlMenu, binding.vp2){ tab,postion->
+           tab.text = tabTitle[postion]
+       }.attach()
+   }
 
 
 }

@@ -1,4 +1,4 @@
-package com.example.searchstudy.ui.recyclerview
+package com.example.searchstudy.ui.recyclerview.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

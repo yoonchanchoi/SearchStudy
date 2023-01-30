@@ -1,4 +1,4 @@
-package com.example.searchstudy.ui.recyclerview
+package com.example.searchstudy.ui.recyclerview.search
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.RecentSearchRecyclerviewItemBinding
@@ -8,9 +8,9 @@ class SearchViewHolder(private val binding: RecentSearchRecyclerviewItemBinding)
 
 
 
-    fun bind(searchData: SearchData,searchRecyclerListener:SearchRecyclerListener){
+    fun bind(searchData: SearchData,searchRecyclerListener: SearchRecyclerListener){
         binding.tvSearchItemText.text=searchData.searchText
-        binding.tvSearchItemDate.text=searchData.searchText
+        binding.tvSearchItemDate.text=searchData.searchTime
         binding.btnDeletItem.setOnClickListener { searchRecyclerListener.onItemDelete(adapterPosition) }
         binding.clSearchItem.setOnClickListener{ searchRecyclerListener.onItemClick(adapterPosition) }
     }

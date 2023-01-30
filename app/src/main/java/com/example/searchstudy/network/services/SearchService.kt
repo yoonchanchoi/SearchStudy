@@ -1,6 +1,8 @@
 package com.example.searchstudy.network.services
+import com.example.searchstudy.network.models.request.BlogSearch
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface SearchService {
     //나중에 지울것
@@ -12,6 +14,10 @@ interface SearchService {
     //}
 
     //이런 형식을 보내준다. 이걸 다시보면 { "userId": "pmsdev", "password": "open1404!!"} 형식의 직열화된 형식으로 보낸다.
-    @GET("/blog.json")
-    fun searchBlog(): Call<String>
+    @GET("/v1/search/blog.json")
+    fun searchBlog(@Query(value = "query", encoded = true) query: String,
+                   @Query(value = "display") display: Int,
+                   @Query(value = "start") start: Int,
+                   @Query(value = "sort") sort: String
+    ): Call<String>
 }

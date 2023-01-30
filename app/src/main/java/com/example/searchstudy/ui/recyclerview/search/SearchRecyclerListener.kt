@@ -1,4 +1,4 @@
-package com.example.searchstudy.ui.recyclerview
+package com.example.searchstudy.ui.recyclerview.search
 
 interface SearchRecyclerListener {
 

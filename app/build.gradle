@@ -61,7 +61,6 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:2.42"
 
     //---- Network ----
-
     implementation 'com.squareup.okhttp3:okhttp:4.9.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.2'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -71,5 +70,7 @@ dependencies {
     //----Gson----
     implementation 'com.google.code.gson:gson:2.9.1'
 
+    //viewpager
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
 
 }

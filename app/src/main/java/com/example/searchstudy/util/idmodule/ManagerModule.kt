@@ -15,5 +15,5 @@ abstract class ManagerModule {
 
     @Binds
     @Singleton
-    abstract fun bindPmsManager(pmsManagerImpl: SearchManagerImpl): SearchManager
+    abstract fun bindSearchManager(searchManagerImpl: SearchManagerImpl): SearchManager
 }

@@ -20,6 +20,7 @@
         android:id="@+id/cl_search"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,15 +47,16 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_search_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_search_title" />
+
         <TextView
             android:id="@+id/tv_search_empty"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:text="비어 있습니다."
             android:gravity="center"
-            app:layout_constraintStart_toStartOf="parent"
+            android:text="비어 있습니다."
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_search_title"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_search_title" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_search"
@@ -71,7 +73,42 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/clr_BABABA"
-            app:layout_constraintBottom_toBottomOf="@id/rv_search"/>
+            app:layout_constraintBottom_toBottomOf="@id/rv_search" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_search_result"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sv_search">
+
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tl_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabIndicatorColor="@color/clr_24ffffff"
+            app:tabSelectedTextColor="@color/clr_4CAF50" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tl_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
