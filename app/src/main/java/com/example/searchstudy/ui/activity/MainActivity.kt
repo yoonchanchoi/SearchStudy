@@ -50,12 +50,13 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      */
     private fun initData() {
         //최근 검색어 데이터 가져와서 어댑터에 세팅
+        viewPagerSetting()
         searchDataList = pref.getSearchList() as ArrayList<SearchData>
         searchAdapterSetting(searchDataList)
         Log.e("cyc", "searchDataList.size-->${searchDataList.size}")
         Log.e("cyc", "searchAdapter.itemCount()-->${searchAdapter.itemCount}")
         checkSearchData()
-        viewPagerSetting()
+
 
     }
 
@@ -87,6 +88,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
                 when (focus) {
                     true -> {
                         binding.clSearch.visibility = View.VISIBLE
+                        binding.clSearch.bringToFront()
 //                        binding.clSearchResult.visibility = View.INVISIBLE
                     }
                     false -> {
@@ -141,7 +143,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         // 기존 데이터에 덮어쓰기
         pref.saveSearchList(this.searchDataList)
 
-//            this.mySearchHistoryRecyclerViewAdapter.notifyDataSetChanged()
+//            this.mySearchHistoryRecyclerViewAdapter.notifㅅyDataSetChanged()
     }
 
     /**
