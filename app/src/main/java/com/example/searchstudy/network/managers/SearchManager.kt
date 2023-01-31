@@ -1,4 +1,5 @@
 package com.example.searchstudy.network.managers
+
 import com.example.searchstudy.network.models.response.ResultSearchBlog
 import com.example.searchstudy.network.models.response.ResultSearchCafe
 import com.example.searchstudy.network.models.response.ResultSearchDictionary

@@ -8,7 +8,7 @@ import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.searchstudy.databinding.ActivityMainBinding
-import com.example.searchstudy.network.models.dto.search.SearchData
+import com.example.searchstudy.network.models.dto.searchDto.SearchData
 import com.example.searchstudy.ui.recyclerview.search.SearchAdapter
 import com.example.searchstudy.ui.recyclerview.search.SearchRecyclerListener
 import com.example.searchstudy.ui.recyclerview.viewpager.ViewpagerFragmentAdapter
@@ -56,8 +56,6 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         Log.e("cyc", "searchDataList.size-->${searchDataList.size}")
         Log.e("cyc", "searchAdapter.itemCount()-->${searchAdapter.itemCount}")
         checkSearchData()
-
-
     }
 
     /**
@@ -100,7 +98,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         }
 
         binding.tvDeleteAll.setOnClickListener {
-            Log.e("cyc","")
+            Log.e("cyc", "")
             searchDataList.clear()
             pref.clear()
             searchAdapter.notifyDataSetChanged()
@@ -108,17 +106,19 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         }
 
     }
+
     /**
      * 최근 검색어에 데이터의 유무에 따른 뷰 보여주기
      */
     private fun checkSearchData() {
-        Log.e("cyc","checkSearchData")
-        if (searchAdapter.itemCount>0) {
+        Log.e("cyc", "checkSearchData")
+        if (searchAdapter.itemCount > 0) {
             binding.tvSearchEmpty.visibility = View.INVISIBLE
         } else {
             binding.tvSearchEmpty.visibility = View.VISIBLE
         }
     }
+
     /**
      * 최근 검색어에 저장
      */
@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      * 아이템 삭제
      */
     override fun onItemDelete(position: Int) {
-        Log.e("cyc","onItemDelete")
+        Log.e("cyc", "onItemDelete")
         searchDataList.removeAt(position)
         pref.saveSearchList(searchDataList)
         searchAdapter.notifyDataSetChanged()
@@ -180,13 +180,16 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
 
     }
 
-   private fun viewPagerSetting(){
-       val tabTitle = listOf<String>("통합","VIEW", "백과사전","이미지")
-       binding.vp2.adapter = ViewpagerFragmentAdapter(this)
-       TabLayoutMediator(binding.tlMenu, binding.vp2){ tab,postion->
-           tab.text = tabTitle[postion]
-       }.attach()
-   }
+    /**
+     * 뷰페이저 세팅
+     */
+    private fun viewPagerSetting() {
+        val tabTitle = listOf<String>("통합", "VIEW", "백과사전", "이미지")
+        binding.vp2.adapter = ViewpagerFragmentAdapter(this)
+        TabLayoutMediator(binding.tlMenu, binding.vp2) { tab, postion ->
+            tab.text = tabTitle[postion]
+        }.attach()
+    }
 
 
 }

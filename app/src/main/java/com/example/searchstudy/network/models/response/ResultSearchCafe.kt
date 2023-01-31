@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class ResultSearchCafe(
     @SerializedName("lastBuildDate")
     @Expose
-    val lastBuildDate: String="",
+    val lastBuildDate: String = "",
 
     @SerializedName("total")
     @Expose
@@ -22,7 +22,7 @@ data class ResultSearchCafe(
 
     @SerializedName("items")
     @Expose
-    val cafeItem: List<CafeItems>
+    val cafeItem: ArrayList<CafeItems>
 )
 
 data class CafeItems(

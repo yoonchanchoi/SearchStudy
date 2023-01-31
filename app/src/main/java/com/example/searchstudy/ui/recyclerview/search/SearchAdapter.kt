@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.RecentSearchRecyclerviewItemBinding
-import com.example.searchstudy.network.models.dto.search.SearchData
+import com.example.searchstudy.network.models.dto.searchDto.SearchData
 
 class SearchAdapter(private val searchRecyclerListener: SearchRecyclerListener, private val searchData: ArrayList<SearchData>) :  RecyclerView.Adapter<SearchViewHolder>(){
 

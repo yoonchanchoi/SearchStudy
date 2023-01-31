@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.example.searchstudy.R
+import com.example.searchstudy.databinding.FragmentImgBinding
+import com.example.searchstudy.databinding.FragmentViewBinding
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -14,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class ViewFragment : Fragment() {
 
     private val viewModel: MainActivityViewModel by activityViewModels()
+    private lateinit var binding: FragmentViewBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,8 +28,7 @@ class ViewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_view, container, false)
+        binding = FragmentViewBinding.inflate(inflater, container, false)
+        return binding.root
     }
-
-
 }

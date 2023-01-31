@@ -2,7 +2,7 @@ package com.example.searchstudy.ui.recyclerview.search
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.RecentSearchRecyclerviewItemBinding
-import com.example.searchstudy.network.models.dto.search.SearchData
+import com.example.searchstudy.network.models.dto.searchDto.SearchData
 
 class SearchViewHolder(private val binding: RecentSearchRecyclerviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
 

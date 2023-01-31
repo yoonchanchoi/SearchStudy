@@ -1,4 +1,4 @@
-package com.example.searchstudy.network.models.dto.search
+package com.example.searchstudy.network.models.dto.searchDto
 
 data class SearchData(
     val searchText: String = "",

@@ -1,8 +1,7 @@
 package com.example.searchstudy.util
 
-import android.content.Context
 import android.content.SharedPreferences
-import com.example.searchstudy.network.models.dto.search.SearchData
+import com.example.searchstudy.network.models.dto.searchDto.SearchData
 import com.google.gson.Gson
 import javax.inject.Inject
 

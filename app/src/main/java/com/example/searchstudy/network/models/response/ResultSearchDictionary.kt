@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class ResultSearchDictionary(
     @SerializedName("lastBuildDate")
     @Expose
-    val lastBuildDate: String="",
+    val lastBuildDate: String = "",
 
     @SerializedName("total")
     @Expose
@@ -22,7 +22,7 @@ data class ResultSearchDictionary(
 
     @SerializedName("items")
     @Expose
-    val dictionaryItem: List<DictionaryItems>
+    val dictionaryItem: ArrayList<DictionaryItems>
 )
 
 

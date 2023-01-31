@@ -3,10 +3,7 @@ package com.example.searchstudy.ui.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.searchstudy.network.managers.SearchManager
-import com.example.searchstudy.network.models.response.ResultSearchBlog
-import com.example.searchstudy.network.models.response.ResultSearchCafe
-import com.example.searchstudy.network.models.response.ResultSearchDictionary
-import com.example.searchstudy.network.models.response.ResultSearchImg
+import com.example.searchstudy.network.models.response.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,6 +17,11 @@ class MainActivityViewModel @Inject constructor(
 ) : ViewModel() {
 
 
+
+    var blogItemsArraylist = ArrayList<BlogItems>()
+    var cafeItemsArraylist = ArrayList<CafeItems>()
+    var dictionaryItemsArraylist = ArrayList<DictionaryItems>()
+    var imgItemsArraylist = ArrayList<ImgItems>()
 
     /**
      * search
@@ -39,6 +41,7 @@ class MainActivityViewModel @Inject constructor(
                     Log.e("cyc", "통신 성공")
                     response.body()?.let {
                         Log.e("cyc","it.blogItem-->${it.blogItem}")
+                        blogItemsArraylist=it.blogItem
                     }
                 }else{
                     Log.e("cyc", "통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
@@ -62,6 +65,8 @@ class MainActivityViewModel @Inject constructor(
                     Log.e("cyc", "통신 성공")
                     response.body()?.let {
                         Log.e("cyc","it.cafeItem-->${it.cafeItem}")
+                       cafeItemsArraylist=it.cafeItem
+
                     }
                 }else{
                     Log.e("cyc", "통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
@@ -87,7 +92,9 @@ class MainActivityViewModel @Inject constructor(
                 if(response.isSuccessful){
                     Log.e("cyc", "통신 성공")
                     response.body()?.let {
-                        Log.e("cyc","it.dictionaryItem-->${it.dictionaryItem}")
+                        Log.e("cyc","Mainviewmodel___________________it.dictionaryItem-->${it.dictionaryItem}")
+                        dictionaryItemsArraylist=it.dictionaryItem
+
                     }
                 }else{
                     Log.e("cyc", "통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
@@ -114,6 +121,8 @@ class MainActivityViewModel @Inject constructor(
                     Log.e("cyc", "통신 성공")
                     response.body()?.let {
                         Log.e("cyc","it.imgItem-->${it.imgItem}")
+                        imgItemsArraylist=it.imgItem
+
                     }
                 }else{
                     Log.e("cyc", "통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")

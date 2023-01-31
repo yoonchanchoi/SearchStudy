@@ -7,7 +7,7 @@ data class ResultSearchBlog(
 
     @SerializedName("lastBuildDate")
     @Expose
-    val lastBuildDate: String="",
+    val lastBuildDate: String = "",
 
     @SerializedName("total")
     @Expose
@@ -23,7 +23,7 @@ data class ResultSearchBlog(
 
     @SerializedName("items")
     @Expose
-    val blogItem: List<BlogItems>
+    val blogItem: ArrayList<BlogItems>
 )
 
 data class BlogItems(
