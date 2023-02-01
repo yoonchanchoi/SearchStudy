@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1955" />
+        <entry key="app/src/main/res/drawable/ic_arrow_back.xml" value="0.1185" />
+        <entry key="app/src/main/res/drawable/ic_search.xml" value="0.1185" />
         <entry key="app/src/main/res/drawable/search_text_delete.xml" value="0.1955" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/dictionary_recyclerview_item.xml" value="0.25" />

@@ -16,8 +16,6 @@ class MainActivityViewModel @Inject constructor(
     private val searchManager: SearchManager
 ) : ViewModel() {
 
-
-
     var blogItemsArraylist = ArrayList<BlogItems>()
     var cafeItemsArraylist = ArrayList<CafeItems>()
     var dictionaryItemsArraylist = ArrayList<DictionaryItems>()
@@ -137,6 +135,4 @@ class MainActivityViewModel @Inject constructor(
 
         })
     }
-
-
 }
