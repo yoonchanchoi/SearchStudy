@@ -21,7 +21,6 @@ class DictionaryFragment : Fragment() {
 
     private val viewModel: MainActivityViewModel by activityViewModels()
     private lateinit var binding: FragmentDictionaryBinding
-    private lateinit var dictionaryItems: ArrayList<DictionaryItems>
     private lateinit var dictionaryAdapter: DictionaryAdapter
 
     override fun onCreateView(
@@ -45,19 +44,19 @@ class DictionaryFragment : Fragment() {
      * 백과사전 데이터 세팅
      */
     private fun init() {
-        Log.e("cyc", "viewModel.dictionaryItemData--->${viewModel.dictionaryItemsArraylist}")
-        dictionaryItems = viewModel.dictionaryItemsArraylist
         settingAdapter()
+        Log.e("cyc", "dicfragment------viewModel.dictionaryItemData--->${viewModel.dictionaryItemsArraylist}")
+        viewModel.dictionaryItemsArraylist.observe(viewLifecycleOwner){
+            dictionaryAdapter.setData(it)
+        }
     }
 
     /**
      * 어댑터 세팅
      */
     private fun settingAdapter() {
-        Log.e("cyc","fragment_dictionaryItems-->${dictionaryItems}")
-        dictionaryAdapter = DictionaryAdapter(dictionaryItems)
-        val searchLinearLayoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
+        dictionaryAdapter = DictionaryAdapter()
+        val searchLinearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
         searchLinearLayoutManager.stackFromEnd = true // 키보드 열릴시 recycclerview 스크롤 처리
         binding.rvDictionary.apply {
             layoutManager = searchLinearLayoutManager

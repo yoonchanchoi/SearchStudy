@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.AllFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="all"
-        android:textSize="30dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_view"
@@ -38,6 +32,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         <androidx.recyclerview.widget.RecyclerView
+            android:overScrollMode="never"
+
             android:id="@+id/rv_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -69,6 +65,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         <androidx.recyclerview.widget.RecyclerView
+            android:overScrollMode="never"
+
             android:id="@+id/rv_dictionary"
             android:layout_width="match_parent"
             android:layout_height="0dp"

@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="clr_BABABA">#BABABA</color>
+    <color name="clr_FFF3F3F3">#FFF3F3F3</color>
     <color name="clr_4CAF50">#4CAF50</color>
     <color name="clr_24ffffff">#24ffffff</color>
 </resources>

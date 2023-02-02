@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.DictionaryRecyclerviewItemBinding
 import com.example.searchstudy.network.models.response.DictionaryItems
 
-class DictionaryAdapter(private val dictionaryItems: ArrayList<DictionaryItems>) : RecyclerView.Adapter<DictionaryViewHolder>() {
+class DictionaryAdapter() : RecyclerView.Adapter<DictionaryViewHolder>() {
+
+    var dictionaryItems= mutableListOf<DictionaryItems>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DictionaryViewHolder {
         val itemBinding = DictionaryRecyclerviewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return DictionaryViewHolder(itemBinding)
@@ -18,5 +21,10 @@ class DictionaryAdapter(private val dictionaryItems: ArrayList<DictionaryItems>)
 
     override fun getItemCount(): Int {
         return dictionaryItems.size
+    }
+
+    fun setData(data : ArrayList<DictionaryItems>){
+        dictionaryItems = data
+        notifyDataSetChanged()
     }
 }
