@@ -3,8 +3,7 @@ package com.example.searchstudy.network.models.response
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class ResultSearchDictionary(
-
+data class ResultSearchView(
     @SerializedName("lastBuildDate")
     @Expose
     val lastBuildDate: String = "",
@@ -23,11 +22,10 @@ data class ResultSearchDictionary(
 
     @SerializedName("items")
     @Expose
-    val dictionaryItem: ArrayList<DictionaryItems>
+    val viewitems: ArrayList<ViewItems>
 )
 
-
-data class DictionaryItems(
+data class ViewItems(
     @SerializedName("title")
     @Expose
     val title: String = "",
@@ -40,8 +38,24 @@ data class DictionaryItems(
     @Expose
     val description: String = "",
 
-    @SerializedName("thumbnail")
+    @SerializedName("bloggername")
     @Expose
-    val thumbnail: String = ""
+    val bloggername: String = "",
+
+    @SerializedName("bloggerlink")
+    @Expose
+    val bloggerlink: String = "",
+
+    @SerializedName("postdate")
+    @Expose
+    val postdate: String = "",
+
+    @SerializedName("cafename")
+    @Expose
+    val cafename: String = "",
+
+    @SerializedName("cafeurl")
+    @Expose
+    val cafeurl: String = ""
 
 )

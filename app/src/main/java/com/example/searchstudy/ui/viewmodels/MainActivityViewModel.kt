@@ -1,6 +1,7 @@
 package com.example.searchstudy.ui.viewmodels
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,12 +35,12 @@ class MainActivityViewModel @Inject constructor(
     val searchText : LiveData<String>
         get() = _searchText
 
-    private val _blogItemsArraylist = MutableLiveData<ArrayList<BlogItems>>()
-    val blogItemsArraylist : LiveData<ArrayList<BlogItems>>
+    private val _blogItemsArraylist = MutableLiveData<ArrayList<ViewItems>>()
+    val blogItemsArraylist : LiveData<ArrayList<ViewItems>>
         get() = _blogItemsArraylist
 
-    private val _cafeItemsArraylist = MutableLiveData<ArrayList<CafeItems>>()
-    val cafeItemsArraylist : LiveData<ArrayList<CafeItems>>
+    private val _cafeItemsArraylist = MutableLiveData<ArrayList<ViewItems>>()
+    val cafeItemsArraylist : LiveData<ArrayList<ViewItems>>
         get() = _cafeItemsArraylist
 
     private val _dictionaryItemsArraylist = MutableLiveData<ArrayList<DictionaryItems>>()
@@ -50,7 +51,9 @@ class MainActivityViewModel @Inject constructor(
     val imgItemsArraylist : LiveData<ArrayList<ImgItems>>
         get() = _imgItemsArraylist
 
-
+    private val _viewItemsArraylist = MutableLiveData<ArrayList<ViewItems>>()
+    val viewItemsArraylist : LiveData<ArrayList<ViewItems>>
+        get() = _viewItemsArraylist
 
     /**
      * search
@@ -64,19 +67,19 @@ class MainActivityViewModel @Inject constructor(
 
     private fun searchBlog(query: String){
         val result = searchManager.searchBlog(query = query)
-        result.enqueue(object : Callback<ResultSearchBlog>{
-            override fun onResponse(call: Call<ResultSearchBlog>, response: Response<ResultSearchBlog>) {
+        result.enqueue(object : Callback<ResultSearchView>{
+            override fun onResponse(call: Call<ResultSearchView>, response: Response<ResultSearchView>) {
                 if(response.isSuccessful){
                     Log.e("cyc", "통신 성공")
                     response.body()?.let {
-                        Log.e("cyc","it.blogItem-->${it.blogItem}")
-                        _blogItemsArraylist.postValue(it.blogItem)
+                        Log.e("cyc","it.blogItem-->${it.viewitems}")
+                        _blogItemsArraylist.postValue(it.viewitems)
                     }
                 }else{
                     Log.e("cyc", "통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
                 }
             }
-            override fun onFailure(call: Call<ResultSearchBlog>, t: Throwable) {
+            override fun onFailure(call: Call<ResultSearchView>, t: Throwable) {
                 Log.e("cyc", "통신실패 (인터넷 연결의 문제, 예외발생)")
             }
 
@@ -85,17 +88,16 @@ class MainActivityViewModel @Inject constructor(
 
     private fun searCafe(query: String){
         val result = searchManager.searchCafe(query = query)
-        result.enqueue(object : Callback<ResultSearchCafe>{
+        result.enqueue(object : Callback<ResultSearchView>{
             override fun onResponse(
-                call: Call<ResultSearchCafe>,
-                response: Response<ResultSearchCafe>
+                call: Call<ResultSearchView>,
+                response: Response<ResultSearchView>
             ) {
                 if(response.isSuccessful){
                     Log.e("cyc", "통신 성공")
                     response.body()?.let {
-                        Log.e("cyc","it.cafeItem-->${it.cafeItem}")
-                       _cafeItemsArraylist.postValue(it.cafeItem)
-
+                        Log.e("cyc","it.cafeItem-->${it.viewitems}")
+                        _cafeItemsArraylist.postValue(it.viewitems)
                     }
                 }else{
                     Log.e("cyc", "통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
@@ -103,7 +105,7 @@ class MainActivityViewModel @Inject constructor(
                 }
             }
 
-            override fun onFailure(call: Call<ResultSearchCafe>, t: Throwable) {
+            override fun onFailure(call: Call<ResultSearchView>, t: Throwable) {
                 Log.e("cyc", "통신실패 (인터넷 연결의 문제, 예외발생)")
             }
 

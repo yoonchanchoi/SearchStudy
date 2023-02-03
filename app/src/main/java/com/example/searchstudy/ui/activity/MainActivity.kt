@@ -16,6 +16,7 @@ import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.ActivityMainBinding
 import com.example.searchstudy.network.models.dto.searchDto.SearchData
 import com.example.searchstudy.ui.recyclerview.search.SearchAdapter
@@ -120,6 +121,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
                         saveSearchData(text)
                         searchAdapter.notifyDataSetChanged()
                         hideKeyboard()
+
                         viewModel.searchQury(text)
                         binding.clSearch.visibility =View.INVISIBLE
                         binding.clSearchResult.visibility = View.VISIBLE
@@ -165,6 +167,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             searchDataList.clear()
             pref.clear()
             searchAdapter.notifyDataSetChanged()
+            checkSearchTextData()
         }
 
         //            this.setOnCloseListener { false }
@@ -263,6 +266,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     private fun viewPagerSetting() {
         val tabTitle = listOf<String>("통합", "VIEW", "백과사전", "이미지")
         adapter = ViewpagerFragmentAdapter(this)
+        binding.vp2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER  //뷰페이저 오버스크롤 없애기
         binding.vp2.adapter = adapter
         TabLayoutMediator(binding.tlMenu, binding.vp2) { tab, postion ->
             tab.text = tabTitle[postion]

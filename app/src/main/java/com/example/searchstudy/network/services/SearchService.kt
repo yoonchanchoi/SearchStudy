@@ -1,9 +1,6 @@
 package com.example.searchstudy.network.services
 
-import com.example.searchstudy.network.models.response.ResultSearchBlog
-import com.example.searchstudy.network.models.response.ResultSearchCafe
-import com.example.searchstudy.network.models.response.ResultSearchDictionary
-import com.example.searchstudy.network.models.response.ResultSearchImg
+import com.example.searchstudy.network.models.response.*
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -15,7 +12,7 @@ interface SearchService {
         @Query(value = "display") display: Int? = null,
         @Query(value = "start") start: Int? = null,
         @Query(value = "sort") sort: String? = null
-    ): Call<ResultSearchBlog>
+    ): Call<ResultSearchView>
 
 
     @GET("/v1/search/cafearticle.json")
@@ -24,7 +21,7 @@ interface SearchService {
         @Query(value = "display") display: Int? = null,
         @Query(value = "start") start: Int? = null,
         @Query(value = "sort") sort: String? = null
-    ): Call<ResultSearchCafe>
+    ): Call<ResultSearchView>
 
     @GET("/v1/search/encyc.json")
     fun searchDictionary(

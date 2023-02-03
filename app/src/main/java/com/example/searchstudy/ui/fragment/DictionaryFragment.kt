@@ -56,10 +56,10 @@ class DictionaryFragment : Fragment() {
      */
     private fun settingAdapter() {
         dictionaryAdapter = DictionaryAdapter()
-        val searchLinearLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
-        searchLinearLayoutManager.stackFromEnd = true // 키보드 열릴시 recycclerview 스크롤 처리
+        val dictionaryLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        dictionaryLayoutManager.stackFromEnd = true // 키보드 열릴시 recycclerview 스크롤 처리
         binding.rvDictionary.apply {
-            layoutManager = searchLinearLayoutManager
+            layoutManager = dictionaryLayoutManager
             adapter = dictionaryAdapter
         }
     }

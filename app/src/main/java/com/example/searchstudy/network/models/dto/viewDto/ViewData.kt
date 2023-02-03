@@ -4,5 +4,5 @@ import okhttp3.Interceptor
 
 data class ViewData<T>(
     val title: String,
-    val items: T
+    val items: ArrayList<T>
 )

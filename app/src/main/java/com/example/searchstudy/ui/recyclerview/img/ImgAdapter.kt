@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.ImgRecyclerviewItemBinding
-import com.example.searchstudy.network.models.response.DictionaryItems
 import com.example.searchstudy.network.models.response.ImgItems
 
 class ImgAdapter() : RecyclerView.Adapter<ImgViewHolder>() {

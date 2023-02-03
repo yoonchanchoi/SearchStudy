@@ -1,19 +1,18 @@
 package com.example.searchstudy.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.searchstudy.R
-import com.example.searchstudy.databinding.FragmentImgBinding
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.searchstudy.databinding.FragmentViewBinding
-import com.example.searchstudy.network.models.response.DictionaryItems
+import com.example.searchstudy.network.models.response.ViewItems
 import com.example.searchstudy.ui.recyclerview.dictionary.DictionaryAdapter
-import com.example.searchstudy.ui.recyclerview.img.ImgAdapter
+import com.example.searchstudy.ui.recyclerview.view.ViewAdapter
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,14 +21,8 @@ class ViewFragment : Fragment() {
 
     private val viewModel: MainActivityViewModel by activityViewModels()
     private lateinit var binding: FragmentViewBinding
-//    private lateinit var viewItems: ArrayList<ViewItems>
-//    private lateinit var viewItemsAdapter: DictionaryAdapter
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private var viewAdapter= ViewAdapter()
+    private lateinit var viewItems: ArrayList<ViewItems>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,29 +39,41 @@ class ViewFragment : Fragment() {
         init()
     }
 
-
     /**
-     * 백과사전 데이터 세팅
+     * view 데이터 세팅
      */
     private fun init() {
-//        viewModel.imgItemsArraylist.observe(viewLifecycleOwner){
-//            viewItems=it
+        viewAdapterSetting()
+
+        viewModel.cafeItemsArraylist.observe(viewLifecycleOwner){
+//            viewAdapter.setData(it)
+            viewItems.addAll(it)
+
+
+        }
+        viewModel.blogItemsArraylist.observe(viewLifecycleOwner){
+//            viewAdapter.setData(it)
+            viewItems.addAll(it)
+
+
+        }
+//        viewItems?.let {
+//            viewAdapter.setData(it)
 //        }
-//        settingAdapter()
+
+
     }
 
     /**
      * 어댑터 세팅
      */
-//    private fun settingAdapter() {
-//        Log.e("cyc","fragment_dictionaryItems-->${imgItems}")
-//        imgAdapter = ImgAdapter(imgItems)
-//        val searchLinearLayoutManager =
-//            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
-//        searchLinearLayoutManager.stackFromEnd = true // 키보드 열릴시 recycclerview 스크롤 처리
-//        binding.rvView.apply {
-//            layoutManager = searchLinearLayoutManager
-//            adapter = Adapter
-//        }
-//    }
+    private fun viewAdapterSetting() {
+        viewAdapter = ViewAdapter()
+        viewAdapter.removeAll()
+        val rvViewLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+        binding.rvView.apply {
+            layoutManager=rvViewLayoutManager
+            adapter=viewAdapter
+        }
+    }
 }
