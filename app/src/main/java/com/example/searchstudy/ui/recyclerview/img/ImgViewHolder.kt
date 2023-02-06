@@ -11,7 +11,6 @@ class ImgViewHolder(private val binding: ImgRecyclerviewItemBinding) : RecyclerV
     fun bind(imgItems: ImgItems) {
         Glide.with(itemView)
             .load(imgItems.thumbnail)
-            .error(R.drawable.noimag)
             .into(binding.ivThumbnail)
 //        binding.ivThumbnail = imgItems.thumbnail
     }

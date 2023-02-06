@@ -9,8 +9,10 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1705" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.1185" />
         <entry key="app/src/main/res/drawable/search_text_delete.xml" value="0.1955" />
+        <entry key="app/src/main/res/layout/activity_first_search.xml" value="0.2234375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/all_recyclerview_item_in.xml" value="0.2234375" />
+        <entry key="app/src/main/res/layout/all_recyclerview_item_out.xml" value="0.2234375" />
         <entry key="app/src/main/res/layout/blog_recyclerview_item.xml" value="0.2234375" />
         <entry key="app/src/main/res/layout/cafe_recyclerview_item.xml" value="0.32083333333333336" />
         <entry key="app/src/main/res/layout/dictionary_recyclerview_item.xml" value="0.25" />

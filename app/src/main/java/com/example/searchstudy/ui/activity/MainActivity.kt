@@ -61,9 +61,6 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         initListener()
     }
 
-
-
-
     /**
      * 초기화
      */

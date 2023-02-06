@@ -36,7 +36,8 @@ class DictionaryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        init()
+    //여기
+    //        init()
     }
 
 
@@ -47,7 +48,8 @@ class DictionaryFragment : Fragment() {
         settingAdapter()
         Log.e("cyc", "dicfragment------viewModel.dictionaryItemData--->${viewModel.dictionaryItemsArraylist}")
         viewModel.dictionaryItemsArraylist.observe(viewLifecycleOwner){
-            dictionaryAdapter.setData(it)
+        //여기
+        //            dictionaryAdapter.setData(it)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.searchstudy.ui.recyclerview.all
-
-class InAllAdapterViewHolder {
-}
+//package com.example.searchstudy.ui.recyclerview.all
+//
+//class InAllAdapterViewHolder {
+//}

@@ -1,6 +1,7 @@
 package com.example.searchstudy.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +23,10 @@ class ViewFragment : Fragment() {
     private val viewModel: MainActivityViewModel by activityViewModels()
     private lateinit var binding: FragmentViewBinding
     private var viewAdapter= ViewAdapter()
-    private lateinit var viewItems: ArrayList<ViewItems>
+    private var viewItems = ArrayList<ViewItems>()
+
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +40,7 @@ class ViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        init()
+//        init()
     }
 
     /**
@@ -45,21 +49,35 @@ class ViewFragment : Fragment() {
     private fun init() {
         viewAdapterSetting()
 
-        viewModel.cafeItemsArraylist.observe(viewLifecycleOwner){
-//            viewAdapter.setData(it)
-            viewItems.addAll(it)
-
-
-        }
-        viewModel.blogItemsArraylist.observe(viewLifecycleOwner){
-//            viewAdapter.setData(it)
-            viewItems.addAll(it)
-
-
-        }
-//        viewItems?.let {
-//            viewAdapter.setData(it)
+//        var blogflag = false
+//        var cafeflag = false
+//        viewModel.cafeItemsArraylist.observe(viewLifecycleOwner){
+//            blogflag=true
+//            viewItems.addAll(it)
+//            if(blogflag&&cafeflag){
+//                viewAdapter.setData(viewItems)
+//
+//            }
+////            viewItems.addAll(it)
 //        }
+//        viewModel.blogItemsArraylist.observe(viewLifecycleOwner){
+//            cafeflag=true
+//            viewItems.addAll(it)
+//            if(blogflag&&cafeflag){
+//                viewAdapter.setData(viewItems)
+//            }
+//        }
+
+        viewModel.cafeItemsArraylist.observe(viewLifecycleOwner){
+            viewItems.clear()
+            viewItems.addAll(it)
+            viewModel.blogItemsArraylist.observe(viewLifecycleOwner){ blog->
+                viewItems.addAll(blog)
+                viewAdapter.setData(viewItems)
+            }
+        }
+
+
 
 
     }

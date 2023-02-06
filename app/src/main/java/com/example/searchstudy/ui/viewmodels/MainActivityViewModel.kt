@@ -3,6 +3,7 @@ package com.example.searchstudy.ui.viewmodels
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.searchstudy.network.managers.SearchManager
@@ -26,11 +27,11 @@ class MainActivityViewModel @Inject constructor(
 
 
 
+
 //    var blogItemsArraylist = ArrayList<BlogItems>()
 //    var cafeItemsArraylist = ArrayList<CafeItems>()
 //    var dictionaryItemsArraylist = ArrayList<DictionaryItems>()
 //    var imgItemsArraylist = ArrayList<ImgItems>()
-
     private val _searchText = MutableLiveData<String>()
     val searchText : LiveData<String>
         get() = _searchText
@@ -51,9 +52,14 @@ class MainActivityViewModel @Inject constructor(
     val imgItemsArraylist : LiveData<ArrayList<ImgItems>>
         get() = _imgItemsArraylist
 
-    private val _viewItemsArraylist = MutableLiveData<ArrayList<ViewItems>>()
-    val viewItemsArraylist : LiveData<ArrayList<ViewItems>>
-        get() = _viewItemsArraylist
+    var viewItems= ArrayList<ViewItems>()
+    var dictionaryItems= ArrayList<DictionaryItems>()
+    var allItems = ArrayList<AllItems>()
+
+//    private val _viewItemsArraylist = MutableLiveData<ArrayList<ViewItems>>()
+//    val viewItemsArraylist : LiveData<ArrayList<ViewItems>>
+//        get() = _viewItemsArraylist
+
 
     /**
      * search
@@ -65,6 +71,8 @@ class MainActivityViewModel @Inject constructor(
         searchImg(query)
     }
 
+
+
     private fun searchBlog(query: String){
         val result = searchManager.searchBlog(query = query)
         result.enqueue(object : Callback<ResultSearchView>{
@@ -74,6 +82,12 @@ class MainActivityViewModel @Inject constructor(
                     response.body()?.let {
                         Log.e("cyc","it.blogItem-->${it.viewitems}")
                         _blogItemsArraylist.postValue(it.viewitems)
+//                        addAllData(it.viewitems)
+//                        viewItemsArrayList.addSource(_blogItemsArraylist){
+//                            viewItemsArrayList.value = _blogItemsArraylist.value
+//
+//                        }
+
                     }
                 }else{
                     Log.e("cyc", "통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
@@ -98,6 +112,12 @@ class MainActivityViewModel @Inject constructor(
                     response.body()?.let {
                         Log.e("cyc","it.cafeItem-->${it.viewitems}")
                         _cafeItemsArraylist.postValue(it.viewitems)
+//                        addAllData(it.viewitems)
+
+//                        viewItemsArrayList.addSource(_cafeItemsArraylist){
+//                            viewItemsArrayList.value = _cafeItemsArraylist.value
+//
+//                        }
                     }
                 }else{
                     Log.e("cyc", "통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
@@ -125,6 +145,7 @@ class MainActivityViewModel @Inject constructor(
                     response.body()?.let {
                         Log.e("cyc","Mainviewmodel___________________it.dictionaryItem-->${it.dictionaryItem}")
                         _dictionaryItemsArraylist.postValue(it.dictionaryItem)
+//                        addAllData(it.dictionaryItem)
                         Log.e("cyc","dictionaryItemsArraylist--->${dictionaryItemsArraylist}")
 
                     }
@@ -169,4 +190,14 @@ class MainActivityViewModel @Inject constructor(
 
         })
     }
+
+
+    fun addAllData(allItems: ArrayList<AllItems>){
+        allItems.addAll(allItems)
+    }
+
+    fun Allclear(){
+        allItems.clear()
+    }
+
 }
