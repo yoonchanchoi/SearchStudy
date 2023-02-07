@@ -33,8 +33,7 @@ class ImgFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-    //여기
-    //        init()
+            init()
     }
 
 

@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.DictionaryRecyclerviewItemBinding
-import com.example.searchstudy.network.models.response.DictionaryItems
+import com.example.searchstudy.network.models.response.AllItems
 
 class DictionaryAdapter() : RecyclerView.Adapter<DictionaryViewHolder>() {
 
-    var dictionaryItems= mutableListOf<DictionaryItems>()
+    var dictionaryItems= mutableListOf<AllItems>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DictionaryViewHolder {
         val itemBinding = DictionaryRecyclerviewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -23,7 +23,7 @@ class DictionaryAdapter() : RecyclerView.Adapter<DictionaryViewHolder>() {
         return dictionaryItems.size
     }
 
-    fun setData(data : ArrayList<DictionaryItems>){
+    fun setData(data : ArrayList<AllItems>){
         dictionaryItems = data
         notifyDataSetChanged()
     }

@@ -4,14 +4,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.searchstudy.databinding.DictionaryRecyclerviewItemBinding
 import com.example.searchstudy.databinding.ViewRecyclerviewItemBinding
-import com.example.searchstudy.network.models.response.DictionaryItems
-import com.example.searchstudy.network.models.response.ViewItems
+import com.example.searchstudy.network.models.response.AllItems
 
 class ViewAdapter() : RecyclerView.Adapter<ViewViewHolder>() {
 
-    var viewItems= mutableListOf<ViewItems>()
+    var viewItems= mutableListOf<AllItems>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewViewHolder {
         val itemBinding = ViewRecyclerviewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -30,11 +28,8 @@ class ViewAdapter() : RecyclerView.Adapter<ViewViewHolder>() {
         viewItems.clear()
         notifyDataSetChanged()
     }
-    fun setData(data : ArrayList<ViewItems>){
-        Log.e("cyc","ViewAdapter----data---->data")
+    fun setData(data : ArrayList<AllItems>){
         viewItems=data
         notifyDataSetChanged()
     }
-
-
 }

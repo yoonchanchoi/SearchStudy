@@ -1,18 +1,14 @@
 package com.example.searchstudy.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.searchstudy.R
 import com.example.searchstudy.databinding.FragmentDictionaryBinding
-import com.example.searchstudy.network.models.response.DictionaryItems
 import com.example.searchstudy.ui.recyclerview.dictionary.DictionaryAdapter
-import com.example.searchstudy.ui.recyclerview.search.SearchAdapter
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,7 +24,6 @@ class DictionaryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
         binding = FragmentDictionaryBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -36,20 +31,16 @@ class DictionaryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-    //여기
-    //        init()
+            init()
     }
-
 
     /**
      * 백과사전 데이터 세팅
      */
     private fun init() {
         settingAdapter()
-        Log.e("cyc", "dicfragment------viewModel.dictionaryItemData--->${viewModel.dictionaryItemsArraylist}")
         viewModel.dictionaryItemsArraylist.observe(viewLifecycleOwner){
-        //여기
-        //            dictionaryAdapter.setData(it)
+            dictionaryAdapter.setData(it)
         }
     }
 

@@ -1,24 +1,20 @@
 package com.example.searchstudy.ui.activity
 
 import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.view.KeyEvent
-import android.view.MotionEvent
 import android.view.View
-import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.ActivityMainBinding
+import com.example.searchstudy.network.models.dto.integrated.Integrated
 import com.example.searchstudy.network.models.dto.searchDto.SearchData
+import com.example.searchstudy.network.models.response.AllItems
 import com.example.searchstudy.ui.recyclerview.search.SearchAdapter
 import com.example.searchstudy.ui.recyclerview.search.SearchRecyclerListener
 import com.example.searchstudy.ui.recyclerview.viewpager.ViewpagerFragmentAdapter
@@ -27,9 +23,9 @@ import com.example.searchstudy.util.Pref
 import com.example.searchstudy.util.toDateString
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import java.nio.file.WatchEvent
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
@@ -43,8 +39,10 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     private lateinit var searchDataList: ArrayList<SearchData>
     private lateinit var searchAdapter: SearchAdapter
     private lateinit var adapter: ViewpagerFragmentAdapter
-    private var mainBaseheight = 0
-    private var count = 0
+//    private var allItems = ArrayList<AllItems>()
+    private var arrayIntegrated = ArrayList<Integrated>()
+    private var query = ""
+    private var viewItems = ArrayList<AllItems>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,12 +64,9 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      */
     private fun initData() {
         //최근 검색어 데이터 가져와서 어댑터에 세팅
-
         viewPagerSetting()
         searchDataList = pref.getSearchList() as ArrayList<SearchData>
         searchAdapterSetting(searchDataList)
-        Log.e("cyc", "searchDataList.size-->${searchDataList.size}")
-        Log.e("cyc", "searchAdapter.itemCount()-->${searchAdapter.itemCount}")
         checkSearchTextData()
     }
 
@@ -81,21 +76,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     private fun initListener() {
         //검색 입력 포커스 조절
         binding.etSearch.apply {
-//            this.setOnFocusChangeListener { v, focus ->
-//                when (focus) {
-//                    true -> {
-////                        binding.clMain.setOnTouchListener { view, event ->
-//////                            binding.svSearch.clearFocus()
-////                            hideKeyboard()
-////                            false
-////                        }
-//                    }
-//                    false -> {
-//                        binding.clSearch.visibility = View.INVISIBLE
-////                        binding.clSearchResult.visibility = View.VISIBLE
-//                    }
-//                }
-//            }
+
             this.addTextChangedListener(object : TextWatcher{
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 }
@@ -114,15 +95,8 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             this.setOnEditorActionListener { textView, actionId, keyEvent ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_SEARCH -> {
-                        val text = binding.etSearch.text.toString()
-                        saveSearchData(text)
-                        searchAdapter.notifyDataSetChanged()
+                        actionSearch()
                         hideKeyboard()
-
-                        viewModel.searchQury(text)
-                        binding.clSearch.visibility =View.INVISIBLE
-                        binding.clSearchResult.visibility = View.VISIBLE
-                        binding.etSearch.clearFocus()
                         true
                     }
                     else -> {
@@ -130,15 +104,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
                     }
                 }
             }
-
-
         }
-
-//        binding.clMain.setOnTouchListener { view, motionEvent ->
-//            Log.e("cyc","setOnTouchListener")
-//            hideKeyboard()
-//            false
-//        }
 
         //텍스트 전체 삭제 리스너
         binding.btnTextClear.setOnClickListener {
@@ -151,13 +117,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
 
         //검색 버튼 리스너
         binding.btnSearch.setOnClickListener {
-            val text = binding.etSearch.text.toString()
-            saveSearchData(text)
-            searchAdapter.notifyDataSetChanged()
-            viewModel.searchQury(text)
-            binding.clSearch.visibility =View.INVISIBLE
-            binding.clSearchResult.visibility = View.VISIBLE
-            binding.etSearch.clearFocus()
+            actionSearch()
         }
         //최근 검색어 삭제 리스너
         binding.tvDeleteAll.setOnClickListener {
@@ -166,13 +126,35 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             searchAdapter.notifyDataSetChanged()
             checkSearchTextData()
         }
-
-        //            this.setOnCloseListener { false }
-
     }
-
+    /**
+     * observe
+     */
     private fun initObserve(){
+        viewModel.blogItemsArraylist.observe(this){
+            for(i in 0 until 5){
+//                allItems.add(it[i])
+                viewItems.add(it[i])
+            }
+//            viewItems.addAll(it)
+            viewModel.searchCafe(query)
+        }
+        viewModel.cafeItemsArraylist.observe(this){
+            for(i in 0 until 5){
+                viewItems.add(it[i])
+            }
+            arrayIntegrated.add(Integrated("VEIW",viewItems))
+//            viewItems.addAll(it)
+            //여기
+            viewModel.setViewitems(viewItems)
 
+//            viewModel.setViewitems(viewItems)
+            viewModel.searchDictionary(query)
+        }
+        viewModel.dictionaryItemsArraylist.observe(this){
+            arrayIntegrated.add(Integrated("백과사전",it))
+            viewModel.setIntegrated(arrayIntegrated)
+        }
     }
 
     /**
@@ -185,17 +167,6 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             binding.tvSearchEmpty.visibility = View.VISIBLE
         }
     }
-
-    /**
-     * 검색 데이터의 유무에 따른 뷰 보여주기
-     */
-//    private fun checkSearchData() {
-//        if (searchAdapter.itemCount > 0) {
-//            binding.tvSearchEmpty.visibility = View.INVISIBLE
-//        } else {
-//            binding.tvSearchEmpty.visibility = View.VISIBLE
-//        }
-//    }
 
     /**
      * 최근 검색어에 저장
@@ -269,9 +240,10 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             tab.text = tabTitle[postion]
         }.attach()
     }
-
+    /**
+     * 키보드 숨기기
+     */
     private fun hideKeyboard() {
-        Log.e("cyc","hideKeyboard-------------------------------------------------->>>>>>>")
         val inputManager: InputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         this.currentFocus?.let {
             inputManager.hideSoftInputFromWindow(it.windowToken,0)
@@ -279,103 +251,69 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         binding.etSearch.clearFocus()
     }
 
-
+    /**
+     * viewpager데이터 초기화
+     */
     override fun onResume() {
         super.onResume()
         adapter.notifyDataSetChanged()
     }
 
+    /**
+     * 검색 버튼 클리시 초기화 및 api호출
+     */
+    private fun searchView(){
+//        allItems.clear()
+        arrayIntegrated.clear()
+        viewItems.clear()
+        viewModel.searchBlog(query)
+        viewModel.searchImg(query)
+
+    }
+    /**
+     * 검색 버튼 클리시 활동
+     */
+    private fun actionSearch(){
+        query = binding.etSearch.text.toString()
+        saveSearchData(query)
+        searchAdapter.notifyDataSetChanged()
+        searchView()
+        binding.clSearch.visibility =View.INVISIBLE
+        binding.clSearchResult.visibility = View.VISIBLE
+        binding.etSearch.clearFocus()
+    }
 }
 
 
-//    // 화면 클릭하여 키보드 숨기기 및 포커스 제거
-//    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
-//        if (event?.action === MotionEvent.ACTION_DOWN) {
-//            val v = currentFocus
-//            if (v is SearchView) {
-//                val outRect = Rect()
-//                v.getGlobalVisibleRect(outRect)
-//                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
-//                    v.clearFocus()
-//                    val imm: InputMethodManager =
-//                        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
-//                }
-//            }
-//        }
-//        return super.dispatchTouchEvent(event)
-//    }
 
 
-//                        binding.clMain.viewTreeObserver.addOnGlobalLayoutListener {
-//                            Log.e("cyc","count->${count}")
-//                            val displayRect =
-//                                Rect().apply { binding.clMain.getWindowVisibleDisplayFrame(this) }
-//                            val min = displayRect.bottom
-//                            if (min == mainBaseheight) {
-//                                if(count==0){
-//                                }else{
-//                                    binding.svSearch.clearFocus()
-//                                }
-//                            }
-//                        }
 
 
-//    private fun baseheightSetting() {
-//        val displayRect = Rect().apply { binding.clMain.getWindowVisibleDisplayFrame(this) }
-//        val baseheight = displayRect.bottom
-//        Log.e("cyc", "여기여기displayRect.bottom-->${displayRect.bottom}")
-//        if (baseheight > 0) {
-//            Log.e("cyc", "baseheight>0")
-//            mainBaseheight = baseheight
-//        }
-//    }
 
 
-////서치뷰 리스너
-//binding.svSearch.apply {
-//    this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//        override fun onQueryTextSubmit(searchText: String?): Boolean {
-//            searchText?.let {
-//                saveSearchData(it)
-//                searchAdapter.notifyDataSetChanged()
-//                viewModel.searchQury(searchText)
-//                checkSearchData()
-//                binding.svSearch.clearFocus()
-//            }
-//            return true
-//        }
-//
-//
-//        override fun onQueryTextChange(searchText: String?): Boolean {
-//
-//            return true
-//        }
-//    })
-//
-//    this.setOnQueryTextFocusChangeListener { v, focus ->
-//        when (focus) {
-//            true -> {
-//                binding.clSearch.visibility = View.VISIBLE
-//                binding.clSearch.bringToFront()
-//                binding.clMain.setOnTouchListener { view, event ->
-////                            binding.svSearch.clearFocus()
-//                    hideKeyboard()
-//                    false
-//                }
-//            }
-//            false -> {
-//                binding.clSearch.visibility = View.INVISIBLE
+
+//            this.setOnFocusChangeListener { v, focus ->
+//                when (focus) {
+//                    true -> {
+////                        binding.clMain.setOnTouchListener { view, event ->
+//////                            binding.svSearch.clearFocus()
+////                            hideKeyboard()
+////                            false
+////                        }
+//                    }
+//                    false -> {
+//                        binding.clSearch.visibility = View.INVISIBLE
 ////                        binding.clSearchResult.visibility = View.VISIBLE
+//                    }
+//                }
 //            }
+
+
+//        binding.clMain.setOnTouchListener { view, motionEvent ->
+//            Log.e("cyc","setOnTouchListener")
+//            hideKeyboard()
+//            false
 //        }
-//    }
-//
-////            this.setOnCloseListener { false }
-//
-//}
 
 
-// 2/2 해야될 거
-// 검색 editext의 전체 텍스트 삭제, 네이버 아이콘 바꾸기
-// 백과사전 쪽 제목 빼고 각각의 item들 카드 뷰로 구역 분활
+

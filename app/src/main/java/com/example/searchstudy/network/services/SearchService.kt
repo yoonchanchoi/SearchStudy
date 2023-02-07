@@ -12,7 +12,7 @@ interface SearchService {
         @Query(value = "display") display: Int? = null,
         @Query(value = "start") start: Int? = null,
         @Query(value = "sort") sort: String? = null
-    ): Call<ResultSearchView>
+    ): Call<ResultSearchAll>
 
 
     @GET("/v1/search/cafearticle.json")
@@ -21,14 +21,14 @@ interface SearchService {
         @Query(value = "display") display: Int? = null,
         @Query(value = "start") start: Int? = null,
         @Query(value = "sort") sort: String? = null
-    ): Call<ResultSearchView>
+    ): Call<ResultSearchAll>
 
     @GET("/v1/search/encyc.json")
     fun searchDictionary(
         @Query(value = "query", encoded = true) query: String,
         @Query(value = "display") display: Int? = null,
         @Query(value = "start") start: Int? = null,
-    ): Call<ResultSearchDictionary>
+    ): Call<ResultSearchAll>
 
     @GET("/v1/search/image")
     fun searchImg(
