@@ -39,11 +39,13 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     private lateinit var searchDataList: ArrayList<SearchData>
     private lateinit var searchAdapter: SearchAdapter
     private lateinit var adapter: ViewpagerFragmentAdapter
-//    private var allItems = ArrayList<AllItems>()
-    private var arrayIntegrated = ArrayList<Integrated>()
-    private var query = ""
-    private var viewItems = ArrayList<AllItems>()
 
+    //    private var allItems = ArrayList<AllItems>()
+    private var viewIntegrated = Integrated()
+    private var allArrayIntegrated = ArrayList<Integrated>()
+    private var query = ""
+    private var tempViewItems = ArrayList<AllItems>()
+    private var tempDicItems = ArrayList<AllItems>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,17 +79,19 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         //검색 입력 포커스 조절
         binding.etSearch.apply {
 
-            this.addTextChangedListener(object : TextWatcher{
+            this.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 }
+
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    if(binding.etSearch.text.toString().isNotEmpty()){
-                        binding.btnTextClear.visibility=View.VISIBLE
-                    }else{
-                        binding.btnTextClear.visibility=View.INVISIBLE
+                    if (binding.etSearch.text.toString().isNotEmpty()) {
+                        binding.btnTextClear.visibility = View.VISIBLE
+                    } else {
+                        binding.btnTextClear.visibility = View.INVISIBLE
 
                     }
                 }
+
                 override fun afterTextChanged(p0: Editable?) {
                 }
 
@@ -127,33 +131,52 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             checkSearchTextData()
         }
     }
+
     /**
      * observe
      */
-    private fun initObserve(){
-        viewModel.blogItemsArraylist.observe(this){
-            for(i in 0 until 5){
+    private fun initObserve() {
+        viewModel.blogItemsArraylist.observe(this) {
+
+            if (it.size < 5) {
+                tempViewItems.addAll(it)
+            } else {
+                for (i in 0 until 5) {
 //                allItems.add(it[i])
-                viewItems.add(it[i])
+                    tempViewItems.add(it[i])
+                }
             }
-//            viewItems.addAll(it)
+
+//            tempItems.addAll(it)
             viewModel.searchCafe(query)
         }
-        viewModel.cafeItemsArraylist.observe(this){
-            for(i in 0 until 5){
-                viewItems.add(it[i])
+        viewModel.cafeItemsArraylist.observe(this) {
+            if (it.size < 5) {
+                tempViewItems.addAll(it)
+            } else {
+                for (i in 0 until 5) {
+                    tempViewItems.add(it[i])
+                }
             }
-            arrayIntegrated.add(Integrated("VEIW",viewItems))
+            viewIntegrated = (Integrated(allItemsarraylist = tempViewItems))
+            allArrayIntegrated.add(Integrated("VIEW", tempViewItems, 2))
 //            viewItems.addAll(it)
             //여기
-            viewModel.setViewitems(viewItems)
+            viewModel.setViewitems(viewIntegrated)
 
-//            viewModel.setViewitems(viewItems)
+//            viewModel.setViewitems(tempItems)
             viewModel.searchDictionary(query)
         }
-        viewModel.dictionaryItemsArraylist.observe(this){
-            arrayIntegrated.add(Integrated("백과사전",it))
-            viewModel.setIntegrated(arrayIntegrated)
+        viewModel.dictionaryItemsArraylist.observe(this) {
+            if (it.size < 5) {
+                tempDicItems.addAll(it)
+            } else {
+                for (i in 0 until 5) {
+                    tempDicItems.add(it[i])
+                }
+            }
+            allArrayIntegrated.add(Integrated("백과사전", tempDicItems, 2))
+            viewModel.setIntegrated(allArrayIntegrated)
         }
     }
 
@@ -192,7 +215,6 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         // 기존 데이터에 덮어쓰기
         pref.saveSearchList(this.searchDataList)
 
-//            this.mySearchHistoryRecyclerViewAdapter.notifDataSetChanged()
     }
 
     /**
@@ -240,13 +262,15 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             tab.text = tabTitle[postion]
         }.attach()
     }
+
     /**
      * 키보드 숨기기
      */
     private fun hideKeyboard() {
-        val inputManager: InputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputManager: InputMethodManager =
+            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         this.currentFocus?.let {
-            inputManager.hideSoftInputFromWindow(it.windowToken,0)
+            inputManager.hideSoftInputFromWindow(it.windowToken, 0)
         }
         binding.etSearch.clearFocus()
     }
@@ -262,34 +286,30 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     /**
      * 검색 버튼 클리시 초기화 및 api호출
      */
-    private fun searchView(){
+    private fun searchView() {
 //        allItems.clear()
-        arrayIntegrated.clear()
-        viewItems.clear()
+
+        allArrayIntegrated.clear()
+        tempViewItems.clear()
+        tempDicItems.clear()
         viewModel.searchBlog(query)
         viewModel.searchImg(query)
 
     }
+
     /**
      * 검색 버튼 클리시 활동
      */
-    private fun actionSearch(){
+    private fun actionSearch() {
         query = binding.etSearch.text.toString()
         saveSearchData(query)
         searchAdapter.notifyDataSetChanged()
         searchView()
-        binding.clSearch.visibility =View.INVISIBLE
+        binding.clSearch.visibility = View.INVISIBLE
         binding.clSearchResult.visibility = View.VISIBLE
         binding.etSearch.clearFocus()
     }
 }
-
-
-
-
-
-
-
 
 
 //            this.setOnFocusChangeListener { v, focus ->

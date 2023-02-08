@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.searchstudy.databinding.FragmentDictionaryBinding
 import com.example.searchstudy.ui.recyclerview.dictionary.DictionaryAdapter
@@ -39,7 +41,7 @@ class DictionaryFragment : Fragment() {
      */
     private fun init() {
         settingAdapter()
-        viewModel.dictionaryItemsArraylist.observe(viewLifecycleOwner){
+        viewModel.dictionaryIntegratedArraylist.observe(viewLifecycleOwner){
             dictionaryAdapter.setData(it)
         }
     }
@@ -54,6 +56,7 @@ class DictionaryFragment : Fragment() {
         binding.rvDictionary.apply {
             layoutManager = dictionaryLayoutManager
             adapter = dictionaryAdapter
+
         }
     }
 }

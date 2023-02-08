@@ -35,15 +35,17 @@ class MainActivityViewModel @Inject constructor(
     val imgItemsArraylist : LiveData<ArrayList<ImgItems>>
         get() = _imgItemsArraylist
 
-    private val _integratedArraylist = MutableLiveData<ArrayList<Integrated>>()
-    val integratedArraylist : LiveData<ArrayList<Integrated>>
-        get()=_integratedArraylist
+    private val _allIntegratedArraylist = MutableLiveData<ArrayList<Integrated>>()
+    val allIntegratedArraylist : LiveData<ArrayList<Integrated>>
+        get()=_allIntegratedArraylist
 
-    private val _viewItemsArraylist = MutableLiveData<ArrayList<AllItems>>()
-    val viewItemsArrayList : LiveData<ArrayList<AllItems>>
-        get()=_viewItemsArraylist
+    private val _viewIntegratedArraylist = MutableLiveData<Integrated>()
+    val viewIntegratedArraylist : LiveData<Integrated>
+        get()=_viewIntegratedArraylist
 
-
+    private val _dictionaryIntegratedArraylist = MutableLiveData<Integrated>()
+    val dictionaryIntegratedArraylist : LiveData<Integrated>
+        get()=_dictionaryIntegratedArraylist
 
     /**
      * search
@@ -109,7 +111,7 @@ class MainActivityViewModel @Inject constructor(
                     Log.e("cyc", "통신 성공")
                     response.body()?.let {
                         _dictionaryItemsArraylist.postValue(it.allItems)
-
+                        _dictionaryIntegratedArraylist.postValue(Integrated(allItemsarraylist = it.allItems))
                     }
                 }else{
                     Log.e("cyc", "통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
@@ -157,12 +159,14 @@ class MainActivityViewModel @Inject constructor(
 //    }
 
 
-    fun setViewitems(viewItems: ArrayList<AllItems>){
-        _viewItemsArraylist.postValue(viewItems)
+    fun setViewitems(viewIntegratedItems: Integrated){
+
+        _viewIntegratedArraylist.postValue(viewIntegratedItems)
     }
 
     fun setIntegrated(arrayIntegrated: ArrayList<Integrated>){
-        _integratedArraylist.postValue(arrayIntegrated)
+
+        _allIntegratedArraylist.postValue(arrayIntegrated)
     }
 
 }

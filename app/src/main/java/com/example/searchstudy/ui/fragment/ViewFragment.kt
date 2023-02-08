@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.searchstudy.databinding.FragmentViewBinding
 import com.example.searchstudy.ui.recyclerview.view.ViewAdapter
@@ -40,7 +42,7 @@ class ViewFragment : Fragment() {
      */
     private fun init() {
         viewAdapterSetting()
-        viewModel.viewItemsArrayList.observe(viewLifecycleOwner) {
+        viewModel.viewIntegratedArraylist.observe(viewLifecycleOwner) {
             viewAdapter.setData(it)
         }
     }

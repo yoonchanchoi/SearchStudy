@@ -5,12 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.searchstudy.databinding.FragmentAllBinding
-import com.example.searchstudy.network.models.response.AllItems
-import com.example.searchstudy.ui.recyclerview.all.OutAllAdapter
+import com.example.searchstudy.ui.recyclerview.all.AllAdapter
 import com.example.searchstudy.ui.recyclerview.dictionary.DictionaryAdapter
 import com.example.searchstudy.ui.recyclerview.view.ViewAdapter
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
@@ -21,7 +22,7 @@ class AllFragment : Fragment() {
 
     private val viewModel: MainActivityViewModel by activityViewModels()
     private lateinit var binding: FragmentAllBinding
-    private var outAllAdapter= OutAllAdapter()
+    private var allAdapter= AllAdapter()
     private lateinit var concatAdapter: ConcatAdapter
     private val viewAdapter = ViewAdapter()
     private val dictionaryAdapter= DictionaryAdapter()
@@ -44,8 +45,8 @@ class AllFragment : Fragment() {
     private fun init(){
         adapterSetting()
 
-        viewModel.integratedArraylist.observe(viewLifecycleOwner){
-            outAllAdapter.setData(it)
+        viewModel.allIntegratedArraylist.observe(viewLifecycleOwner){
+            allAdapter.setData(it)
         }
 
 //        viewModel.viewItemsArrayList.observe(viewLifecycleOwner){
@@ -65,7 +66,9 @@ class AllFragment : Fragment() {
         val allLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL, false)
         binding.rvOutAll.apply {
             layoutManager=allLayoutManager
-            adapter=outAllAdapter
+            adapter=allAdapter
+//            addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
+
         }
 //        concatAdapter = ConcatAdapter(viewAdapter, dictionaryAdapter)
 //        val allLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
