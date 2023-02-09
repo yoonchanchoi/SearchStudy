@@ -10,7 +10,7 @@ import com.example.searchstudy.network.models.response.AllItems
 class AllAdapterItemViewViewHolder(private val binding: AllRecyclerviewItemViewBinding) : RecyclerView.ViewHolder(binding.root)  {
 
     fun bind(allItems: AllItems) {
-        binding.tvTitle.text = Html.fromHtml(allItems.title)
+        binding.tvTitle.text = Html.fromHtml(allItems.title,Html.FROM_HTML_MODE_LEGACY)
         if(allItems.postdate.isEmpty()){
             binding.tvCatagory.text = "카페"
             binding.tvName.text = allItems.cafename
@@ -18,12 +18,6 @@ class AllAdapterItemViewViewHolder(private val binding: AllRecyclerviewItemViewB
             binding.tvName.text = allItems.bloggername
             binding.tvCatagory.text = "블로그"
         }
-        binding.tvDescription.text = Html.fromHtml(allItems.description)
+        binding.tvDescription.text = Html.fromHtml(allItems.description,Html.FROM_HTML_MODE_LEGACY)
     }
-
-
-
-
-
-
 }

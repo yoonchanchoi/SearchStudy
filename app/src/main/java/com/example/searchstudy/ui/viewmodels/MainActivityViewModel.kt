@@ -60,7 +60,6 @@ class MainActivityViewModel @Inject constructor(
                     response.body()?.let {
                         _blogItemsArraylist.postValue(it.allItems)
 
-
                     }
                 }else{
                     Log.e("cyc", "통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
@@ -153,10 +152,6 @@ class MainActivityViewModel @Inject constructor(
 
         })
     }
-
-//    fun setAllitems(allItems: ArrayList<AllItems>){
-//        _allItemsArraylist.postValue(allItems)
-//    }
 
 
     fun setViewitems(viewIntegratedItems: Integrated){

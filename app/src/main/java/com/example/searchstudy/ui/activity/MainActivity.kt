@@ -3,6 +3,7 @@ package com.example.searchstudy.ui.activity
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -158,6 +159,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
                     tempViewItems.add(it[i])
                 }
             }
+
             viewIntegrated = (Integrated(allItemsarraylist = tempViewItems))
             allArrayIntegrated.add(Integrated("VIEW", tempViewItems, 2))
 //            viewItems.addAll(it)
@@ -305,6 +307,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         saveSearchData(query)
         searchAdapter.notifyDataSetChanged()
         searchView()
+        binding.vp2.currentItem=0
         binding.clSearch.visibility = View.INVISIBLE
         binding.clSearchResult.visibility = View.VISIBLE
         binding.etSearch.clearFocus()

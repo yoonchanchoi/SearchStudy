@@ -9,8 +9,7 @@ class DictionaryViewHolder(private val binding: DictionaryRecyclerviewItemBindin
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(allItems: AllItems) {
-        binding.tvTitle.text = Html.fromHtml(allItems.title)
-        binding.tvLink.text = allItems.link
-        binding.tvDescription.text = Html.fromHtml(allItems.description)
+        binding.tvTitle.text = Html.fromHtml(allItems.title,Html.FROM_HTML_MODE_LEGACY)
+        binding.tvDescription.text = Html.fromHtml(allItems.description,Html.FROM_HTML_MODE_LEGACY)
     }
 }

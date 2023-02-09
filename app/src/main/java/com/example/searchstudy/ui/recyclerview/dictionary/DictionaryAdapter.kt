@@ -1,5 +1,6 @@
 package com.example.searchstudy.ui.recyclerview.dictionary
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -32,9 +33,6 @@ class DictionaryAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 AllAdapterItemDictionaryViewHolder(allRecyclerviewItemDictionaryBinding)
             }
         }
-
-//        val itemBinding = DictionaryRecyclerviewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-//        return DictionaryViewHolder(itemBinding)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -48,8 +46,6 @@ class DictionaryAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 holder.setIsRecyclable(false)
             }
         }
-
-        //        holder.bind(dictionaryItems[position])
     }
 
     override fun getItemCount(): Int {
@@ -64,6 +60,9 @@ class DictionaryAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         dictionaryIntegrated = data
         data.allItemsarraylist?.let {
             dictionaryItems = it
+            dictionaryItems.sortBy { allItems ->
+                allItems.title
+            }
         }
         notifyDataSetChanged()
     }

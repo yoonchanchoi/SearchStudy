@@ -1,5 +1,6 @@
 package com.example.searchstudy.ui.recyclerview.view
 
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -72,7 +73,65 @@ class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         viewIntegrated = data
         data.allItemsarraylist?.let {
             viewItems = it
+            viewItems.sortWith(compareBy { allItems ->
+                Html.fromHtml(allItems.title,Html.FROM_HTML_MODE_LEGACY).toString()
+            })
+
+//            Log.e("cyc","view---안찍힌다고???")
+//            viewItems = it.apply {
+//                this.sortWith(compareBy{ allItems ->
+//                    allItems.title.apply {
+//                        Log.e("cyc","전---문자열--this---${this}")
+//                        Html.fromHtml(this,Html.FROM_HTML_MODE_LEGACY).toString()
+//                        Log.e("cyc","후---문자열--Html.fromHtml(this,Html.FROM_HTML_MODE_LEGACY).toString()---${Html.fromHtml(this,Html.FROM_HTML_MODE_LEGACY).toString()}")
+//                    }
+//                    Log.e("cyc","-----정렬----allItems.title->${allItems.title}")
+//                })
+//            }
+//            Log.e("cyc","-----정렬----viewItems->${viewItems}")
+
+
+//            viewItems.sortBy { allItems ->
+//
+//                allItems.title.apply {
+//                    Log.e("cyc","전---문자열--this---${this}")
+//                    Html.fromHtml(this,Html.FROM_HTML_MODE_LEGACY)
+//                    Log.e("cyc","후---문자열--this---${this}")
+//
+//                }
+////                allItems.title.apply {
+////                    Log.e("cyc","전---문자열--this---${this}")
+////                    this.replace(this,(Html.fromHtml(this,Html.FROM_HTML_MODE_LEGACY)).toString())
+////                    Log.e("cyc","후---문자열--this---${this}")
+////
+////                }
+//                Log.e("cyc","hteml----제거------allItems.title-->${allItems.title}")
+//            }
         }
         notifyDataSetChanged()
     }
+
+//    private fun titleHtml(viewItems: ArrayList<AllItems>): ArrayList<AllItems> {
+//        val tempArray = ArrayList<AllItems>()
+//
+//        for (i in 0 until viewItems.size) {
+////            val temp = viewItems[i].title.replace(
+////                viewItems[i].title,
+////                Html.fromHtml(viewItems[i].title, Html.FROM_HTML_MODE_LEGACY).toString()
+////            )
+////
+////            Log.e("jsp",temp)
+//////            viewItems[i].title.replace("<b>","")
+//////            viewItems[i].title.replace("</b>","")
+////            Log.e("cyc","viewItems[i]--->${viewItems[i]}")
+////            Log.e("cyc","viewItems[i].title--->${viewItems[i].title}")
+////            Log.e("cyc","Html.fromHtml(viewItems[i].title, Html.FROM_HTML_MODE_LEGACY).toString()--->${Html.fromHtml(viewItems[i].title, Html.FROM_HTML_MODE_LEGACY).toString()}")
+//
+//        }
+//        tempArray.addAll(viewItems)
+//        Log.e("cyc", "tempArray--->${tempArray}")
+//        return tempArray
+//
+//    }
+
 }

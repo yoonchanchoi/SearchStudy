@@ -12,10 +12,7 @@ class AllAdapterItemDictionaryViewHolder(private val binding: AllRecyclerviewIte
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(allItems: AllItems) {
-        binding.tvTitle.text = Html.fromHtml(allItems.title)
-        binding.tvLink.text = allItems.link
+        binding.tvTitle.text = Html.fromHtml(allItems.title,Html.FROM_HTML_MODE_LEGACY)
         binding.tvDescription.text = Html.fromHtml(allItems.description)
-
     }
-
 }
