@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:background="@drawable/all_item_stroke"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+<!--    android:background="@drawable/all_item_stroke"-->
 
     <TextView
         android:id="@+id/tv_catagory"

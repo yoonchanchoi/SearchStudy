@@ -44,6 +44,7 @@ class ViewFragment : Fragment() {
         viewAdapterSetting()
         viewModel.viewIntegratedArraylist.observe(viewLifecycleOwner) {
             viewAdapter.setData(it)
+            viewAdapter.notifyDataSetChanged()
         }
     }
 

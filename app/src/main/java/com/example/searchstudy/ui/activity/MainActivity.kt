@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     private var viewIntegrated = Integrated()
     private var allArrayIntegrated = ArrayList<Integrated>()
     private var query = ""
+//    private var tempAllItems = ArrayList<AllItems>()
     private var tempViewItems = ArrayList<AllItems>()
     private var tempDicItems = ArrayList<AllItems>()
 
@@ -160,8 +161,9 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
                 }
             }
 
+
             viewIntegrated = (Integrated(allItemsarraylist = tempViewItems))
-            allArrayIntegrated.add(Integrated("VIEW", tempViewItems, 2))
+            allArrayIntegrated.add(Integrated("VIEW", dataExtraction(tempViewItems), 2))
 //            viewItems.addAll(it)
             //여기
             viewModel.setViewitems(viewIntegrated)
@@ -277,13 +279,13 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         binding.etSearch.clearFocus()
     }
 
-    /**
-     * viewpager데이터 초기화
-     */
-    override fun onResume() {
-        super.onResume()
-        adapter.notifyDataSetChanged()
-    }
+//    /**
+//     * viewpager데이터 초기화
+//     */
+//    override fun onResume() {
+//        super.onResume()
+//        adapter.notifyDataSetChanged()
+//    }
 
     /**
      * 검색 버튼 클리시 초기화 및 api호출
@@ -307,10 +309,33 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         saveSearchData(query)
         searchAdapter.notifyDataSetChanged()
         searchView()
-        binding.vp2.currentItem=0
+        adapter.notifyDataSetChanged()
         binding.clSearch.visibility = View.INVISIBLE
         binding.clSearchResult.visibility = View.VISIBLE
         binding.etSearch.clearFocus()
+    }
+
+
+
+//    private fun dataSort(arrayAllItems: ArrayList<AllItems>){
+//        arrayAllItems.sortWith(compareBy { allItems ->
+//            val tagExcept = "<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>"
+//            val specialChar = "[^\uAC00-\uD7A30-9a-zA-Z\\s]"
+//            val tagExceptTempStr = allItems.title.replace(Regex(tagExcept),"")
+//            val specialCharTempStr = tagExceptTempStr.replace(Regex(specialChar),"")
+//            Html.fromHtml(specialCharTempStr,Html.FROM_HTML_MODE_LEGACY).toString()
+//        })
+//
+//    }
+//
+    private fun dataExtraction(arrayAllItems: ArrayList<AllItems>): ArrayList<AllItems>{
+        val tempArrayList= ArrayList<AllItems>()
+        for(i in 0 until arrayAllItems.size){
+            if(i<=4){
+                tempArrayList.add(arrayAllItems[i])
+            }
+        }
+        return tempArrayList
     }
 }
 

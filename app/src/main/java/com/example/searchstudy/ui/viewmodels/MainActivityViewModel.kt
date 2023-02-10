@@ -163,5 +163,10 @@ class MainActivityViewModel @Inject constructor(
 
         _allIntegratedArraylist.postValue(arrayIntegrated)
     }
+//
+//    fun setDicitems(dicIntegratedItems: Integrated){
+//
+//        _dictionaryIntegratedArraylist.postValue(dicIntegratedItems)
+//    }
 
 }

@@ -5,14 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.searchstudy.databinding.AllRecyclerviewItemDictionaryBinding
 import com.example.searchstudy.databinding.AllRecyclerviewItemViewBinding
-import com.example.searchstudy.databinding.DictionaryRecyclerviewItemBinding
 import com.example.searchstudy.databinding.ViewRecyclerviewItemBinding
 import com.example.searchstudy.network.models.dto.integrated.Integrated
 import com.example.searchstudy.network.models.response.AllItems
-import com.example.searchstudy.ui.recyclerview.dictionary.AllAdapterItemDictionaryViewHolder
-import com.example.searchstudy.ui.recyclerview.dictionary.DictionaryViewHolder
 
 class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -71,11 +67,36 @@ class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun setData(data: Integrated) {
         viewIntegrated = data
+        Log.e("cyc","전--------data.allItemsarraylist-->${data.allItemsarraylist}")
+
         data.allItemsarraylist?.let {
             viewItems = it
+
             viewItems.sortWith(compareBy { allItems ->
-                Html.fromHtml(allItems.title,Html.FROM_HTML_MODE_LEGACY).toString()
+                val tagExcept = "<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>"
+                val specialChar = "[^\uAC00-\uD7A30-9a-zA-Z\\s]"
+                val tagExceptTempStr = allItems.title.replace(Regex(tagExcept),"")
+                val specialCharTempStr = tagExceptTempStr.replace(Regex(specialChar),"")
+                Html.fromHtml(specialCharTempStr,Html.FROM_HTML_MODE_LEGACY).toString()
             })
+            Log.e("cyc","전-------viewItems->${viewItems}")
+        }
+        Log.e("cyc","후---------viewItems->${viewItems}")
+        Log.e("cyc","후--------data.allItemsarraylist-->${data.allItemsarraylist}")
+
+        notifyDataSetChanged()
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 //            Log.e("cyc","view---안찍힌다고???")
 //            viewItems = it.apply {
@@ -107,9 +128,8 @@ class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 ////                }
 //                Log.e("cyc","hteml----제거------allItems.title-->${allItems.title}")
 //            }
-        }
-        notifyDataSetChanged()
-    }
+
+
 
 //    private fun titleHtml(viewItems: ArrayList<AllItems>): ArrayList<AllItems> {
 //        val tempArray = ArrayList<AllItems>()
@@ -133,5 +153,3 @@ class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 //        return tempArray
 //
 //    }
-
-}

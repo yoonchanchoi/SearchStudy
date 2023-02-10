@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <size
+        android:width="1dp"
+        android:height="1dp" />
+    <solid android:color="@color/clr_BABABA"/>
+</shape>
 
+<!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android">-->
+<!--<item-->
+<!--    android:bottom="-2dp"-->
+<!--    android:left="-2dp"-->
+<!--    android:top="1dp"-->
+<!--    android:right="-2dp">-->
 
-
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-<item
-    android:bottom="-2dp"
-    android:left="-2dp"
-    android:top="1dp"
-    android:right="-2dp">
-
-    <shape android:shape="rectangle">
-        <stroke
-            android:width="1dp"
-            android:color="@color/clr_BABABA"/>
-    </shape>
-</item>
-</layer-list>
+<!--    <shape android:shape="rectangle">-->
+<!--        <stroke-->
+<!--            android:width="1dp"-->
+<!--            android:color="@color/clr_BABABA"/>-->
+<!--    </shape>-->
+<!--</item>-->
+<!--</layer-list>-->
 
 
 <!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android">-->

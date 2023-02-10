@@ -47,6 +47,7 @@ class AllFragment : Fragment() {
 
         viewModel.allIntegratedArraylist.observe(viewLifecycleOwner){
             allAdapter.setData(it)
+            allAdapter.notifyDataSetChanged()
         }
 
 //        viewModel.viewItemsArrayList.observe(viewLifecycleOwner){

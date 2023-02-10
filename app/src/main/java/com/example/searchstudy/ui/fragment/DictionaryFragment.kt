@@ -43,6 +43,7 @@ class DictionaryFragment : Fragment() {
         settingAdapter()
         viewModel.dictionaryIntegratedArraylist.observe(viewLifecycleOwner){
             dictionaryAdapter.setData(it)
+            dictionaryAdapter.notifyDataSetChanged()
         }
     }
 
@@ -52,7 +53,7 @@ class DictionaryFragment : Fragment() {
     private fun settingAdapter() {
         dictionaryAdapter = DictionaryAdapter()
         val dictionaryLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        dictionaryLayoutManager.stackFromEnd = true // 키보드 열릴시 recycclerview 스크롤 처리
+//        dictionaryLayoutManager.stackFromEnd = true // 키보드 열릴시 recycclerview 스크롤 처리
         binding.rvDictionary.apply {
             layoutManager = dictionaryLayoutManager
             adapter = dictionaryAdapter

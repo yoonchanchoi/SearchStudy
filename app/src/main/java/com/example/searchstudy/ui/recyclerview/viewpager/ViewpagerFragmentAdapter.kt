@@ -18,4 +18,7 @@ class ViewpagerFragmentAdapter(fragmentActivity: FragmentActivity): FragmentStat
     override fun createFragment(position: Int): Fragment {
         return fragmentList[position]
     }
+
+
+
 }
