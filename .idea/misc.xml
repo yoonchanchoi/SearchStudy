@@ -9,6 +9,7 @@
         <entry key="app/src/main/res/drawable/ic_close.xml" value="0.205" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1705" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.1185" />
+        <entry key="app/src/main/res/drawable/item_loading.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/search_text_delete.xml" value="0.1955" />
         <entry key="app/src/main/res/layout/activity_first_search.xml" value="0.2234375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
@@ -31,6 +32,8 @@
         <entry key="app/src/main/res/layout/holder_recyclerview_out.xml" value="0.22239583333333332" />
         <entry key="app/src/main/res/layout/image_recyclerview_item.xml" value="0.14463019250253292" />
         <entry key="app/src/main/res/layout/img_recyclerview_item.xml" value="0.13903985507246377" />
+        <entry key="app/src/main/res/layout/item_loading.xml" value="0.30480072463768115" />
+        <entry key="app/src/main/res/layout/item_row.xml" value="0.30480072463768115" />
         <entry key="app/src/main/res/layout/recent_search_recyclerview_item.xml" value="0.27717391304347827" />
         <entry key="app/src/main/res/layout/view_recyclerview_item.xml" value="0.5619834710743802" />
       </map>

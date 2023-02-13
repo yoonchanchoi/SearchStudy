@@ -41,6 +41,7 @@ class AllAdapterViewHolder(private val binding: AllRecyclerviewItemBinding) :
 
                 layoutManager = LinearLayoutManager(binding.root.context)
                 this.adapter = DictionaryAdapter().apply {
+
                     setData(integrated)
                 }
             }

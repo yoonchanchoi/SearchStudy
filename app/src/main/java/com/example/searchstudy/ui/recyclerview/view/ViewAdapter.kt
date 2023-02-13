@@ -71,19 +71,15 @@ class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         data.allItemsarraylist?.let {
             viewItems = it
-
-            viewItems.sortWith(compareBy { allItems ->
-                val tagExcept = "<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>"
-                val specialChar = "[^\uAC00-\uD7A30-9a-zA-Z\\s]"
-                val tagExceptTempStr = allItems.title.replace(Regex(tagExcept),"")
-                val specialCharTempStr = tagExceptTempStr.replace(Regex(specialChar),"")
-                Html.fromHtml(specialCharTempStr,Html.FROM_HTML_MODE_LEGACY).toString()
-            })
-            Log.e("cyc","전-------viewItems->${viewItems}")
         }
-        Log.e("cyc","후---------viewItems->${viewItems}")
-        Log.e("cyc","후--------data.allItemsarraylist-->${data.allItemsarraylist}")
+        notifyDataSetChanged()
+    }
 
+    fun addData(data: Integrated){
+        viewIntegrated = data
+        data.allItemsarraylist?.let {
+            viewItems.addAll(it)
+        }
         notifyDataSetChanged()
     }
 }

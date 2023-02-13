@@ -45,6 +45,7 @@ class DictionaryFragment : Fragment() {
             dictionaryAdapter.setData(it)
             dictionaryAdapter.notifyDataSetChanged()
         }
+
     }
 
     /**

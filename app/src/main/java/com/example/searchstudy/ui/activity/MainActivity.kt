@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     private lateinit var adapter: ViewpagerFragmentAdapter
 
     //    private var allItems = ArrayList<AllItems>()
+    private var dicIntegrated = Integrated()
     private var viewIntegrated = Integrated()
     private var allArrayIntegrated = ArrayList<Integrated>()
     private var query = ""
@@ -140,29 +141,31 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     private fun initObserve() {
         viewModel.blogItemsArraylist.observe(this) {
 
-            if (it.size < 5) {
-                tempViewItems.addAll(it)
-            } else {
-                for (i in 0 until 5) {
-//                allItems.add(it[i])
-                    tempViewItems.add(it[i])
-                }
-            }
-
+//            if (it.size < 5) {
+//                tempViewItems.addAll(it)
+//            } else {
+//                for (i in 0 until 5) {
+////                allItems.add(it[i])
+//                    tempViewItems.add(it[i])
+//                }
+//            }
+            tempViewItems.addAll(it)
 //            tempItems.addAll(it)
             viewModel.searchCafe(query)
         }
         viewModel.cafeItemsArraylist.observe(this) {
-            if (it.size < 5) {
-                tempViewItems.addAll(it)
-            } else {
-                for (i in 0 until 5) {
-                    tempViewItems.add(it[i])
-                }
-            }
+//            if (it.size < 5) {
+//                tempViewItems.addAll(it)
+//            } else {
+//                for (i in 0 until 5) {
+//                    tempViewItems.add(it[i])
+//                }
+//            }
 
-
+            tempViewItems.addAll(it)
+            dataSort(tempViewItems)
             viewIntegrated = (Integrated(allItemsarraylist = tempViewItems))
+
             allArrayIntegrated.add(Integrated("VIEW", dataExtraction(tempViewItems), 2))
 //            viewItems.addAll(it)
             //여기
@@ -172,14 +175,19 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             viewModel.searchDictionary(query)
         }
         viewModel.dictionaryItemsArraylist.observe(this) {
-            if (it.size < 5) {
-                tempDicItems.addAll(it)
-            } else {
-                for (i in 0 until 5) {
-                    tempDicItems.add(it[i])
-                }
-            }
-            allArrayIntegrated.add(Integrated("백과사전", tempDicItems, 2))
+//            if (it.size < 5) {
+//                tempDicItems.addAll(it)
+//            } else {
+//                for (i in 0 until 5) {
+//                    tempDicItems.add(it[i])
+//                }
+//            }
+            tempDicItems.addAll(it)
+            dataSort(tempDicItems)
+            dicIntegrated = (Integrated(allItemsarraylist = tempDicItems))
+            viewModel.setDicitems(dicIntegrated)
+            allArrayIntegrated.add(Integrated("백과사전", dataExtraction(tempDicItems), 2))
+
             viewModel.setIntegrated(allArrayIntegrated)
         }
     }
@@ -292,7 +300,6 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      */
     private fun searchView() {
 //        allItems.clear()
-
         allArrayIntegrated.clear()
         tempViewItems.clear()
         tempDicItems.clear()
@@ -317,17 +324,17 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
 
 
 
-//    private fun dataSort(arrayAllItems: ArrayList<AllItems>){
-//        arrayAllItems.sortWith(compareBy { allItems ->
-//            val tagExcept = "<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>"
-//            val specialChar = "[^\uAC00-\uD7A30-9a-zA-Z\\s]"
-//            val tagExceptTempStr = allItems.title.replace(Regex(tagExcept),"")
-//            val specialCharTempStr = tagExceptTempStr.replace(Regex(specialChar),"")
-//            Html.fromHtml(specialCharTempStr,Html.FROM_HTML_MODE_LEGACY).toString()
-//        })
-//
-//    }
-//
+    private fun dataSort(arrayAllItems: ArrayList<AllItems>){
+        arrayAllItems.sortWith(compareBy { allItems ->
+            val tagExcept = "<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>"
+            val specialChar = "[^\uAC00-\uD7A30-9a-zA-Z\\s]"
+            val tagExceptTempStr = allItems.title.replace(Regex(tagExcept),"")
+            val specialCharTempStr = tagExceptTempStr.replace(Regex(specialChar),"")
+            Html.fromHtml(specialCharTempStr,Html.FROM_HTML_MODE_LEGACY).toString()
+        })
+
+    }
+
     private fun dataExtraction(arrayAllItems: ArrayList<AllItems>): ArrayList<AllItems>{
         val tempArrayList= ArrayList<AllItems>()
         for(i in 0 until arrayAllItems.size){

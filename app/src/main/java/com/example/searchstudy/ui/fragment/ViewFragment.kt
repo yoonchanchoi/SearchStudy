@@ -1,14 +1,13 @@
 package com.example.searchstudy.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.FragmentViewBinding
 import com.example.searchstudy.ui.recyclerview.view.ViewAdapter
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
@@ -46,6 +45,25 @@ class ViewFragment : Fragment() {
             viewAdapter.setData(it)
             viewAdapter.notifyDataSetChanged()
         }
+
+        binding.rvView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+
+                super.onScrolled(recyclerView, dx, dy)
+                val lastVisibleItemPosition =
+                    (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                recyclerView.adapter?.let {
+                    val itemTotalCount = it.itemCount - 1
+                    if(itemTotalCount == lastVisibleItemPosition){
+//                        binding.pbLoad.progress
+//                        //데이터 api 호출
+//                        //데이터 세팅
+//                        //프로그래스마 종료(안보여주기)
+
+                    }
+                }
+            }
+        })
     }
 
     /**

@@ -60,6 +60,7 @@ class MainActivityViewModel @Inject constructor(
                     response.body()?.let {
                         _blogItemsArraylist.postValue(it.allItems)
 
+
                     }
                 }else{
                     Log.e("cyc", "통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
@@ -110,7 +111,7 @@ class MainActivityViewModel @Inject constructor(
                     Log.e("cyc", "통신 성공")
                     response.body()?.let {
                         _dictionaryItemsArraylist.postValue(it.allItems)
-                        _dictionaryIntegratedArraylist.postValue(Integrated(allItemsarraylist = it.allItems))
+//                        _dictionaryIntegratedArraylist.postValue(Integrated(allItemsarraylist = it.allItems))
                     }
                 }else{
                     Log.e("cyc", "통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
@@ -164,9 +165,9 @@ class MainActivityViewModel @Inject constructor(
         _allIntegratedArraylist.postValue(arrayIntegrated)
     }
 //
-//    fun setDicitems(dicIntegratedItems: Integrated){
-//
-//        _dictionaryIntegratedArraylist.postValue(dicIntegratedItems)
-//    }
+    fun setDicitems(dicIntegratedItems: Integrated){
+
+        _dictionaryIntegratedArraylist.postValue(dicIntegratedItems)
+    }
 
 }
