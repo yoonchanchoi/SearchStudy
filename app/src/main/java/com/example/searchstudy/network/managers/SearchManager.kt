@@ -1,11 +1,12 @@
 package com.example.searchstudy.network.managers
 
+import android.view.Display
 import com.example.searchstudy.network.models.response.*
 import retrofit2.Call
 
 interface SearchManager {
-    fun searchBlog(query: String): Call<ResultSearchAll>
-    fun searchCafe(query: String): Call<ResultSearchAll>
-    fun searchDictionary(query: String): Call<ResultSearchAll>
-    fun searchImg(query: String): Call<ResultSearchImg>
+    fun requestBlog(query: String, start: Int): Call<ResultSearchAll>
+    fun requestCafe(query: String, start: Int): Call<ResultSearchAll>
+    fun requestDictionary(query: String, start: Int): Call<ResultSearchAll>
+    fun requestImg(query: String, start: Int): Call<ResultSearchImg>
 }

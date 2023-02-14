@@ -3,7 +3,6 @@ package com.example.searchstudy.ui.activity
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
-import android.text.Html
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -13,9 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.ActivityMainBinding
-import com.example.searchstudy.network.models.dto.integrated.Integrated
 import com.example.searchstudy.network.models.dto.searchDto.SearchData
-import com.example.searchstudy.network.models.response.AllItems
 import com.example.searchstudy.ui.recyclerview.search.SearchAdapter
 import com.example.searchstudy.ui.recyclerview.search.SearchRecyclerListener
 import com.example.searchstudy.ui.recyclerview.viewpager.ViewpagerFragmentAdapter
@@ -40,15 +37,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     private lateinit var searchDataList: ArrayList<SearchData>
     private lateinit var searchAdapter: SearchAdapter
     private lateinit var adapter: ViewpagerFragmentAdapter
-
-    //    private var allItems = ArrayList<AllItems>()
-    private var dicIntegrated = Integrated()
-    private var viewIntegrated = Integrated()
-    private var allArrayIntegrated = ArrayList<Integrated>()
     private var query = ""
-//    private var tempAllItems = ArrayList<AllItems>()
-    private var tempViewItems = ArrayList<AllItems>()
-    private var tempDicItems = ArrayList<AllItems>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -140,55 +129,14 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      */
     private fun initObserve() {
         viewModel.blogItemsArraylist.observe(this) {
-
-//            if (it.size < 5) {
-//                tempViewItems.addAll(it)
-//            } else {
-//                for (i in 0 until 5) {
-////                allItems.add(it[i])
-//                    tempViewItems.add(it[i])
-//                }
-//            }
-            tempViewItems.addAll(it)
-//            tempItems.addAll(it)
-            viewModel.searchCafe(query)
+            if(viewModel.moreLoad){
+                viewModel.requestCafe(viewModel.query,viewModel.lastItemPoint)
+            }else{
+                viewModel.requestCafe(query)
+            }
         }
         viewModel.cafeItemsArraylist.observe(this) {
-//            if (it.size < 5) {
-//                tempViewItems.addAll(it)
-//            } else {
-//                for (i in 0 until 5) {
-//                    tempViewItems.add(it[i])
-//                }
-//            }
-
-            tempViewItems.addAll(it)
-            dataSort(tempViewItems)
-            viewIntegrated = (Integrated(allItemsarraylist = tempViewItems))
-
-            allArrayIntegrated.add(Integrated("VIEW", dataExtraction(tempViewItems), 2))
-//            viewItems.addAll(it)
-            //여기
-            viewModel.setViewitems(viewIntegrated)
-
-//            viewModel.setViewitems(tempItems)
-            viewModel.searchDictionary(query)
-        }
-        viewModel.dictionaryItemsArraylist.observe(this) {
-//            if (it.size < 5) {
-//                tempDicItems.addAll(it)
-//            } else {
-//                for (i in 0 until 5) {
-//                    tempDicItems.add(it[i])
-//                }
-//            }
-            tempDicItems.addAll(it)
-            dataSort(tempDicItems)
-            dicIntegrated = (Integrated(allItemsarraylist = tempDicItems))
-            viewModel.setDicitems(dicIntegrated)
-            allArrayIntegrated.add(Integrated("백과사전", dataExtraction(tempDicItems), 2))
-
-            viewModel.setIntegrated(allArrayIntegrated)
+            viewModel.requestDictionary(query)
         }
     }
 
@@ -287,27 +235,6 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         binding.etSearch.clearFocus()
     }
 
-//    /**
-//     * viewpager데이터 초기화
-//     */
-//    override fun onResume() {
-//        super.onResume()
-//        adapter.notifyDataSetChanged()
-//    }
-
-    /**
-     * 검색 버튼 클리시 초기화 및 api호출
-     */
-    private fun searchView() {
-//        allItems.clear()
-        allArrayIntegrated.clear()
-        tempViewItems.clear()
-        tempDicItems.clear()
-        viewModel.searchBlog(query)
-        viewModel.searchImg(query)
-
-    }
-
     /**
      * 검색 버튼 클리시 활동
      */
@@ -315,60 +242,16 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         query = binding.etSearch.text.toString()
         saveSearchData(query)
         searchAdapter.notifyDataSetChanged()
-        searchView()
+        viewModel.requestBlog(query = query)
+        viewModel.requestImg(query = query)
+        viewModel.query = query
         adapter.notifyDataSetChanged()
         binding.clSearch.visibility = View.INVISIBLE
         binding.clSearchResult.visibility = View.VISIBLE
         binding.etSearch.clearFocus()
     }
-
-
-
-    private fun dataSort(arrayAllItems: ArrayList<AllItems>){
-        arrayAllItems.sortWith(compareBy { allItems ->
-            val tagExcept = "<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>"
-            val specialChar = "[^\uAC00-\uD7A30-9a-zA-Z\\s]"
-            val tagExceptTempStr = allItems.title.replace(Regex(tagExcept),"")
-            val specialCharTempStr = tagExceptTempStr.replace(Regex(specialChar),"")
-            Html.fromHtml(specialCharTempStr,Html.FROM_HTML_MODE_LEGACY).toString()
-        })
-
-    }
-
-    private fun dataExtraction(arrayAllItems: ArrayList<AllItems>): ArrayList<AllItems>{
-        val tempArrayList= ArrayList<AllItems>()
-        for(i in 0 until arrayAllItems.size){
-            if(i<=4){
-                tempArrayList.add(arrayAllItems[i])
-            }
-        }
-        return tempArrayList
-    }
 }
 
-
-//            this.setOnFocusChangeListener { v, focus ->
-//                when (focus) {
-//                    true -> {
-////                        binding.clMain.setOnTouchListener { view, event ->
-//////                            binding.svSearch.clearFocus()
-////                            hideKeyboard()
-////                            false
-////                        }
-//                    }
-//                    false -> {
-//                        binding.clSearch.visibility = View.INVISIBLE
-////                        binding.clSearchResult.visibility = View.VISIBLE
-//                    }
-//                }
-//            }
-
-
-//        binding.clMain.setOnTouchListener { view, motionEvent ->
-//            Log.e("cyc","setOnTouchListener")
-//            hideKeyboard()
-//            false
-//        }
 
 
 

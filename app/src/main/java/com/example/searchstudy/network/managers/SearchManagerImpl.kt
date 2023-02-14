@@ -6,17 +6,17 @@ import retrofit2.Call
 import javax.inject.Inject
 
 class SearchManagerImpl @Inject constructor(private val service: SearchService) : SearchManager {
-    override fun searchBlog(query: String): Call<ResultSearchAll> =
-        service.searchBlog(query)
+    override fun requestBlog(query: String, start: Int): Call<ResultSearchAll> =
+        service.requestBlog(query, start = start)
 
-    override fun searchCafe(query: String): Call<ResultSearchAll> =
-        service.searchCafe(query)
+    override fun requestCafe(query: String, start: Int): Call<ResultSearchAll> =
+        service.requestCafe(query, start = start)
 
-    override fun searchDictionary(query: String): Call<ResultSearchAll> =
-        service.searchDictionary(query)
+    override fun requestDictionary(query: String, start: Int): Call<ResultSearchAll> =
+        service.requestDictionary(query, start =start)
 
-    override fun searchImg(query: String): Call<ResultSearchImg> =
-        service.searchImg(query)
+    override fun requestImg(query: String, start: Int): Call<ResultSearchImg> =
+        service.requestImg(query, start =start)
 
 }
 

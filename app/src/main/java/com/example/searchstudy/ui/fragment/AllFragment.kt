@@ -5,16 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.searchstudy.databinding.FragmentAllBinding
+import com.example.searchstudy.network.models.dto.integrated.Integrated
+import com.example.searchstudy.network.models.response.AllItems
 import com.example.searchstudy.ui.recyclerview.all.AllAdapter
-import com.example.searchstudy.ui.recyclerview.dictionary.DictionaryAdapter
-import com.example.searchstudy.ui.recyclerview.view.ViewAdapter
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
+import com.example.searchstudy.util.Util
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,10 +20,10 @@ class AllFragment : Fragment() {
 
     private val viewModel: MainActivityViewModel by activityViewModels()
     private lateinit var binding: FragmentAllBinding
-    private var allAdapter= AllAdapter()
-    private lateinit var concatAdapter: ConcatAdapter
-    private val viewAdapter = ViewAdapter()
-    private val dictionaryAdapter= DictionaryAdapter()
+    private var allAdapter = AllAdapter()
+    private val tempAllViewItems = ArrayList<AllItems>()
+    private val tempAllIntegratedArrayList = ArrayList<Integrated>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,50 +40,48 @@ class AllFragment : Fragment() {
         init()
     }
 
-    private fun init(){
+    /**
+     * 옵저버 세팅
+     */
+    private fun init() {
         adapterSetting()
 
-        viewModel.allIntegratedArraylist.observe(viewLifecycleOwner){
-            allAdapter.setData(it)
-            allAdapter.notifyDataSetChanged()
+        viewModel.blogItemsArraylist.observe(viewLifecycleOwner) {
+            tempAllViewItems.clear()
+            tempAllIntegratedArrayList.clear()
+            tempAllViewItems.addAll(it)
+        }
+        viewModel.cafeItemsArraylist.observe(viewLifecycleOwner) {
+            tempAllViewItems.addAll(it)
+            Util.dataSort(tempAllViewItems)
+            tempAllIntegratedArrayList.add(
+                Integrated(
+                    "VIEW",
+                    Util.dataExtraction(tempAllViewItems),
+                    2
+                )
+            )
+        }
+        viewModel.dictionaryItemsArraylist.observe(viewLifecycleOwner) {
+            tempAllIntegratedArrayList.add(Integrated("백과 사전", Util.dataExtraction(it), 2))
+            viewModel.setAllIntegratedArraylist(tempAllIntegratedArrayList)
         }
 
-//        viewModel.viewItemsArrayList.observe(viewLifecycleOwner){
-//            viewAdapter.setData(it)
-//        }
-//        viewModel.dictionaryItemsArraylist.observe(viewLifecycleOwner){
-//            dictionaryAdapter.setData(it)
-//        }
-//        viewModel.allItemsArraylist.observe(viewLifecycleOwner){
-//            outAllAdapter.setData(it)
-//        }
+        viewModel.allIntegratedArraylist.observe(viewLifecycleOwner) {
+            allAdapter.setData(it)
+        }
     }
 
+    /**
+     * 어댑터 세팅
+     */
+    private fun adapterSetting() {
 
-    private fun adapterSetting(){
-
-        val allLayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL, false)
+        val allLayoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvOutAll.apply {
-            layoutManager=allLayoutManager
-            adapter=allAdapter
-//            addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
-
+            layoutManager = allLayoutManager
+            adapter = allAdapter
         }
-//        concatAdapter = ConcatAdapter(viewAdapter, dictionaryAdapter)
-//        val allLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-////        allLayoutManager.stackFromEnd = true
-//        binding.rvOutAll.apply {
-//            layoutManager = allLayoutManager
-//            adapter = concatAdapter
-//        }
-
-
-//        outAllAdapter = OutAllAdapter()
-//        val allLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-//        allLayoutManager.stackFromEnd = true // 키보드 열릴시 recycclerview 스크롤 처리
-//        binding.rvOutAll.apply {
-//            layoutManager = allLayoutManager
-//            adapter = outAllAdapter
-//        }
     }
 }

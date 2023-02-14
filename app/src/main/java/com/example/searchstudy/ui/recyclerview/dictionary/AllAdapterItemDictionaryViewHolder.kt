@@ -4,7 +4,6 @@ package com.example.searchstudy.ui.recyclerview.dictionary
 import android.text.Html
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.AllRecyclerviewItemDictionaryBinding
-import com.example.searchstudy.network.models.dto.integrated.Integrated
 import com.example.searchstudy.network.models.response.AllItems
 
 

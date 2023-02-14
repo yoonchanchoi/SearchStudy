@@ -1,20 +1,19 @@
 package com.example.searchstudy.ui.recyclerview.all
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.*
 import com.example.searchstudy.network.models.dto.integrated.Integrated
-import com.example.searchstudy.network.models.response.AllItems
 import kotlin.collections.ArrayList
 
 class AllAdapter() : RecyclerView.Adapter<AllAdapterViewHolder>() {
 
-    private var arrayIntegratedData= mutableListOf<Integrated>()
+    private var arrayIntegratedData = mutableListOf<Integrated>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllAdapterViewHolder {
 
-        val itemBinding = AllRecyclerviewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val itemBinding =
+            AllRecyclerviewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AllAdapterViewHolder(itemBinding)
     }
 
@@ -26,19 +25,11 @@ class AllAdapter() : RecyclerView.Adapter<AllAdapterViewHolder>() {
         return arrayIntegratedData.size
     }
 
-    fun setData(arrayIntegrated:ArrayList<Integrated>) {
-        Log.e("cyc", "ViewAdapter----data---->data")
-        arrayIntegratedData=arrayIntegrated
+    fun setData(arrayIntegrated: ArrayList<Integrated>) {
+        arrayIntegratedData = arrayIntegrated
         notifyDataSetChanged()
     }
 }
-
-
-
-
-
-
-
 
 
 //        when(viewType){

@@ -1,7 +1,5 @@
 package com.example.searchstudy.ui.recyclerview.dictionary
 
-import android.text.Html
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -62,14 +60,6 @@ class DictionaryAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         dictionaryIntegrated = data
         data.allItemsarraylist?.let {
             dictionaryItems = it
-//            dictionaryItems.sortWith(compareBy { allItems ->
-//                val tagExcept = "<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>"
-//                val match = "[^\uAC00-\uD7A30-9a-zA-Z\\s]"
-//                val tagExceptTempStr = allItems.title.replace(Regex(tagExcept),"")
-//                val matchTempStr = tagExceptTempStr.replace(Regex(match),"")
-//                Log.e("cyc","tempStr--->${matchTempStr}")
-//                Html.fromHtml(matchTempStr, Html.FROM_HTML_MODE_LEGACY).toString()
-//            })
         }
         notifyDataSetChanged()
     }

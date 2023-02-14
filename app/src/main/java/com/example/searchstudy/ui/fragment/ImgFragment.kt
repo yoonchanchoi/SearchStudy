@@ -20,8 +20,6 @@ class ImgFragment : Fragment() {
     private lateinit var imgAdapter: ImgAdapter
 
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,16 +31,17 @@ class ImgFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-            init()
+        init()
     }
 
 
     /**
-     * 백과사전 데이터 세팅
+     *
      */
     private fun init() {
         settingAdapter()
-        viewModel.imgItemsArraylist.observe(viewLifecycleOwner){
+        //옵저버 세팅
+        viewModel.imgItemsArraylist.observe(viewLifecycleOwner) {
             imgAdapter.setData(it)
         }
     }
@@ -52,9 +51,10 @@ class ImgFragment : Fragment() {
      */
     private fun settingAdapter() {
         imgAdapter = ImgAdapter()
-        val imgLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL).apply {
-            gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
-        }
+        val imgLayoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL).apply {
+                gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
+            }
         binding.rvImg.apply {
             layoutManager = imgLayoutManager
             adapter = imgAdapter
