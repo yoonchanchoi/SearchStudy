@@ -13,7 +13,7 @@ class AllAdapterViewHolder(private val binding: AllRecyclerviewItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(integrated: Integrated) {
-        Log.e("cyc", "전체---integrated--->${integrated}")
+//        Log.e("cyc", "전체---integrated--->${integrated}")
         if (integrated.title == "VIEW") {
             binding.tvCatagory.text = integrated.title
             binding.rvIn.apply {

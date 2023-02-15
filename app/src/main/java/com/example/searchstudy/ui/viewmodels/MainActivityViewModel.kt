@@ -51,7 +51,12 @@ class MainActivityViewModel @Inject constructor(
 
     var query = ""
     var lastItemPoint = 0
-    var moreLoad = false
+    var lastViewItemPoint = 0
+    var lastDicItemPoint = 0
+    var lastImgItemPoint = 0
+    var viewMoreLoad = false
+    var dicMoreLoad = false
+    var imgMoreLoad = false
 
     /**
      * search
@@ -68,7 +73,7 @@ class MainActivityViewModel @Inject constructor(
                     Log.e("cyc", "블로그-통신 성공")
                     response.body()?.let {
                         _blogItemsArraylist.postValue(it.allItems)
-                        moreLoad = checkMoreLoad
+                        viewMoreLoad = checkMoreLoad
 
                     }
                 } else {
@@ -110,7 +115,7 @@ class MainActivityViewModel @Inject constructor(
         })
     }
 
-    fun requestDictionary(query: String, start: Int = 1) {
+    fun requestDictionary(query: String, start: Int = 1, checkMoreLoad: Boolean = false) {
         val result = searchManager.requestDictionary(query = query, start)
         result.enqueue(object : Callback<ResultSearchAll> {
             override fun onResponse(
@@ -121,6 +126,7 @@ class MainActivityViewModel @Inject constructor(
                     Log.e("cyc", "백과사전-통신 성공")
                     response.body()?.let {
                         _dictionaryItemsArraylist.postValue(it.allItems)
+                        dicMoreLoad = checkMoreLoad
 //                        _dictionaryIntegratedArraylist.postValue(Integrated(allItemsarraylist = it.allItems))
                     }
                 } else {
@@ -137,7 +143,7 @@ class MainActivityViewModel @Inject constructor(
         })
     }
 
-    fun requestImg(query: String, start: Int = 1) {
+    fun requestImg(query: String, start: Int = 1, checkMoreLoad: Boolean = false) {
         val result = searchManager.requestImg(query = query, start)
         result.enqueue(object : Callback<ResultSearchImg> {
             override fun onResponse(
@@ -148,6 +154,7 @@ class MainActivityViewModel @Inject constructor(
                     Log.e("cyc", "이미지-통신 성공")
                     response.body()?.let {
                         _imgItemsArraylist.postValue(it.imgItem)
+                        imgMoreLoad = checkMoreLoad
 
                     }
                 } else {

@@ -27,13 +27,13 @@ interface SearchService {
     fun requestDictionary(
         @Query(value = "query", encoded = true) query: String,
         @Query(value = "display") display: Int? = 10,
-        @Query(value = "start") start: Int? = null,
+        @Query(value = "start") start: Int? = null
     ): Call<ResultSearchAll>
 
     @GET("/v1/search/image")
     fun requestImg(
         @Query(value = "query", encoded = true) query: String,
-        @Query(value = "display") display: Int? = 10,
+        @Query(value = "display") display: Int? = 30,
         @Query(value = "start") start: Int? = null,
         @Query(value = "sort") sort: String? = null,
         @Query(value = "filter") filter: String? = null

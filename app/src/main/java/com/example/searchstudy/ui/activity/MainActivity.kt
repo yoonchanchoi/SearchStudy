@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -11,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.searchstudy.databinding.ActivityMainBinding
 import com.example.searchstudy.network.models.dto.searchDto.SearchData
 import com.example.searchstudy.ui.recyclerview.search.SearchAdapter
@@ -58,7 +60,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      */
     private fun initData() {
         //최근 검색어 데이터 가져와서 어댑터에 세팅
-        viewPagerSetting()
+//        viewPagerSetting()
         searchDataList = pref.getSearchList() as ArrayList<SearchData>
         searchAdapterSetting(searchDataList)
         checkSearchTextData()
@@ -122,6 +124,29 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             searchAdapter.notifyDataSetChanged()
             checkSearchTextData()
         }
+        binding.vp2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                /*when(position){
+                    0->{
+                        Log.e("cyc","뷰페이저 0=통합 선택")
+                        viewModel.requestBlog(viewModel.query)
+                    }
+                    1->{
+                        Log.e("cyc","뷰페이저 1=View 선택")
+                        viewModel.requestBlog(viewModel.query)
+                    }
+                    2->{
+                        Log.e("cyc","뷰페이저 2=diction 선택")
+                        viewModel.requestBlog(viewModel.query)
+
+                    }
+                    else->{
+                        Log.e("cyc","뷰페이저 3=Img 선택")
+                        viewModel.requestBlog(viewModel.query)
+                    }
+                }*/
+            }
+        })
     }
 
     /**
@@ -129,14 +154,20 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      */
     private fun initObserve() {
         viewModel.blogItemsArraylist.observe(this) {
-            if(viewModel.moreLoad){
-                viewModel.requestCafe(viewModel.query,viewModel.lastItemPoint)
-            }else{
+            Log.e("cyc","main___initObserve()_____blogItemsArrayList")
+            if(!viewModel.viewMoreLoad){
                 viewModel.requestCafe(query)
+            }else{
+                viewModel.requestCafe(viewModel.query,viewModel.lastViewItemPoint)
             }
         }
         viewModel.cafeItemsArraylist.observe(this) {
-            viewModel.requestDictionary(query)
+//            Log.e("cyc","main---query")
+            Log.e("cyc","main___initObserve()_____cafeItemsArrayList")
+
+            if(!viewModel.viewMoreLoad){
+                viewModel.requestDictionary(query)
+            }
         }
     }
 
@@ -242,6 +273,8 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         query = binding.etSearch.text.toString()
         saveSearchData(query)
         searchAdapter.notifyDataSetChanged()
+        //여기 수정
+        viewPagerSetting()
         viewModel.requestBlog(query = query)
         viewModel.requestImg(query = query)
         viewModel.query = query

@@ -27,7 +27,7 @@ class ViewFragment : Fragment() {
     private var viewAdapter = ViewAdapter()
     private val tempViewItems = ArrayList<AllItems>()
     private val tempTotalViewitems = ArrayList<AllItems>()
-    private lateinit var progressBar : LoadingProgressDialog
+    private lateinit var progressBar: LoadingProgressDialog
 //    private val progressBar = LoadingProgressDialog(requireContext())
 
 
@@ -52,30 +52,23 @@ class ViewFragment : Fragment() {
     private fun init() {
         viewAdapterSetting()
         initObserve()
-        progressBar= LoadingProgressDialog(requireContext())
+        progressBar = LoadingProgressDialog(requireContext())
         binding.rvView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-
                 val lastVisibleItemPosition =
                     (recyclerView.layoutManager as LinearLayoutManager?)?.let {
                         it.findLastCompletelyVisibleItemPosition()
                     }
-//                Log.e("cyc", "lastVisibleItemPosition--->${lastVisibleItemPosition}")
                 val itemTotalCount = recyclerView.adapter?.let {
                     it.itemCount - 1
                 } // 어댑터에 등록된 아이템의 총 개수 -1
-//                Log.e("cyc", "itemTotalCount--->${itemTotalCount}")
-//                Log.e("cyc", "binding.rvView.canScrollVertically(1)--->${binding.rvView.canScrollVertically(1)}")
+
+                Log.e(">>>>>>>>>>>>>>>>>>>>>>>", "TotalCount :: $itemTotalCount")
                 // 스크롤이 끝에 도달했는지 확인
                 if (!binding.rvView.canScrollVertically(1) && lastVisibleItemPosition == itemTotalCount) {
-//                        viewModel.requestBlog(viewModel.query)
-                    Log.e("cyc", "스크롤 끝")
-                    Log.e("cyc", "lastVisibleItemPosition->${lastVisibleItemPosition}")
-                    Log.e("cyc", "itemTotalCount->${itemTotalCount}")
-                    Log.e("cyc", "itemTotalCount+1->${itemTotalCount!! + 1}")
-                    viewModel.requestBlog(viewModel.query, itemTotalCount!! + 1, true)
-                    viewModel.lastItemPoint = itemTotalCount + 1
+                    viewModel.requestBlog(viewModel.query, (itemTotalCount!! + 1)/2, true)
+                    viewModel.lastViewItemPoint = (itemTotalCount + 1)/2
 //                    binding.clProgress.visibility=View.VISIBLE
                     progressBar.show()
                 }
@@ -89,48 +82,50 @@ class ViewFragment : Fragment() {
      */
     private fun initObserve() {
         viewModel.blogItemsArraylist.observe(viewLifecycleOwner) {
+            Log.e("cyc","viewfragment___initObserve()_____blogItemsArrayList")
+
             tempViewItems.clear()
-            if (!viewModel.moreLoad) {
-                Log.e("cyc", "View--->clear()")
+            if (!viewModel.viewMoreLoad) {
                 tempTotalViewitems.clear()
             }
             tempViewItems.addAll(it)
-            Log.e("cyc", "")
-            Log.e("cyc", "---------bolg-tempViewitems-시작---------")
-            for (i in 0 until tempTotalViewitems.size) {
-                Log.e("cyc", "tempTotalViewitems---->${tempTotalViewitems[i]}")
-            }
-            Log.e("cyc", "---------bolg-tempViewitems-끝---------")
-            Log.e("cyc", "")
-
+//            Log.e("cyc", "")
+//            Log.e("cyc", "--------view-bolg-tempViewitems-시작---------")
+//            for (i in 0 until tempTotalViewitems.size) {
+//                Log.e("cyc", "tempTotalViewitems---->${tempTotalViewitems[i]}")
+//            }
+//            Log.e("cyc", "--------view-bolg-tempViewitems-끝---------")
+//            Log.e("cyc", "")
         }
         viewModel.cafeItemsArraylist.observe(viewLifecycleOwner) {
+            Log.e("cyc","viewfragment___initObserve()_____cafeItemsArrayList")
+
             tempViewItems.addAll(it)
+            //여기 임시 수정
             Util.dataSort(tempViewItems)
             tempTotalViewitems.addAll(tempViewItems)
-            Log.e("cyc", "")
-            Log.e("cyc", "---------블로그 + 카페-tempViewitems-시작---------")
-            for (i in 0 until tempTotalViewitems.size) {
-                Log.e("cyc", "tempTotalViewitems---->${tempTotalViewitems[i]}")
-            }
-            Log.e("cyc", "---------블로그 + 카페-tempViewitems-끝---------")
-            Log.e("cyc", "")
+
+//            Log.e("cyc", "")
+//            Log.e("cyc", "--------view-블로그 + 카페-tempViewitems-시작---------")
+//            for (i in 0 until tempTotalViewitems.size) {
+//                Log.e("cyc", "tempTotalViewitems---->${tempTotalViewitems[i]}")
+//            }
+//            Log.e("cyc", "--------view-블로그 + 카페-tempViewitems-끝---------")
+//            Log.e("cyc", "")
             val viewIntegrated = (Integrated(allItemsarraylist = tempTotalViewitems))
             viewModel.setViewIntegrateditems(viewIntegrated)
         }
         viewModel.viewIntegrated.observe(viewLifecycleOwner) {
-            Log.e("cyc", "")
-            Log.e("cyc", "---------블로그 + 카페-어탭터-tempViewitems-시작---------")
-            for (i in 0 until it.allItemsarraylist!!.size) {
-                Log.e("cyc", "tempViewitems---->${it.allItemsarraylist!![i]}")
-            }
-            Log.e("cyc", "---------블로그 + 카페-어탭터-tempViewitems-끝---------")
-            Log.e("cyc", "")
+//            Log.e("cyc", "")
+//            Log.e("cyc", "--------view-블로그 + 카페-어탭터-tempViewitems-시작---------")
+//            for (i in 0 until it.allItemsarraylist!!.size) {
+//                Log.e("cyc", "tempViewitems---->${it.allItemsarraylist!![i]}")
+//            }
+//            Log.e("cyc", "--------view-블로그 + 카페-어탭터-tempViewitems-끝---------")
+//            Log.e("cyc", "")
             viewAdapter.setData(it)
             progressBar.dismiss()
 //            binding.clProgress.visibility=View.INVISIBLE
-
-
         }
     }
 
@@ -140,7 +135,6 @@ class ViewFragment : Fragment() {
      */
     private fun viewAdapterSetting() {
         viewAdapter = ViewAdapter()
-//        viewAdapter.removeAll()
         val rvViewLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvView.apply {
@@ -217,3 +211,23 @@ class ViewFragment : Fragment() {
 //                        viewModel.requestBlog(viewModel.query)
 //                    }
 //                }
+
+
+
+
+
+
+
+
+
+
+
+
+//if (!viewModel.viewMoreLoad) {
+//    tempTotalViewitems.clear()
+//    tempViewItems.addAll(it)
+//
+//}else{
+//    tempViewItems.addAll(it)
+//    viewModel.requestCafe(viewModel.query,viewModel.lastViewItemPoint)
+//}

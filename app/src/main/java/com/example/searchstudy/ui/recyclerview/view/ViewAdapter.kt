@@ -67,7 +67,7 @@ class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun setData(data: Integrated) {
         viewIntegrated = data
-        Log.e("cyc","전--------data.allItemsarraylist-->${data.allItemsarraylist}")
+//        Log.e("cyc","전--------data.allItemsarraylist-->${data.allItemsarraylist}")
 
         data.allItemsarraylist?.let {
             viewItems = it

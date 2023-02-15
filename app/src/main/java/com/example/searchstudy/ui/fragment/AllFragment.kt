@@ -1,6 +1,7 @@
 package com.example.searchstudy.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -47,24 +48,38 @@ class AllFragment : Fragment() {
         adapterSetting()
 
         viewModel.blogItemsArraylist.observe(viewLifecycleOwner) {
-            tempAllViewItems.clear()
-            tempAllIntegratedArrayList.clear()
-            tempAllViewItems.addAll(it)
+            Log.e("cyc","allfragment___initObserve()_____blogItemsArrayList")
+
+            if(!viewModel.viewMoreLoad){
+                tempAllViewItems.clear()
+                tempAllIntegratedArrayList.clear()
+                tempAllViewItems.addAll(it)
+            }
+
         }
         viewModel.cafeItemsArraylist.observe(viewLifecycleOwner) {
-            tempAllViewItems.addAll(it)
-            Util.dataSort(tempAllViewItems)
-            tempAllIntegratedArrayList.add(
-                Integrated(
-                    "VIEW",
-                    Util.dataExtraction(tempAllViewItems),
-                    2
+            Log.e("cyc","allfragment___initObserve()_____cafeItemsArrayList")
+
+            if(!viewModel.viewMoreLoad){
+                tempAllViewItems.addAll(it)
+                Util.dataSort(tempAllViewItems)
+                tempAllIntegratedArrayList.add(
+                    Integrated(
+                        "VIEW",
+                        Util.dataExtraction(tempAllViewItems),
+                        2
+                    )
                 )
-            )
+            }
         }
         viewModel.dictionaryItemsArraylist.observe(viewLifecycleOwner) {
-            tempAllIntegratedArrayList.add(Integrated("백과 사전", Util.dataExtraction(it), 2))
-            viewModel.setAllIntegratedArraylist(tempAllIntegratedArrayList)
+            Log.e("cyc","allfragment___initObserve()_____dicItemsArrayList")
+
+            if(!viewModel.dicMoreLoad){
+                Util.dataSort(it)
+                tempAllIntegratedArrayList.add(Integrated("백과 사전", Util.dataExtraction(it), 2))
+                viewModel.setAllIntegratedArraylist(tempAllIntegratedArrayList)
+            }
         }
 
         viewModel.allIntegratedArraylist.observe(viewLifecycleOwner) {

@@ -2,11 +2,14 @@ package com.example.searchstudy.ui.recyclerview.viewpager
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.searchstudy.ui.fragment.AllFragment
 import com.example.searchstudy.ui.fragment.DictionaryFragment
 import com.example.searchstudy.ui.fragment.ImgFragment
 import com.example.searchstudy.ui.fragment.ViewFragment
+import com.google.android.material.tabs.TabLayout
+import kotlin.jvm.internal.Ref
 
 class ViewpagerFragmentAdapter(fragmentActivity: FragmentActivity): FragmentStateAdapter(fragmentActivity){
 
@@ -18,6 +21,9 @@ class ViewpagerFragmentAdapter(fragmentActivity: FragmentActivity): FragmentStat
     override fun createFragment(position: Int): Fragment {
         return fragmentList[position]
     }
+
+
+
 
 
 

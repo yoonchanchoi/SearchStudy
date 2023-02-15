@@ -13,10 +13,10 @@ class SearchManagerImpl @Inject constructor(private val service: SearchService) 
         service.requestCafe(query, start = start)
 
     override fun requestDictionary(query: String, start: Int): Call<ResultSearchAll> =
-        service.requestDictionary(query, start =start)
+        service.requestDictionary(query, start = start)
 
     override fun requestImg(query: String, start: Int): Call<ResultSearchImg> =
-        service.requestImg(query, start =start)
+        service.requestImg(query, start = start)
 
 }
 
