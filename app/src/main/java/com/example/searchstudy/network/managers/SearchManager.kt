@@ -9,4 +9,7 @@ interface SearchManager {
     fun requestCafe(query: String, start: Int): Call<ResultSearchAll>
     fun requestDictionary(query: String, start: Int): Call<ResultSearchAll>
     fun requestImg(query: String, start: Int): Call<ResultSearchImg>
+    fun requestCheckAdultWord(query: String): Call<ResultCheckAdultWord>
+    fun requestCheckMissWord(query: String): Call<ResultMisspelledWord>
+
 }

@@ -1,4 +1,4 @@
-package com.example.searchstudy.ui.fragment
+package com.example.searchstudy.ui.dialog
 
 import android.R
 import android.app.Dialog
@@ -51,6 +51,7 @@ class LoadingProgressDialog(context: Context) : Dialog(context) {
         binding.pb.isIndeterminate = true
         binding.pb.indeterminateDrawable.setColorFilter(Color.parseColor("#4CAF50"), PorterDuff.Mode.MULTIPLY)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        setCancelable(false)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 

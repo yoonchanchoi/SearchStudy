@@ -7,6 +7,7 @@ import com.example.searchstudy.network.models.response.AllItems
 
 class ViewViewHolder(private val binding: ViewRecyclerviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
+    // view뷰홀더 바인드
     fun bind(allItems: AllItems) {
         binding.tvTitle.text = Html.fromHtml(allItems.title,Html.FROM_HTML_MODE_LEGACY)
         if(allItems.postdate.isEmpty()){

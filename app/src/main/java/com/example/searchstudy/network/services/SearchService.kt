@@ -33,10 +33,20 @@ interface SearchService {
     @GET("/v1/search/image")
     fun requestImg(
         @Query(value = "query", encoded = true) query: String,
-        @Query(value = "display") display: Int? = 30,
+        @Query(value = "display") display: Int? = 20,
         @Query(value = "start") start: Int? = null,
         @Query(value = "sort") sort: String? = null,
         @Query(value = "filter") filter: String? = null
     ): Call<ResultSearchImg>
+
+
+    @GET("/v1/search/adult.json")
+    fun requestCheckAdultWord(
+        @Query(value = "query", encoded = true) query: String): Call<ResultCheckAdultWord>
+
+    @GET("/v1/search/errata.json")
+    fun requestCheckMissWord(
+        @Query(value = "query", encoded = true) query: String): Call<ResultMisspelledWord>
+
 
 }

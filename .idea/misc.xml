@@ -15,6 +15,7 @@
         <entry key="app/src/main/res/drawable/search_text_delete.xml" value="0.1955" />
         <entry key="app/src/main/res/layout/activity_first_search.xml" value="0.2234375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/adult_warning_dialog.xml" value="0.1953125" />
         <entry key="app/src/main/res/layout/all_recyclerview_dictionary_item.xml" value="0.254981884057971" />
         <entry key="app/src/main/res/layout/all_recyclerview_item.xml" value="0.254981884057971" />
         <entry key="app/src/main/res/layout/all_recyclerview_item_dictionary.xml" value="0.254981884057971" />
@@ -27,6 +28,7 @@
         <entry key="app/src/main/res/layout/dialog_progress.xml" value="0.2586050724637681" />
         <entry key="app/src/main/res/layout/dialog_progressbar.xml" value="0.26614583333333336" />
         <entry key="app/src/main/res/layout/dictionary_recyclerview_item.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_adult_warning_dialog.xml" value="0.19635416666666666" />
         <entry key="app/src/main/res/layout/fragment_all.xml" value="0.2062780269058296" />
         <entry key="app/src/main/res/layout/fragment_dictionary.xml" value="0.15602836879432624" />
         <entry key="app/src/main/res/layout/fragment_img.xml" value="0.15602836879432624" />

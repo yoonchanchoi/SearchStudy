@@ -18,5 +18,12 @@ class SearchManagerImpl @Inject constructor(private val service: SearchService) 
     override fun requestImg(query: String, start: Int): Call<ResultSearchImg> =
         service.requestImg(query, start = start)
 
+    override fun requestCheckAdultWord(query: String): Call<ResultCheckAdultWord> =
+        service.requestCheckAdultWord(query)
+
+    override fun requestCheckMissWord(query: String): Call<ResultMisspelledWord> =
+        service.requestCheckMissWord(query)
+
+
 }
 

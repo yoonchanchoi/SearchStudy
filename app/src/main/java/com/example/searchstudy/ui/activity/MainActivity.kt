@@ -5,20 +5,25 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.searchstudy.databinding.ActivityMainBinding
+import com.example.searchstudy.databinding.FragmentAdultWarningDialogBinding
 import com.example.searchstudy.network.models.dto.searchDto.SearchData
+import com.example.searchstudy.ui.dialog.AdultWarningDialogFragment
 import com.example.searchstudy.ui.recyclerview.search.SearchAdapter
 import com.example.searchstudy.ui.recyclerview.search.SearchRecyclerListener
 import com.example.searchstudy.ui.recyclerview.viewpager.ViewpagerFragmentAdapter
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
+import com.example.searchstudy.util.Constants
 import com.example.searchstudy.util.Pref
 import com.example.searchstudy.util.toDateString
 import com.google.android.material.tabs.TabLayoutMediator
@@ -60,7 +65,6 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      */
     private fun initData() {
         //최근 검색어 데이터 가져와서 어댑터에 세팅
-//        viewPagerSetting()
         searchDataList = pref.getSearchList() as ArrayList<SearchData>
         searchAdapterSetting(searchDataList)
         checkSearchTextData()
@@ -93,8 +97,8 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             this.setOnEditorActionListener { textView, actionId, keyEvent ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_SEARCH -> {
-                        actionSearch()
-                        hideKeyboard()
+                        checkAdultWord()
+//                        actionSearch()
                         true
                     }
                     else -> {
@@ -112,10 +116,9 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         binding.btnSearchBack.setOnClickListener {
             hideKeyboard()
         }
-
         //검색 버튼 리스너
         binding.btnSearch.setOnClickListener {
-            actionSearch()
+            checkAdultWord()
         }
         //최근 검색어 삭제 리스너
         binding.tvDeleteAll.setOnClickListener {
@@ -124,29 +127,6 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             searchAdapter.notifyDataSetChanged()
             checkSearchTextData()
         }
-        binding.vp2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                /*when(position){
-                    0->{
-                        Log.e("cyc","뷰페이저 0=통합 선택")
-                        viewModel.requestBlog(viewModel.query)
-                    }
-                    1->{
-                        Log.e("cyc","뷰페이저 1=View 선택")
-                        viewModel.requestBlog(viewModel.query)
-                    }
-                    2->{
-                        Log.e("cyc","뷰페이저 2=diction 선택")
-                        viewModel.requestBlog(viewModel.query)
-
-                    }
-                    else->{
-                        Log.e("cyc","뷰페이저 3=Img 선택")
-                        viewModel.requestBlog(viewModel.query)
-                    }
-                }*/
-            }
-        })
     }
 
     /**
@@ -154,19 +134,35 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      */
     private fun initObserve() {
         viewModel.blogItemsArraylist.observe(this) {
-            Log.e("cyc","main___initObserve()_____blogItemsArrayList")
-            if(!viewModel.viewMoreLoad){
+            if (!viewModel.viewMoreLoad) {
                 viewModel.requestCafe(query)
-            }else{
-                viewModel.requestCafe(viewModel.query,viewModel.lastViewItemPoint)
             }
         }
         viewModel.cafeItemsArraylist.observe(this) {
-//            Log.e("cyc","main---query")
-            Log.e("cyc","main___initObserve()_____cafeItemsArrayList")
-
-            if(!viewModel.viewMoreLoad){
+            if (!viewModel.viewMoreLoad) {
                 viewModel.requestDictionary(query)
+            }
+        }
+        viewModel.checkAdultWord.observe(this) {
+            if (it == Constants.MISSWORD) {
+                AdultWarningDialogFragment().show(supportFragmentManager, "AdultWarningDialog")
+                binding.etSearch.text.clear()
+            } else {
+                viewModel.requestCheckMissWord(query)
+            }
+        }
+        viewModel.checkMissWord.observe(this){
+            if(it.isEmpty()){
+                actionSearch()
+            }else{
+                Toast.makeText(this, "오타를 수정했습니다.", Toast.LENGTH_SHORT).apply {
+                    this.setGravity(Gravity.BOTTOM,0,100)
+                    this.show()
+                }
+                Log.e("cyc","오타 수정-->${it}")
+                binding.etSearch.setText(it)
+                query=it
+                actionSearch()
             }
         }
     }
@@ -270,11 +266,11 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      * 검색 버튼 클리시 활동
      */
     private fun actionSearch() {
-        query = binding.etSearch.text.toString()
-        saveSearchData(query)
-        searchAdapter.notifyDataSetChanged()
-        //여기 수정
         viewPagerSetting()
+        hideKeyboard()
+        if (!query.isNullOrBlank()) {
+            saveSearchData(query)
+        }
         viewModel.requestBlog(query = query)
         viewModel.requestImg(query = query)
         viewModel.query = query
@@ -283,6 +279,12 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         binding.clSearchResult.visibility = View.VISIBLE
         binding.etSearch.clearFocus()
     }
+
+    private fun checkAdultWord() {
+        query = binding.etSearch.text.toString()
+        viewModel.requestCheckAdultWord(query)
+    }
+
 }
 
 

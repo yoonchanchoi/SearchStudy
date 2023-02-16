@@ -15,9 +15,15 @@ class ViewpagerFragmentAdapter(fragmentActivity: FragmentActivity): FragmentStat
 
     private val fragmentList = listOf(AllFragment(), ViewFragment(), DictionaryFragment(), ImgFragment())
 
+    /**
+     * 뷰페이저 프래그먼튼 갯수 가져오기
+     */
     override fun getItemCount(): Int {
         return fragmentList.size
     }
+    /**
+     * 해당 포지션의 프래그먼트 가져오기
+     */
     override fun createFragment(position: Int): Fragment {
         return fragmentList[position]
     }

@@ -12,11 +12,15 @@ import com.example.searchstudy.network.models.response.AllItems
 
 class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    //view의 arraylsit 아이템
     var viewItems = mutableListOf<AllItems>()
+    //viewIntegrated 객체
     var viewIntegrated = Integrated()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             1 -> {
+                //뷰 탭의 view뷰홀더 레이아웃
                 val viewRecyclerviewItemBinding = ViewRecyclerviewItemBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -24,6 +28,7 @@ class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 )
                 ViewViewHolder(viewRecyclerviewItemBinding)
             }
+            //통합 탭의 allview뷰홀더 레이아웃
             else -> {
                 val allRecyclerviewItemDictionaryBinding = AllRecyclerviewItemViewBinding.inflate(
                     LayoutInflater.from(parent.context),

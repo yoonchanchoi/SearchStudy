@@ -30,5 +30,9 @@ class ImgAdapter() : RecyclerView.Adapter<ImgViewHolder>() {
         imgItems = data
         notifyDataSetChanged()
     }
+    fun addData(data: ArrayList<ImgItems>){
+        imgItems.addAll(data)
+        notifyDataSetChanged()
+    }
 
 }
