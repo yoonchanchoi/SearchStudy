@@ -72,18 +72,16 @@ class ImgFragment : Fragment() {
 
     private fun initObserve() {
         viewModel.imgItemsArraylist.observe(viewLifecycleOwner) {
+            resImgTotal = it.total
             if (!viewModel.imgMoreLoad) {
 //                tempImgItems.clear()
 //                tempImgItems.addAll(it)
-                imgAdapter.setData(it)
+                imgAdapter.setData(it.imgItem)
             }else{
-                imgAdapter.addData(it)
+                imgAdapter.addData(it.imgItem)
 
             }
             progressBar.dismiss()
-        }
-        viewModel.imgTotalItems.observe(viewLifecycleOwner) {
-            resImgTotal = it
         }
     }
 

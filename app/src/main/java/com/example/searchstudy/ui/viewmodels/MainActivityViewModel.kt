@@ -20,21 +20,39 @@ class MainActivityViewModel @Inject constructor(
     private val searchManager: SearchManager
 ) : ViewModel() {
 
-    private val _blogItemsArraylist = MutableLiveData<ArrayList<AllItems>>()
-    val blogItemsArraylist: LiveData<ArrayList<AllItems>>
+
+    private val _blogItemsArraylist = MutableLiveData<ResultSearchAll>()
+    val blogItemsArraylist: LiveData<ResultSearchAll>
         get() = _blogItemsArraylist
 
-    private val _cafeItemsArraylist = MutableLiveData<ArrayList<AllItems>>()
-    val cafeItemsArraylist: LiveData<ArrayList<AllItems>>
+    private val _cafeItemsArraylist = MutableLiveData<ResultSearchAll>()
+    val cafeItemsArraylist: LiveData<ResultSearchAll>
         get() = _cafeItemsArraylist
 
-    private val _dictionaryItemsArraylist = MutableLiveData<ArrayList<AllItems>>()
-    val dictionaryItemsArraylist: LiveData<ArrayList<AllItems>>
+    private val _dictionaryItemsArraylist = MutableLiveData<ResultSearchAll>()
+    val dictionaryItemsArraylist: LiveData<ResultSearchAll>
         get() = _dictionaryItemsArraylist
 
-    private val _imgItemsArraylist = MutableLiveData<ArrayList<ImgItems>>()
-    val imgItemsArraylist: LiveData<ArrayList<ImgItems>>
+    private val _imgItemsArraylist = MutableLiveData<ResultSearchImg>()
+    val imgItemsArraylist: LiveData<ResultSearchImg>
         get() = _imgItemsArraylist
+
+
+//    private val _blogItemsArraylist = MutableLiveData<ArrayList<AllItems>>()
+//    val blogItemsArraylist: LiveData<ArrayList<AllItems>>
+//        get() = _blogItemsArraylist
+//
+//    private val _cafeItemsArraylist = MutableLiveData<ArrayList<AllItems>>()
+//    val cafeItemsArraylist: LiveData<ArrayList<AllItems>>
+//        get() = _cafeItemsArraylist
+//
+//    private val _dictionaryItemsArraylist = MutableLiveData<ArrayList<AllItems>>()
+//    val dictionaryItemsArraylist: LiveData<ArrayList<AllItems>>
+//        get() = _dictionaryItemsArraylist
+//
+//    private val _imgItemsArraylist = MutableLiveData<ArrayList<ImgItems>>()
+//    val imgItemsArraylist: LiveData<ArrayList<ImgItems>>
+//        get() = _imgItemsArraylist
 
     private val _viewIntegrated = MutableLiveData<Integrated>()
     val viewIntegrated: LiveData<Integrated>
@@ -99,9 +117,11 @@ class MainActivityViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     Log.e("cyc", "블로그-통신 성공")
                     response.body()?.let {
-                        _blogItemsArraylist.postValue(it.allItems)
-                        _blogTotalItems.postValue(it.total)
-                        viewMoreLoad = checkMoreLoad
+                        _blogItemsArraylist.postValue(it)
+
+//                        _blogItemsArraylist.postValue(it.allItems)
+//                        _blogTotalItems.postValue(it.total)
+                        blogMoreLoad = checkMoreLoad
 
                     }
                 } else {
@@ -128,8 +148,9 @@ class MainActivityViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     Log.e("cyc", "카페-통신 성공")
                     response.body()?.let {
-                        _cafeItemsArraylist.postValue(it.allItems)
-                        _cafeTotalItems.postValue(it.total)
+                        _cafeItemsArraylist.postValue(it)
+//                        _cafeItemsArraylist.postValue(it.allItems)
+//                        _cafeTotalItems.postValue(it.total)
                         cafeMoreLoad=checkMoreLoad
                     }
                 } else {
@@ -158,8 +179,9 @@ class MainActivityViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     Log.e("cyc", "백과사전-통신 성공")
                     response.body()?.let {
-                        _dictionaryItemsArraylist.postValue(it.allItems)
-                        _dicTotalItems.postValue(it.total)
+                        _dictionaryItemsArraylist.postValue(it)
+//                        _dictionaryItemsArraylist.postValue(it.allItems)
+//                        _dicTotalItems.postValue(it.total)
                         dicMoreLoad = checkMoreLoad
 //                        _dictionaryIntegratedArraylist.postValue(Integrated(allItemsarraylist = it.allItems))
                     }
@@ -189,8 +211,9 @@ class MainActivityViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     Log.e("cyc", "이미지-통신 성공")
                     response.body()?.let {
-                        _imgItemsArraylist.postValue(it.imgItem)
-                        _imgTotalItems.postValue(it.total)
+                        _imgItemsArraylist.postValue(it)
+//                        _imgItemsArraylist.postValue(it.imgItem)
+//                        _imgTotalItems.postValue(it.total)
                         imgMoreLoad = checkMoreLoad
 
                     }
@@ -272,7 +295,6 @@ class MainActivityViewModel @Inject constructor(
      * view 아이템 세팅
      */
     fun setViewIntegrateditems(viewIntegratedItems: Integrated) {
-
         _viewIntegrated.postValue(viewIntegratedItems)
     }
     /**

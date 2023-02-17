@@ -14,6 +14,7 @@ import com.example.searchstudy.databinding.FragmentViewBinding
 import com.example.searchstudy.network.models.dto.integrated.Integrated
 import com.example.searchstudy.network.models.response.AllItems
 import com.example.searchstudy.ui.dialog.LoadingProgressDialog
+import com.example.searchstudy.ui.recyclerview.view.AllAdapterItemViewViewHolder
 import com.example.searchstudy.ui.recyclerview.view.ViewAdapter
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
 import com.example.searchstudy.util.Util
@@ -28,6 +29,14 @@ class ViewFragment : Fragment() {
     private val tempViewItems = ArrayList<AllItems>()
     private val tempTotalViewitems = ArrayList<AllItems>()
     private lateinit var progressBar: LoadingProgressDialog
+    private var resCafeTotal = 0
+    private var resBlogTotal = 0
+    private var blogCount = 0
+    private var cafeCount = 0
+
+
+    //아이템 갯수를 체크 각각의 오브절부에서
+
 //    private val progressBar = LoadingProgressDialog(requireContext())
 
 
@@ -55,19 +64,37 @@ class ViewFragment : Fragment() {
         progressBar = LoadingProgressDialog(requireContext())
         binding.rvView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                Log.e("cyc", "onScrolled")
                 super.onScrolled(recyclerView, dx, dy)
                 val lastVisibleItemPosition =
                     (recyclerView.layoutManager as LinearLayoutManager?)?.let {
                         it.findLastCompletelyVisibleItemPosition()
                     }
+                Log.e("cyc","lastVisibleItemPosition--->${lastVisibleItemPosition}")
+
                 val itemTotalCount = recyclerView.adapter?.let {
-                    it.itemCount - 1
+                    Log.e("cyc","it--->${it}")
+                    it.itemCount
                 } // 어댑터에 등록된 아이템의 총 개수 -1
+                Log.e("cyc","itemTotalCount--->${itemTotalCount}")
                 // 스크롤이 끝에 도달했는지 확인
-                if (!binding.rvView.canScrollVertically(1) && lastVisibleItemPosition == itemTotalCount) {
-                    viewModel.requestBlog(viewModel.query, (itemTotalCount!! + 1)/2, true)
-                    viewModel.lastViewItemPoint = (itemTotalCount + 1)/2
-                    progressBar.show()
+                Log.e("cyc", "스크롤 다음 ")
+                if (resBlogTotal > blogCount || resCafeTotal > cafeCount) {
+//                    tempTotalViewitems.clear()
+                    Log.e("cyc", "1111111111")
+                    if (!binding.rvView.canScrollVertically(1) && lastVisibleItemPosition!!+1 == itemTotalCount) {
+                        Log.e("cyc", "스크롤 갯수")
+                        if (resBlogTotal > blogCount && resCafeTotal > cafeCount) {
+                            viewModel.requestCafe(viewModel.query, cafeCount + 1, true)
+                            viewModel.requestBlog(viewModel.query, blogCount + 1, true)
+                        } else if (resBlogTotal > blogCount) {
+                            viewModel.requestBlog(viewModel.query, blogCount + 1, true)
+                        } else {
+                            viewModel.requestCafe(viewModel.query, cafeCount + 1, true)
+                        }
+//                        tempTotalViewitems.clear()
+                        progressBar.show()
+                    }
                 }
             }
         })
@@ -79,13 +106,18 @@ class ViewFragment : Fragment() {
      */
     private fun initObserve() {
         viewModel.blogItemsArraylist.observe(viewLifecycleOwner) {
-            Log.e("cyc","viewfragment___initObserve()_____blogItemsArrayList")
-
-            tempViewItems.clear()
-            if (!viewModel.viewMoreLoad) {
+            Log.e("cyc", "viewfragment___initObserve()_____blogItemsArrayList")
+            if (!viewModel.blogMoreLoad) {
+                blogCount = 0
                 tempTotalViewitems.clear()
+                resBlogTotal = it.total
             }
-            tempViewItems.addAll(it)
+            Log.e("cyc", "2222222222")
+
+            blogCount += it.allItems.size
+            tempTotalViewitems.addAll(it.allItems)
+            Util.dataSort(tempTotalViewitems)
+//            tempViewItems.addAll(it.allItems)
 //            Log.e("cyc", "")
 //            Log.e("cyc", "--------view-bolg-tempViewitems-시작---------")
 //            for (i in 0 until tempTotalViewitems.size) {
@@ -95,22 +127,39 @@ class ViewFragment : Fragment() {
 //            Log.e("cyc", "")
         }
         viewModel.cafeItemsArraylist.observe(viewLifecycleOwner) {
-            tempViewItems.addAll(it)
-            //여기 임시 수정
-            Util.dataSort(tempViewItems)
-            tempTotalViewitems.addAll(tempViewItems)
+            if (!viewModel.cafeMoreLoad) {
+                cafeCount = 0
+                resCafeTotal = it.total
+            }
+            cafeCount += it.allItems.size
+            tempTotalViewitems.addAll(it.allItems)
+            Util.dataSort(tempTotalViewitems)
+//            resCafeTotal = it.total
+//            tempViewItems.addAll(it.allItems)
+//            //여기 임시 수정
+//            Util.dataSort(tempViewItems)
+//            tempTotalViewitems.addAll(tempViewItems)
 
-//            Log.e("cyc", "")
-//            Log.e("cyc", "--------view-블로그 + 카페-tempViewitems-시작---------")
-//            for (i in 0 until tempTotalViewitems.size) {
-//                Log.e("cyc", "tempTotalViewitems---->${tempTotalViewitems[i]}")
-//            }
-//            Log.e("cyc", "--------view-블로그 + 카페-tempViewitems-끝---------")
-//            Log.e("cyc", "")
+            Log.e("cyc", "")
+            Log.e("cyc", "--------view-블로그 + 카페-tempViewitems-시작---------")
+            for (i in 0 until tempTotalViewitems.size) {
+                Log.e("cyc", "tempTotalViewitems---->${tempTotalViewitems[i]}")
+            }
+            Log.e("cyc", "--------view-블로그 + 카페-tempViewitems-끝---------")
+            Log.e("cyc", "")
             val viewIntegrated = (Integrated(allItemsarraylist = tempTotalViewitems))
             viewModel.setViewIntegrateditems(viewIntegrated)
         }
         viewModel.viewIntegrated.observe(viewLifecycleOwner) {
+
+            if (!viewModel.dicMoreLoad && !viewModel.cafeMoreLoad) {
+                Log.e("cyc", "viewadapter___setData")
+
+                viewAdapter.setData(it)
+            } else {
+                Log.e("cyc", "viewadapter___addData")
+                viewAdapter.addData(it)
+            }
 //            Log.e("cyc", "")
 //            Log.e("cyc", "--------view-블로그 + 카페-어탭터-tempViewitems-시작---------")
 //            for (i in 0 until it.allItemsarraylist!!.size) {
@@ -118,7 +167,6 @@ class ViewFragment : Fragment() {
 //            }
 //            Log.e("cyc", "--------view-블로그 + 카페-어탭터-tempViewitems-끝---------")
 //            Log.e("cyc", "")
-            viewAdapter.setData(it)
             progressBar.dismiss()
         }
     }

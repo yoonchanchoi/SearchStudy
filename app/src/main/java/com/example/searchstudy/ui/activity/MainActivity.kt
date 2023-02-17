@@ -134,12 +134,12 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      */
     private fun initObserve() {
         viewModel.blogItemsArraylist.observe(this) {
-            if (!viewModel.viewMoreLoad) {
+            if (!viewModel.blogMoreLoad) {
                 viewModel.requestCafe(query)
             }
         }
         viewModel.cafeItemsArraylist.observe(this) {
-            if (!viewModel.viewMoreLoad) {
+            if (!viewModel.cafeMoreLoad) {
                 viewModel.requestDictionary(query)
             }
         }

@@ -61,6 +61,4 @@ data class AllItems(
     @SerializedName("cafeurl")
     @Expose
     val cafeurl: String = "",
-
-
 )

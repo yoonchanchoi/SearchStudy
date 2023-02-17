@@ -53,7 +53,7 @@ class AllFragment : Fragment() {
             if(!viewModel.viewMoreLoad){
                 tempAllViewItems.clear()
                 tempAllIntegratedArrayList.clear()
-                tempAllViewItems.addAll(it)
+                tempAllViewItems.addAll(it.allItems)
             }
 
         }
@@ -61,7 +61,7 @@ class AllFragment : Fragment() {
             Log.e("cyc","allfragment___initObserve()_____cafeItemsArrayList")
 
             if(!viewModel.viewMoreLoad){
-                tempAllViewItems.addAll(it)
+                tempAllViewItems.addAll(it.allItems)
                 Util.dataSort(tempAllViewItems)
                 tempAllIntegratedArrayList.add(
                     Integrated(
@@ -76,8 +76,8 @@ class AllFragment : Fragment() {
             Log.e("cyc","allfragment___initObserve()_____dicItemsArrayList")
 
             if(!viewModel.dicMoreLoad){
-                Util.dataSort(it)
-                tempAllIntegratedArrayList.add(Integrated("백과 사전", Util.dataExtraction(it), 2))
+                Util.dataSort(it.allItems)
+                tempAllIntegratedArrayList.add(Integrated("백과 사전", Util.dataExtraction(it.allItems), 2))
                 viewModel.setAllIntegratedArraylist(tempAllIntegratedArrayList)
             }
         }

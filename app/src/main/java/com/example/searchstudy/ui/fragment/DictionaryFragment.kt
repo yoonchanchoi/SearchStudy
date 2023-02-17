@@ -86,8 +86,9 @@ class DictionaryFragment : Fragment() {
      */
     private fun initObserve() {
         viewModel.dictionaryItemsArraylist.observe(viewLifecycleOwner) {
-            Util.dataSort(it)
-            val dictionaryIntegrated = (Integrated(allItemsarraylist = it))
+            resDicTotal=it.total
+            Util.dataSort(it.allItems)
+            val dictionaryIntegrated = (Integrated(allItemsarraylist = it.allItems))
             viewModel.setDicIntegrateditems(dictionaryIntegrated)
 //            if (!viewModel.dicMoreLoad) {
 //                tempDicItems.clear()
@@ -118,17 +119,14 @@ class DictionaryFragment : Fragment() {
 //            viewModel.setDicIntegrateditems(dictionaryIntegrated)
         }
         viewModel.dictionaryIntegrated.observe(viewLifecycleOwner) {
+
             if (!viewModel.dicMoreLoad) {
                 dictionaryAdapter.setData(it)
             }else{
                 dictionaryAdapter.addData(it)
             }
-
 //            dictionaryAdapter.setData(it)
             progressBar.dismiss()
-        }
-        viewModel.dicTotalItems.observe(viewLifecycleOwner){
-            resDicTotal=it
         }
     }
 
