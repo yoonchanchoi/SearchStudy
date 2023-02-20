@@ -19,6 +19,5 @@ class DividerItemDecorator(private val mDivider: Drawable) : RecyclerView.ItemDe
             mDivider.setBounds(dividerLeft, dividerTop, dividerRight, dividerBottom)
             mDivider.draw(canvas)
         }
-
     }
 }

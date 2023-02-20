@@ -133,12 +133,12 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      * observe
      */
     private fun initObserve() {
-        viewModel.blogItemsArraylist.observe(this) {
+        viewModel.blogResultSearchArraylist.observe(this) {
             if (!viewModel.blogMoreLoad) {
                 viewModel.requestCafe(query)
             }
         }
-        viewModel.cafeItemsArraylist.observe(this) {
+        viewModel.cafeResultSearchArraylist.observe(this) {
             if (!viewModel.cafeMoreLoad) {
                 viewModel.requestDictionary(query)
             }
@@ -285,6 +285,26 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         viewModel.requestCheckAdultWord(query)
     }
 
+    /*
+    * ui
+    *   main
+    *     MainActivity
+    *     fragment
+    *     all
+    *     - AllFragment
+    *     - viewmodel
+    *     - adapter
+    *     - holder
+    *     view
+    *     - ViewFragment
+    *     - viewmodel
+    *     - adapter
+    *     - holder
+    *     adapter
+    *     viewmodel
+    *   setting
+    *
+    * */
 }
 
 

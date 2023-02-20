@@ -9,10 +9,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.searchstudy.databinding.FragmentAllBinding
-import com.example.searchstudy.network.models.dto.integrated.Integrated
-import com.example.searchstudy.network.models.response.AllItems
+import com.example.searchstudy.network.models.response.AllItem
+import com.example.searchstudy.network.models.response.ResultSearchAll
 import com.example.searchstudy.ui.recyclerview.all.AllAdapter
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
+import com.example.searchstudy.util.Constants
 import com.example.searchstudy.util.Util
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,10 +21,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class AllFragment : Fragment() {
 
     private val viewModel: MainActivityViewModel by activityViewModels()
-    private lateinit var binding: FragmentAllBinding
     private var allAdapter = AllAdapter()
-    private val tempAllViewItems = ArrayList<AllItems>()
-    private val tempAllIntegratedArrayList = ArrayList<Integrated>()
+    private val tempResultSearchAll = ArrayList<ResultSearchAll>()
+    private val tempAllViewItems = ArrayList<AllItem>()
+    private lateinit var binding: FragmentAllBinding
+
 
 
     override fun onCreateView(
@@ -41,49 +43,55 @@ class AllFragment : Fragment() {
         init()
     }
 
+    private fun init() {
+        adapterSetting()
+        initObserve()
+    }
+
     /**
      * 옵저버 세팅
      */
-    private fun init() {
-        adapterSetting()
-
-        viewModel.blogItemsArraylist.observe(viewLifecycleOwner) {
-            Log.e("cyc","allfragment___initObserve()_____blogItemsArrayList")
-
-            if(!viewModel.viewMoreLoad){
+    private fun initObserve() {
+        viewModel.blogResultSearchArraylist.observe(viewLifecycleOwner) {
+            if (!viewModel.blogMoreLoad) {
                 tempAllViewItems.clear()
-                tempAllIntegratedArrayList.clear()
+                tempResultSearchAll.clear()
+                it.allItems.map { allItems ->
+                    allItems.type = Constants.ALLITEMS
+                }
                 tempAllViewItems.addAll(it.allItems)
             }
 
         }
-        viewModel.cafeItemsArraylist.observe(viewLifecycleOwner) {
-            Log.e("cyc","allfragment___initObserve()_____cafeItemsArrayList")
-
-            if(!viewModel.viewMoreLoad){
+        viewModel.cafeResultSearchArraylist.observe(viewLifecycleOwner) {
+            if (!viewModel.cafeMoreLoad) {
+                it.allItems.map { allItems ->
+                    allItems.type = Constants.ALLITEMS
+                }
                 tempAllViewItems.addAll(it.allItems)
                 Util.dataSort(tempAllViewItems)
-                tempAllIntegratedArrayList.add(
-                    Integrated(
-                        "VIEW",
-                        Util.dataExtraction(tempAllViewItems),
-                        2
+                tempResultSearchAll.add(
+                    ResultSearchAll(
+                        category = "VIEW",
+                        allItems = Util.dataExtraction(tempAllViewItems)
                     )
                 )
             }
         }
-        viewModel.dictionaryItemsArraylist.observe(viewLifecycleOwner) {
-            Log.e("cyc","allfragment___initObserve()_____dicItemsArrayList")
-
-            if(!viewModel.dicMoreLoad){
+        viewModel.dictionaryResultSearchArraylist.observe(viewLifecycleOwner) {
+            if (!viewModel.dicMoreLoad) {
+                it.allItems.map { allItems ->
+                    allItems.type = Constants.ALLITEMS
+                }
                 Util.dataSort(it.allItems)
-                tempAllIntegratedArrayList.add(Integrated("백과 사전", Util.dataExtraction(it.allItems), 2))
-                viewModel.setAllIntegratedArraylist(tempAllIntegratedArrayList)
+                tempResultSearchAll.add(
+                    ResultSearchAll(
+                        category = "백과사전",
+                        allItems = Util.dataExtraction(it.allItems)
+                    )
+                )
+                allAdapter.setData(tempResultSearchAll)
             }
-        }
-
-        viewModel.allIntegratedArraylist.observe(viewLifecycleOwner) {
-            allAdapter.setData(it)
         }
     }
 
@@ -91,7 +99,6 @@ class AllFragment : Fragment() {
      * 어댑터 세팅
      */
     private fun adapterSetting() {
-
         val allLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvOutAll.apply {

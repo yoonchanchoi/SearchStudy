@@ -1,6 +1,7 @@
 package com.example.searchstudy.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,10 +20,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class ImgFragment : Fragment() {
 
     private val viewModel: MainActivityViewModel by activityViewModels()
+    private var resImgTotalCount = 0
     private lateinit var binding: FragmentImgBinding
     private lateinit var imgAdapter: ImgAdapter
-    private val tempImgItems = ArrayList<ImgItems>()
-    private var resImgTotal = 0
     private lateinit var progressBar: LoadingProgressDialog
 
     override fun onCreateView(
@@ -39,13 +39,11 @@ class ImgFragment : Fragment() {
         init()
     }
 
-
-    /**
-     *
-     */
     private fun init() {
         settingAdapter()
         initObserve()
+
+        //스크롤 세팅
         progressBar = LoadingProgressDialog(requireContext())
         binding.rvImg.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -59,7 +57,12 @@ class ImgFragment : Fragment() {
                 val lastVisibleItemPosition = getLastVisibleItem(lastVisibleItemPositions!!);
 
 
-                if(resImgTotal>itemTotalCount!!){
+
+
+//                Log.e("cyc","이미지----itemTotalCount--->${itemTotalCount}")
+//                Log.e("cyc","이미지----resImgTotalCount--->${resImgTotalCount}")
+
+                if(resImgTotalCount>itemTotalCount!!){
                     if (binding.rvImg.canScrollVertically(1) && lastVisibleItemPosition + 1 == itemTotalCount) {
                         viewModel.requestImg(viewModel.query, itemTotalCount+1, true)
                         viewModel.lastImgItemPoint = itemTotalCount
@@ -69,16 +72,29 @@ class ImgFragment : Fragment() {
             }
         })
     }
-
+    /**
+     * 옵저버세팅
+     */
     private fun initObserve() {
-        viewModel.imgItemsArraylist.observe(viewLifecycleOwner) {
-            resImgTotal = it.total
+        viewModel.imgResultSearchArraylist.observe(viewLifecycleOwner) {
+            resImgTotalCount = it.total
+
             if (!viewModel.imgMoreLoad) {
-//                tempImgItems.clear()
-//                tempImgItems.addAll(it)
-                imgAdapter.setData(it.imgItem)
+//                Log.e("cyc","====================검색=시작==========================")
+//                for(i in it.imgItems.indices){
+//                    Log.e("cyc","it.imgItems[i]--->${it.imgItems[i]}")
+//                }
+//                Log.e("cyc","====================검색=끝==========================")
+                imgAdapter.setData(it.imgItems)
+
+
             }else{
-                imgAdapter.addData(it.imgItem)
+//                Log.e("cyc","====================더보기=시작==========================")
+//                for(i in it.imgItems.indices){
+//                    Log.e("cyc","it.imgItems[i]--->${it.imgItems[i]}")
+//                }
+//                Log.e("cyc","====================더보기=끝==========================")
+                imgAdapter.addData(it.imgItems)
 
             }
             progressBar.dismiss()
@@ -101,6 +117,9 @@ class ImgFragment : Fragment() {
         }
     }
 
+    /**
+     * 스크롤시 현재 보여지는 이미지 아이템 갯수 반환
+     */
     private fun getLastVisibleItem(lastVisibleItemPositions: IntArray): Int {
         var maxSize = 0
         for (i in lastVisibleItemPositions.indices) {
@@ -112,6 +131,5 @@ class ImgFragment : Fragment() {
         }
         return maxSize
     }
-
 }
 

@@ -1,5 +1,6 @@
 package com.example.searchstudy.network.models.response
 
+import com.example.searchstudy.util.Constants
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -22,10 +23,14 @@ data class ResultSearchAll(
 
     @SerializedName("items")
     @Expose
-    val allItems: ArrayList<AllItems>
+    val allItems: ArrayList<AllItem>,
+
+    var category: String = ""
+
+
 )
 
-data class AllItems(
+data class AllItem(
     @SerializedName("title")
     @Expose
     val title: String = "",
@@ -61,4 +66,8 @@ data class AllItems(
     @SerializedName("cafeurl")
     @Expose
     val cafeurl: String = "",
+
+    var type: Int = Constants.ITEMS
+
+
 )

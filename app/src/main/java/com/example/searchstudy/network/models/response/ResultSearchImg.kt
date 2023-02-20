@@ -22,7 +22,7 @@ data class ResultSearchImg(
 
     @SerializedName("items")
     @Expose
-    val imgItem: ArrayList<ImgItems>
+    val imgItems: ArrayList<ImgItems>
 )
 
 

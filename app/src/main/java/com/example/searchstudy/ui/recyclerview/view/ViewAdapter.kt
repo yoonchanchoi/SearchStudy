@@ -1,25 +1,24 @@
 package com.example.searchstudy.ui.recyclerview.view
 
-import android.text.Html
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.AllRecyclerviewItemViewBinding
 import com.example.searchstudy.databinding.ViewRecyclerviewItemBinding
-import com.example.searchstudy.network.models.dto.integrated.Integrated
-import com.example.searchstudy.network.models.response.AllItems
+import com.example.searchstudy.network.models.response.AllItem
+import com.example.searchstudy.util.Constants
+import com.example.searchstudy.util.Util
 
 class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //view의 arraylsit 아이템
-    var viewItems = mutableListOf<AllItems>()
-    //viewIntegrated 객체
-    var viewIntegrated = Integrated()
+    var viewItems = mutableListOf<AllItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        //viewItems의 타입에 따른 통합, View 뷰홀더 바인딩 구성
         return when (viewType) {
-            1 -> {
+            Constants.ITEMS -> {
                 //뷰 탭의 view뷰홀더 레이아웃
                 val viewRecyclerviewItemBinding = ViewRecyclerviewItemBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -38,13 +37,13 @@ class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 AllAdapterItemViewViewHolder(allRecyclerviewItemDictionaryBinding)
             }
         }
-//        val itemBinding = ViewRecyclerviewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-//        return ViewViewHolder(itemBinding)
+
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (viewIntegrated.type) {
-            1 -> {
+        //viewItems의 타입에 따른 통합, View 뷰홀더 구성
+        when ( viewItems[position].type) {
+            Constants.ITEMS -> {
                 (holder as ViewViewHolder).bind(viewItems[position])
                 holder.setIsRecyclable(false)
             }
@@ -54,7 +53,6 @@ class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
 
         }
-//        holder.bind(viewItems[position])
     }
 
     override fun getItemCount(): Int {
@@ -62,29 +60,22 @@ class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        return viewIntegrated.type
+        return viewItems[position].type
     }
 
-    fun removeAll() {
-        viewItems.clear()
+//    fun removeAll() {
+//        viewItems.clear()
+//        notifyDataSetChanged()
+//    }
+
+    fun setData(data: ArrayList<AllItem>) {
+        viewItems = data
         notifyDataSetChanged()
     }
 
-    fun setData(data: Integrated) {
-        viewIntegrated = data
-//        Log.e("cyc","전--------data.allItemsarraylist-->${data.allItemsarraylist}")
+    fun addData(data: ArrayList<AllItem>){
 
-        data.allItemsarraylist?.let {
-            viewItems = it
-        }
-        notifyDataSetChanged()
-    }
-
-    fun addData(data: Integrated){
-        viewIntegrated = data
-        data.allItemsarraylist?.let {
-            viewItems.addAll(it)
-        }
+        viewItems.addAll(data)
         notifyDataSetChanged()
     }
 }

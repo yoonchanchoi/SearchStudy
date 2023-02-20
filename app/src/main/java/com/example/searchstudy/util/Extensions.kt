@@ -12,19 +12,6 @@ fun Date.toDateString() : String {
     return format.format(this)
 }
 
-//fun RecyclerView.onScrolled()
-
-
-
-
-
-
-
-
-
-
-
-
 fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(editable: Editable?) {

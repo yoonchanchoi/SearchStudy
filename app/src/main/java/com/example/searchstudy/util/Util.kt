@@ -1,16 +1,14 @@
 package com.example.searchstudy.util
 
 import android.text.Html
-import com.example.searchstudy.network.models.response.AllItems
+import com.example.searchstudy.network.models.response.AllItem
 
 object Util {
-
-
 
     /**
      * 데이터 정렬(한글)
      */
-     fun dataSort(arrayAllItems: ArrayList<AllItems>) {
+    fun dataSort(arrayAllItems: ArrayList<AllItem>) {
         arrayAllItems.sortWith(compareBy { allItems ->
             val tagExcept = "<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>"
             val specialChar = "[^\uAC00-\uD7A30-9a-zA-Z\\s]"
@@ -24,8 +22,8 @@ object Util {
     /**
      * 데이터 갯수 세팅
      */
-     fun dataExtraction(arrayAllItems: ArrayList<AllItems>): ArrayList<AllItems> {
-        val tempArrayList = ArrayList<AllItems>()
+    fun dataExtraction(arrayAllItems: ArrayList<AllItem>): ArrayList<AllItem> {
+        val tempArrayList = ArrayList<AllItem>()
         for (i in 0 until arrayAllItems.size) {
             if (i <= 4) {
                 tempArrayList.add(arrayAllItems[i])

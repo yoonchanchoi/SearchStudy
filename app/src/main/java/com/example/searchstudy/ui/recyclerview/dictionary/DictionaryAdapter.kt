@@ -5,16 +5,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.AllRecyclerviewItemDictionaryBinding
 import com.example.searchstudy.databinding.DictionaryRecyclerviewItemBinding
-import com.example.searchstudy.network.models.dto.integrated.Integrated
-import com.example.searchstudy.network.models.response.AllItems
+import com.example.searchstudy.network.models.response.AllItem
+import com.example.searchstudy.util.Constants
 
-class DictionaryAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DictionaryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var dictionaryIntegrated = Integrated()
-    var dictionaryItems = mutableListOf<AllItems>()
+    var dictionaryItems = mutableListOf<AllItem>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        //dictionary의 타입에 따른 통합, 백과사전 뷰홀더 바인딩 구성
         return when (viewType) {
-            1 -> {
+            Constants.ITEMS -> {
                 val dictionaryRecyclerviewItemBinding = DictionaryRecyclerviewItemBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -35,8 +35,9 @@ class DictionaryAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (dictionaryIntegrated.type) {
-            1 -> {
+        //dictionary의 타입에 따른 통합, 백과사전 뷰홀더 구성
+        when (dictionaryItems[position].type) {
+            Constants.ITEMS -> {
                 (holder as DictionaryViewHolder).bind(dictionaryItems[position])
                 holder.setIsRecyclable(false)
             }
@@ -52,20 +53,18 @@ class DictionaryAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        return dictionaryIntegrated.type
+        return dictionaryItems[position].type
     }
 
 
-    fun setData(data: Integrated) {
-        dictionaryIntegrated = data
-        data.allItemsarraylist?.let {
+    fun setData(data: ArrayList<AllItem>) {
+        data?.let {
             dictionaryItems = it
         }
         notifyDataSetChanged()
     }
-    fun addData(data: Integrated){
-        dictionaryIntegrated = data
-        data.allItemsarraylist?.let {
+    fun addData(data: ArrayList<AllItem>){
+        data?.let {
             dictionaryItems.addAll(it)
         }
         notifyDataSetChanged()

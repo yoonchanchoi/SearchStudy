@@ -6,8 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.ImgRecyclerviewItemBinding
 import com.example.searchstudy.network.models.response.ImgItems
 
-class ImgAdapter() : RecyclerView.Adapter<ImgViewHolder>() {
-
+class ImgAdapter : RecyclerView.Adapter<ImgViewHolder>() {
 
     var imgItems = mutableListOf<ImgItems>()
 
