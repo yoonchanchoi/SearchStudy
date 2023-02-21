@@ -14,11 +14,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.example.searchstudy.databinding.ActivityMainBinding
-import com.example.searchstudy.databinding.FragmentAdultWarningDialogBinding
 import com.example.searchstudy.network.models.dto.searchDto.SearchData
 import com.example.searchstudy.ui.dialog.AdultWarningDialogFragment
+import com.example.searchstudy.ui.fragment.AllFragment
+import com.example.searchstudy.ui.fragment.DictionaryFragment
+import com.example.searchstudy.ui.fragment.ImgFragment
+import com.example.searchstudy.ui.fragment.ViewFragment
 import com.example.searchstudy.ui.recyclerview.search.SearchAdapter
 import com.example.searchstudy.ui.recyclerview.search.SearchRecyclerListener
 import com.example.searchstudy.ui.recyclerview.viewpager.ViewpagerFragmentAdapter
@@ -39,12 +41,20 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     @Inject
     lateinit var pref: Pref
 
-    private lateinit var binding: ActivityMainBinding
+    private var query = ""
+    private var dicEndcheck = false
+    private var imgEndcehck = false
     private val viewModel: MainActivityViewModel by viewModels()
+    private var checkViewpagerAllFragment = false
+    private var checkViewpagerViewFragment = false
+    private var checkViewpagerDicFragment = false
+    private var checkViewpagerImgFragment = false
+
+    private lateinit var binding: ActivityMainBinding
     private lateinit var searchDataList: ArrayList<SearchData>
     private lateinit var searchAdapter: SearchAdapter
     private lateinit var adapter: ViewpagerFragmentAdapter
-    private var query = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,15 +144,77 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      */
     private fun initObserve() {
         viewModel.blogResultSearchArraylist.observe(this) {
+
+
             if (!viewModel.blogMoreLoad) {
                 viewModel.requestCafe(query)
+                if (it.allItems.size > 0) {
+                    checkViewpagerViewFragment = true
+                }
             }
         }
         viewModel.cafeResultSearchArraylist.observe(this) {
+
+
             if (!viewModel.cafeMoreLoad) {
+
+                if (it.allItems.size > 0) {
+                    checkViewpagerViewFragment = true
+                }
+                if (checkViewpagerViewFragment) {
+                    checkViewpagerAllFragment = true
+//                adapter.addFragment("VIEW", ViewFragment())
+                }
                 viewModel.requestDictionary(query)
+
             }
+
         }
+        viewModel.dictionaryResultSearchArraylist.observe(this) {
+            if(!viewModel.dicMoreLoad){
+                if (it.allItems.size > 0) {
+                    checkViewpagerAllFragment = true
+                    checkViewpagerDicFragment = true
+//                adapter.addFragment("백과사전", DictionaryFragment())
+                }
+                if (checkViewpagerAllFragment) {
+//                adapter.firstAddFragment("통합", AllFragment())
+                }
+                dicEndcheck = true
+                if (dicEndcheck && imgEndcehck) {
+                    Log.e("cyc", "================================================================")
+                    Log.e("cyc", "dic----checkViewpagerAllFragment-->${checkViewpagerAllFragment}")
+                    Log.e("cyc", "dic----checkViewpagerViewFragment-->${checkViewpagerViewFragment}")
+                    Log.e("cyc", "dic----checkViewpagerDicFragment-->${checkViewpagerDicFragment}")
+                    Log.e("cyc", "dic----checkViewpagerImgFragment-->${checkViewpagerImgFragment}")
+                    Log.e("cyc", "================================================================")
+                    viewPagerSetting()
+                    chcekViewpager()
+                }
+            }
+
+        }
+        viewModel.imgResultSearchArraylist.observe(this) {
+            if(!viewModel.imgMoreLoad){
+                imgEndcehck = true
+                if (it.imgItems.size > 0) {
+                    checkViewpagerImgFragment = true
+//                adapter.lastAddFragment("이미지", ImgFragment())
+                }
+                if (dicEndcheck && imgEndcehck) {
+                    Log.e("cyc", "================================================================")
+                    Log.e("cyc", "img----checkViewpagerAllFragment-->${checkViewpagerAllFragment}")
+                    Log.e("cyc", "img----checkViewpagerViewFragment-->${checkViewpagerViewFragment}")
+                    Log.e("cyc", "img----checkViewpagerDicFragment-->${checkViewpagerDicFragment}")
+                    Log.e("cyc", "img----checkViewpagerImgFragment-->${checkViewpagerImgFragment}")
+                    Log.e("cyc", "================================================================")
+                    viewPagerSetting()
+                    chcekViewpager()
+                }
+            }
+
+        }
+
         viewModel.checkAdultWord.observe(this) {
             if (it == Constants.MISSWORD) {
                 AdultWarningDialogFragment().show(supportFragmentManager, "AdultWarningDialog")
@@ -151,20 +223,21 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
                 viewModel.requestCheckMissWord(query)
             }
         }
-        viewModel.checkMissWord.observe(this){
-            if(it.isEmpty()){
+        viewModel.checkMissWord.observe(this) {
+            if (it.isEmpty()) {
                 actionSearch()
-            }else{
+            } else {
                 Toast.makeText(this, "오타를 수정했습니다.", Toast.LENGTH_SHORT).apply {
-                    this.setGravity(Gravity.BOTTOM,0,100)
+                    this.setGravity(Gravity.BOTTOM, 0, 100)
                     this.show()
                 }
-                Log.e("cyc","오타 수정-->${it}")
+                Log.e("cyc", "오타 수정-->${it}")
                 binding.etSearch.setText(it)
-                query=it
+                query = it
                 actionSearch()
             }
         }
+
     }
 
     /**
@@ -229,7 +302,6 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         checkSearchTextData()
     }
 
-
     /**
      * 아이템 클릭
      */
@@ -241,12 +313,15 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      * 뷰페이저 세팅
      */
     private fun viewPagerSetting() {
-        val tabTitle = listOf<String>("통합", "VIEW", "백과사전", "이미지")
-        adapter = ViewpagerFragmentAdapter(this)
+        if(checkViewpagerAllFragment){adapter.addFragment("통합", AllFragment())}
+        if(checkViewpagerViewFragment){adapter.addFragment("VIEW", ViewFragment())}
+        if(checkViewpagerDicFragment){adapter.addFragment("백과사전", DictionaryFragment())}
+        if(checkViewpagerImgFragment){adapter.addFragment("이미지", ImgFragment())}
         binding.vp2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER  //뷰페이저 오버스크롤 없애기
         binding.vp2.adapter = adapter
         TabLayoutMediator(binding.tlMenu, binding.vp2) { tab, postion ->
-            tab.text = tabTitle[postion]
+//            tab.text = tabTitle[postion]
+            tab.text = adapter.getTitleList(postion)
         }.attach()
     }
 
@@ -266,11 +341,14 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      * 검색 버튼 클리시 활동
      */
     private fun actionSearch() {
-        viewPagerSetting()
+        adapter = ViewpagerFragmentAdapter(this)
+        dicEndcheck=false
+        imgEndcehck=false
         hideKeyboard()
         if (!query.isNullOrBlank()) {
             saveSearchData(query)
         }
+        initViewPagerFragmentCheck()
         viewModel.requestBlog(query = query)
         viewModel.requestImg(query = query)
         viewModel.query = query
@@ -285,6 +363,22 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         viewModel.requestCheckAdultWord(query)
     }
 
+    private fun initViewPagerFragmentCheck() {
+        checkViewpagerAllFragment = false
+        checkViewpagerViewFragment = false
+        checkViewpagerDicFragment = false
+        checkViewpagerImgFragment = false
+    }
+
+    private fun chcekViewpager() {
+        if (!(checkViewpagerAllFragment && checkViewpagerViewFragment)) {
+            binding.clSearchResult.visibility = View.INVISIBLE
+            binding.tvNoSee.visibility = View.VISIBLE
+        } else {
+            binding.tvNoSee.visibility = View.INVISIBLE
+            binding.clSearchResult.visibility = View.VISIBLE
+        }
+    }
     /*
     * ui
     *   main

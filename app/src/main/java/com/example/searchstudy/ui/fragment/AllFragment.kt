@@ -61,37 +61,42 @@ class AllFragment : Fragment() {
                 }
                 tempAllViewItems.addAll(it.allItems)
             }
-
         }
         viewModel.cafeResultSearchArraylist.observe(viewLifecycleOwner) {
-            if (!viewModel.cafeMoreLoad) {
-                it.allItems.map { allItems ->
-                    allItems.type = Constants.ALLITEMS
-                }
-                tempAllViewItems.addAll(it.allItems)
-                Util.dataSort(tempAllViewItems)
-                tempResultSearchAll.add(
-                    ResultSearchAll(
-                        category = "VIEW",
-                        allItems = Util.dataExtraction(tempAllViewItems)
+            if(it.allItems.size>0){
+                if (!viewModel.cafeMoreLoad) {
+                    it.allItems.map { allItems ->
+                        allItems.type = Constants.ALLITEMS
+                    }
+                    tempAllViewItems.addAll(it.allItems)
+                    Util.dataSort(tempAllViewItems)
+                    tempResultSearchAll.add(
+                        ResultSearchAll(
+                            category = "VIEW",
+                            allItems = Util.dataExtraction(tempAllViewItems)
+                        )
                     )
-                )
+                }
             }
+
         }
         viewModel.dictionaryResultSearchArraylist.observe(viewLifecycleOwner) {
-            if (!viewModel.dicMoreLoad) {
-                it.allItems.map { allItems ->
-                    allItems.type = Constants.ALLITEMS
-                }
-                Util.dataSort(it.allItems)
-                tempResultSearchAll.add(
-                    ResultSearchAll(
-                        category = "백과사전",
-                        allItems = Util.dataExtraction(it.allItems)
+            if(it.allItems.size>0){
+                if (!viewModel.dicMoreLoad) {
+                    it.allItems.map { allItems ->
+                        allItems.type = Constants.ALLITEMS
+                    }
+                    Util.dataSort(it.allItems)
+                    tempResultSearchAll.add(
+                        ResultSearchAll(
+                            category = "백과사전",
+                            allItems = Util.dataExtraction(it.allItems)
+                        )
                     )
-                )
-                allAdapter.setData(tempResultSearchAll)
+                    allAdapter.setData(tempResultSearchAll)
+                }
             }
+
         }
     }
 

@@ -25,6 +25,7 @@ class ImgFragment : Fragment() {
     private lateinit var imgAdapter: ImgAdapter
     private lateinit var progressBar: LoadingProgressDialog
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -108,6 +109,7 @@ class ImgFragment : Fragment() {
         imgAdapter = ImgAdapter()
         val imgLayoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL).apply {
+                //아이템간의 마진의 따른 이상한 배치 방지
                 gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
             }
         binding.rvImg.apply {

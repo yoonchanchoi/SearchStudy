@@ -9,7 +9,7 @@ interface SearchService {
     @GET("/v1/search/blog.json")
     fun requestBlog(
         @Query(value = "query", encoded = true) query: String,
-        @Query(value = "display") display: Int? = 100,
+        @Query(value = "display") display: Int,
         @Query(value = "start") start: Int? = null,
         @Query(value = "sort") sort: String? = null
     ): Call<ResultSearchAll>

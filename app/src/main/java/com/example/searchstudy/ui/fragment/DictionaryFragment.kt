@@ -26,6 +26,7 @@ class DictionaryFragment : Fragment() {
     private lateinit var progressBar: LoadingProgressDialog
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

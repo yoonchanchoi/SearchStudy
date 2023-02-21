@@ -73,8 +73,11 @@ class MainActivityViewModel @Inject constructor(
     /**
      * 블로그 검색 api 통신
      */
-    fun requestBlog(query: String, start: Int = 1, checkMoreLoad: Boolean = false) {
-        val result = searchManager.requestBlog(query = query, start)
+    fun requestBlog(query: String, display: Int = 100, start: Int = 1, checkMoreLoad: Boolean = false) {
+//        Log.e("cyc","")
+//        Log.e("cyc","==viewmodel=display---------------------->${display}")
+//        Log.e("cyc","")
+        val result = searchManager.requestBlog(query = query, display = display, start = start)
         result.enqueue(object : Callback<ResultSearchAll> {
             override fun onResponse(
                 call: Call<ResultSearchAll>,
@@ -85,7 +88,7 @@ class MainActivityViewModel @Inject constructor(
                     response.body()?.let {
                         _blogResultSearchArraylist.postValue(it)
                         blogMoreLoad = checkMoreLoad
-                        Log.e("cyc","query -> $query, Blog_it.total->${it.total}")
+                        Log.e("cyc", "query -> $query, Blog_it.total->${it.total}")
                     }
                 } else {
                     Log.e("cyc", "블로그-통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
@@ -98,6 +101,7 @@ class MainActivityViewModel @Inject constructor(
 
         })
     }
+
     /**
      * 카페 검색 api 통신
      */
@@ -112,8 +116,8 @@ class MainActivityViewModel @Inject constructor(
                     Log.e("cyc", "카페-통신 성공")
                     response.body()?.let {
                         _cafeResultSearchArraylist.postValue(it)
-                        cafeMoreLoad=checkMoreLoad
-                        Log.e("cyc","Cafe_it.total->${it.total}")
+                        cafeMoreLoad = checkMoreLoad
+                        Log.e("cyc", "Cafe_it.total->${it.total}")
 
                     }
                 } else {
@@ -125,10 +129,9 @@ class MainActivityViewModel @Inject constructor(
             override fun onFailure(call: Call<ResultSearchAll>, t: Throwable) {
                 Log.e("cyc", "카페-통신실패 (인터넷 연결의 문제, 예외발생)")
             }
-
-
         })
     }
+
     /**
      * 백과사전 검색 api 통신
      */
@@ -144,7 +147,7 @@ class MainActivityViewModel @Inject constructor(
                     response.body()?.let {
                         _dictionaryResultSearchArraylist.postValue(it)
                         dicMoreLoad = checkMoreLoad
-                        Log.e("cyc","dic_it.total->${it.total}")
+                        Log.e("cyc", "dic_it.total->${it.total}")
 
                     }
                 } else {
@@ -160,6 +163,7 @@ class MainActivityViewModel @Inject constructor(
 
         })
     }
+
     /**
      * 이미지 검색 api 통신
      */
@@ -175,7 +179,7 @@ class MainActivityViewModel @Inject constructor(
                     response.body()?.let {
                         _imgResultSearchArraylist.postValue(it)
                         imgMoreLoad = checkMoreLoad
-                        Log.e("cyc","img_it.total->${it.total}")
+                        Log.e("cyc", "img_it.total->${it.total}")
 
 
                     }
@@ -192,6 +196,7 @@ class MainActivityViewModel @Inject constructor(
 
         })
     }
+
     /**
      * 성인단어 필터 api 통신
      */
@@ -206,7 +211,7 @@ class MainActivityViewModel @Inject constructor(
                     Log.e("cyc", "성인-문자열-통신 성공")
                     response.body()?.let {
                         _checkAdultWord.postValue(it.adult)
-                        Log.e("cyc","성인검색어-- it.adult----->${it.adult}")
+                        Log.e("cyc", "성인검색어-- it.adult----->${it.adult}")
                     }
                 } else {
                     Log.e("cyc", "성인 통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
@@ -222,6 +227,7 @@ class MainActivityViewModel @Inject constructor(
 
         })
     }
+
     /**
      * 오타 단언 필터 api 통신
      */
@@ -236,7 +242,7 @@ class MainActivityViewModel @Inject constructor(
                     Log.e("cyc", "성인-문자열-통신 성공")
                     response.body()?.let {
                         _checkMissWord.postValue(it.errata)
-                        Log.e("cyc","성인검색어-- it.adult----->${it.errata}")
+                        Log.e("cyc", "성인검색어-- it.adult----->${it.errata}")
                     }
                 } else {
                     Log.e("cyc", "성인 통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
