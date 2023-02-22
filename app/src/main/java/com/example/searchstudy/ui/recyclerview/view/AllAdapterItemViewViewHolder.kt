@@ -2,6 +2,7 @@ package com.example.searchstudy.ui.recyclerview.view
 
 
 import android.text.Html
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.AllRecyclerviewItemViewBinding
 import com.example.searchstudy.network.models.response.AllItem
@@ -10,7 +11,12 @@ import com.example.searchstudy.network.models.response.AllItem
 class AllAdapterItemViewViewHolder(private val binding: AllRecyclerviewItemViewBinding) : RecyclerView.ViewHolder(binding.root)  {
 
     fun bind(allItems: AllItem) {
-        binding.tvTitle.text = Html.fromHtml(allItems.title,Html.FROM_HTML_MODE_LEGACY)
+        binding.tvTitle.text = Html.fromHtml(allItems.title, Html.FROM_HTML_MODE_LEGACY)
+        Log.e("cyc","")
+        Log.e("cyc","-----------------------------------------------------------------")
+        Log.e("cyc","AllItemsadapter-------allItems--->${allItems}")
+        Log.e("cyc","-----------------------------------------------------------------")
+        Log.e("cyc","")
         if(allItems.postdate.isEmpty()){
             binding.tvCatagory.text = "카페"
             binding.tvName.text = allItems.cafename

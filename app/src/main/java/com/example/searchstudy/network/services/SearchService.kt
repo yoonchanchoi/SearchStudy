@@ -18,7 +18,7 @@ interface SearchService {
     @GET("/v1/search/cafearticle.json")
     fun requestCafe(
         @Query(value = "query", encoded = true) query: String,
-        @Query(value = "display") display: Int? = 100,
+        @Query(value = "display") display: Int? = 10,
         @Query(value = "start") start: Int? = null,
         @Query(value = "sort") sort: String? = null
     ): Call<ResultSearchAll>

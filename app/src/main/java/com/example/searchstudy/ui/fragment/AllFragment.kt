@@ -53,7 +53,15 @@ class AllFragment : Fragment() {
      */
     private fun initObserve() {
         viewModel.blogResultSearchArraylist.observe(viewLifecycleOwner) {
+//            Log.e("cyc","")
+//            Log.e("cyc","-----------------------------------------------------------------")
+//            Log.e("cyc","blog--it.allItems--->${it.allItems}")
+//            Log.e("cyc","-----------------------------------------------------------------")
+//            Log.e("cyc","")
             if (!viewModel.blogMoreLoad) {
+//                Log.e("cyc","---------------------------------------------------------------------------------------------------------------")
+//                Log.e("cyc","blog--it.allItems--->${it.allItems}")
+//                Log.e("cyc","---------------------------------------------------------------------------------------------------------------")
                 tempAllViewItems.clear()
                 tempResultSearchAll.clear()
                 it.allItems.map { allItems ->
@@ -63,11 +71,23 @@ class AllFragment : Fragment() {
             }
         }
         viewModel.cafeResultSearchArraylist.observe(viewLifecycleOwner) {
+
             if(it.allItems.size>0){
+                Log.e("cyc","!viewModel.cafeMoreLoad--->${!viewModel.cafeMoreLoad}")
                 if (!viewModel.cafeMoreLoad) {
+//                    Log.e("cyc","========================변경===전========================")
+//
+//                    Log.e("cyc","---------------------------------------------------------------------------------------------------------------")
+//                    Log.e("cyc","cafe--it.allItems--->${it.allItems}")
+//                    Log.e("cyc","---------------------------------------------------------------------------------------------------------------")
                     it.allItems.map { allItems ->
                         allItems.type = Constants.ALLITEMS
                     }
+//                    Log.e("cyc","========================변경===후========================")
+//
+//                    Log.e("cyc","---------------------------------------------------------------------------------------------------------------")
+//                    Log.e("cyc","cafe--it.allItems--->${it.allItems}")
+//                    Log.e("cyc","---------------------------------------------------------------------------------------------------------------")
                     tempAllViewItems.addAll(it.allItems)
                     Util.dataSort(tempAllViewItems)
                     tempResultSearchAll.add(
@@ -78,24 +98,52 @@ class AllFragment : Fragment() {
                     )
                 }
             }
-
         }
         viewModel.dictionaryResultSearchArraylist.observe(viewLifecycleOwner) {
-            if(it.allItems.size>0){
+
                 if (!viewModel.dicMoreLoad) {
+//                    Log.e("cyc","")
+//                    Log.e("cyc","---------------------------------------------------------------------------------------------------------------")
+//                    Log.e("cyc","dictionaryResultSearchArraylist")
+//                    Log.e("cyc","dic--it.allItems--->${it.allItems}")
+//                    Log.e("cyc","---------------------------------------------------------------------------------------------------------------")
+                    Log.e("cyc","")
                     it.allItems.map { allItems ->
                         allItems.type = Constants.ALLITEMS
                     }
-                    Util.dataSort(it.allItems)
-                    tempResultSearchAll.add(
-                        ResultSearchAll(
-                            category = "백과사전",
-                            allItems = Util.dataExtraction(it.allItems)
+                    if(it.allItems.size>0) {
+                        Util.dataSort(it.allItems)
+                        tempResultSearchAll.add(
+                            ResultSearchAll(
+                                category = "백과사전",
+                                allItems = Util.dataExtraction(it.allItems)
+                            )
                         )
-                    )
+                    }
                     allAdapter.setData(tempResultSearchAll)
                 }
-            }
+
+//            if(it.allItems.size>0){
+//                if (!viewModel.dicMoreLoad) {
+//                    Log.e("cyc","")
+//                    Log.e("cyc","---------------------------------------------------------------------------------------------------------------")
+//                    Log.e("cyc","dictionaryResultSearchArraylist")
+//                    Log.e("cyc","dic--it.allItems--->${it.allItems}")
+//                    Log.e("cyc","---------------------------------------------------------------------------------------------------------------")
+//                    Log.e("cyc","")
+//                    it.allItems.map { allItems ->
+//                        allItems.type = Constants.ALLITEMS
+//                    }
+//                    Util.dataSort(it.allItems)
+//                    tempResultSearchAll.add(
+//                        ResultSearchAll(
+//                            category = "백과사전",
+//                            allItems = Util.dataExtraction(it.allItems)
+//                        )
+//                    )
+//                }
+//            }
+//            allAdapter.setData(tempResultSearchAll)
 
         }
     }

@@ -57,12 +57,6 @@ class ImgFragment : Fragment() {
                 }
                 val lastVisibleItemPosition = getLastVisibleItem(lastVisibleItemPositions!!);
 
-
-
-
-//                Log.e("cyc","이미지----itemTotalCount--->${itemTotalCount}")
-//                Log.e("cyc","이미지----resImgTotalCount--->${resImgTotalCount}")
-
                 if(resImgTotalCount>itemTotalCount!!){
                     if (binding.rvImg.canScrollVertically(1) && lastVisibleItemPosition + 1 == itemTotalCount) {
                         viewModel.requestImg(viewModel.query, itemTotalCount+1, true)
@@ -79,24 +73,10 @@ class ImgFragment : Fragment() {
     private fun initObserve() {
         viewModel.imgResultSearchArraylist.observe(viewLifecycleOwner) {
             resImgTotalCount = it.total
-
             if (!viewModel.imgMoreLoad) {
-//                Log.e("cyc","====================검색=시작==========================")
-//                for(i in it.imgItems.indices){
-//                    Log.e("cyc","it.imgItems[i]--->${it.imgItems[i]}")
-//                }
-//                Log.e("cyc","====================검색=끝==========================")
                 imgAdapter.setData(it.imgItems)
-
-
             }else{
-//                Log.e("cyc","====================더보기=시작==========================")
-//                for(i in it.imgItems.indices){
-//                    Log.e("cyc","it.imgItems[i]--->${it.imgItems[i]}")
-//                }
-//                Log.e("cyc","====================더보기=끝==========================")
                 imgAdapter.addData(it.imgItems)
-
             }
             progressBar.dismiss()
         }

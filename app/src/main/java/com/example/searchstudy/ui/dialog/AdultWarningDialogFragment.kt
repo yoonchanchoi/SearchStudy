@@ -32,8 +32,6 @@ class AdultWarningDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         binding.btnCheck.setOnClickListener {
             dismiss()
         }

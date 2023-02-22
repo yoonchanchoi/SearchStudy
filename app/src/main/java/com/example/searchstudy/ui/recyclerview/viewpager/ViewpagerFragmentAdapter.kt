@@ -35,24 +35,11 @@ class ViewpagerFragmentAdapter(fragmentActivity: FragmentActivity): FragmentStat
         fragmentList.add(frag)
         titleList.add(title)
     }
-    fun firstAddFragment(title: String, frg: Fragment){
-        fragmentList.add(0,frg)
-        titleList.add(0,title)
-    }
-    fun lastAddFragment(title: String, frg: Fragment){
-        if(fragmentList.size==0){
-            fragmentList.add(frg)
-        }else{
-            fragmentList.add(fragmentList.size-1,frg)
-        }
-        if(fragmentList.size==0){
-            titleList.add(title)
-
-        }else{
-            titleList.add(fragmentList.size-1,title)
-        }
-    }
     fun getTitleList(position: Int): String{
         return titleList[position]
+    }
+    fun clear(){
+        fragmentList.clear()
+        titleList.clear()
     }
 }

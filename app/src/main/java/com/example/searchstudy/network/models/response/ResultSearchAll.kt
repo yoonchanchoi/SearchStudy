@@ -68,6 +68,7 @@ data class AllItem(
     val cafeurl: String = "",
 
     var type: Int = Constants.ITEMS
+//    var type: Int = Constants.ITEMS
 
 
 )

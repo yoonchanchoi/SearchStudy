@@ -73,7 +73,7 @@ class MainActivityViewModel @Inject constructor(
     /**
      * 블로그 검색 api 통신
      */
-    fun requestBlog(query: String, display: Int = 100, start: Int = 1, checkMoreLoad: Boolean = false) {
+    fun requestBlog(query: String, display: Int = 10, start: Int = 1, checkMoreLoad: Boolean = false) {
 //        Log.e("cyc","")
 //        Log.e("cyc","==viewmodel=display---------------------->${display}")
 //        Log.e("cyc","")

@@ -1,5 +1,6 @@
 package com.example.searchstudy.ui.recyclerview.dictionary
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +37,7 @@ class DictionaryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         //dictionary의 타입에 따른 통합, 백과사전 뷰홀더 구성
+
         when (dictionaryItems[position].type) {
             Constants.ITEMS -> {
                 (holder as DictionaryViewHolder).bind(dictionaryItems[position])

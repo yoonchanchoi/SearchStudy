@@ -24,18 +24,7 @@ class TestActivity : AppCompatActivity() {
             viewModel.requestBlog("롤 hdv", blogCount + 1)
         }
         viewModel.blogResultSearchArraylist.observe(this){
-            Log.e("cyc","")
-            Log.e("cyc","-------------------시작--------------------")
-            for(i in it.allItems.indices){
-                Log.e("cyc","it.allItems[$i]--->${it.allItems[i]}")
-            }
-            Log.e("cyc","-------------------끝--------------------")
-            Log.e("cyc","")
             blogCount += it.allItems.size
-            Log.e("cyc","===========================================")
-            Log.e("cyc","it.allItems.size->${it.allItems.size}")
-            Log.e("cyc","blogCount->${blogCount}")
-            Log.e("cyc","===========================================")
         }
     }
 }

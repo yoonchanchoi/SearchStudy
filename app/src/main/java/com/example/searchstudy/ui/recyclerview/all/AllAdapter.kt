@@ -9,24 +9,23 @@ import kotlin.collections.ArrayList
 
 class AllAdapter : RecyclerView.Adapter<AllAdapterViewHolder>() {
 
-    private var arrayIntegratedData = mutableListOf<ResultSearchAll>()
+    private var arrayResultSearchAllData = mutableListOf<ResultSearchAll>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllAdapterViewHolder {
-
         val itemBinding =
             AllRecyclerviewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AllAdapterViewHolder(itemBinding)
     }
 
     override fun onBindViewHolder(holder: AllAdapterViewHolder, position: Int) {
-        holder.bind(arrayIntegratedData[position])
+        holder.bind(arrayResultSearchAllData[position])
     }
 
     override fun getItemCount(): Int {
-        return arrayIntegratedData.size
+        return arrayResultSearchAllData.size
     }
 
-    fun setData(arrayIntegrated: ArrayList<ResultSearchAll>) {
-        arrayIntegratedData = arrayIntegrated
+    fun setData(arrayResultSearchAll: ArrayList<ResultSearchAll>) {
+        arrayResultSearchAllData = arrayResultSearchAll
         notifyDataSetChanged()
     }
 }
