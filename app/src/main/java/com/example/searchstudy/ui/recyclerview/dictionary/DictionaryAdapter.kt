@@ -1,5 +1,6 @@
 package com.example.searchstudy.ui.recyclerview.dictionary
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,9 +10,9 @@ import com.example.searchstudy.databinding.DictionaryRecyclerviewItemBinding
 import com.example.searchstudy.network.models.response.AllItem
 import com.example.searchstudy.util.Constants
 
-class DictionaryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DictionaryAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var dictionaryItems = mutableListOf<AllItem>()
+    private val dictionaryItems = mutableListOf<AllItem>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         //dictionary의 타입에 따른 통합, 백과사전 뷰홀더 바인딩 구성
         return when (viewType) {
@@ -41,11 +42,11 @@ class DictionaryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         when (dictionaryItems[position].type) {
             Constants.ITEMS -> {
                 (holder as DictionaryViewHolder).bind(dictionaryItems[position])
-                holder.setIsRecyclable(false)
+                holder.setIsRecyclable(true)
             }
             else -> {
                 (holder as AllAdapterItemDictionaryViewHolder).bind(dictionaryItems[position])
-                holder.setIsRecyclable(false)
+                holder.setIsRecyclable(true)
             }
         }
     }
@@ -61,7 +62,7 @@ class DictionaryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun setData(data: ArrayList<AllItem>) {
         data?.let {
-            dictionaryItems = it
+            dictionaryItems.addAll(it)
         }
         notifyDataSetChanged()
     }

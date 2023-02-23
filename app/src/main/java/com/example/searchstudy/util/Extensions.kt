@@ -3,14 +3,9 @@ package com.example.searchstudy.util
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
-import androidx.recyclerview.widget.RecyclerView
+import java.sql.Time
 import java.text.SimpleDateFormat
 import java.util.*
-
-fun Date.toDateString() : String {
-    val format = SimpleDateFormat("HH:mm:ss")
-    return format.format(this)
-}
 
 fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {

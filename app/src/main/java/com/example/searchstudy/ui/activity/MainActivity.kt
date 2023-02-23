@@ -9,12 +9,15 @@ import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.searchstudy.databinding.ActivityMainBinding
 import com.example.searchstudy.network.models.dto.searchDto.SearchData
 import com.example.searchstudy.ui.dialog.AdultWarningDialogFragment
@@ -27,11 +30,10 @@ import com.example.searchstudy.ui.recyclerview.search.SearchAdapter
 import com.example.searchstudy.ui.recyclerview.search.SearchRecyclerListener
 import com.example.searchstudy.ui.recyclerview.viewpager.ViewpagerFragmentAdapter
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
-import com.example.searchstudy.util.Constants
-import com.example.searchstudy.util.Pref
-import com.example.searchstudy.util.toDateString
+import com.example.searchstudy.util.*
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.internal.notifyAll
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -43,23 +45,24 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     @Inject
     lateinit var pref: Pref
 
-    private var query = ""
+    private var query = ""  // 검색어
+    private var preQuery = "" // 이전 검색어
     private var dicEndcheck = false
     private var imgEndcehck = false
     private val viewModel: MainActivityViewModel by viewModels()
-    private var checkViewpagerAllFragment = false
     private var checkViewpagerViewFragment = false
     private var checkViewpagerDicFragment = false
     private var checkViewpagerImgFragment = false
     private var waitTime = 0L
-    private var endSearchFlag = true
-    private var preQuery = ""
 
+    private lateinit var loadingProgressDialog: LoadingProgressDialog
     private lateinit var binding: ActivityMainBinding
     private lateinit var searchDataList: ArrayList<SearchData>
     private lateinit var searchAdapter: SearchAdapter
-    private lateinit var adapter: ViewpagerFragmentAdapter
+    private lateinit var viewPagerAdapter: ViewpagerFragmentAdapter
 
+    private val fragments: ArrayList<Fragment> = arrayListOf()
+    private val titles: ArrayList<String> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +83,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      */
     private fun initData() {
         //최근 검색어 데이터 가져와서 어댑터에 세팅
+        loadingProgressDialog = LoadingProgressDialog(this)
         searchDataList = pref.getSearchList() as ArrayList<SearchData>
         searchAdapterSetting(searchDataList)
         checkSearchTextData()
@@ -113,7 +117,6 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
                 when (actionId) {
                     EditorInfo.IME_ACTION_SEARCH -> {
                         checkAdultWord()
-//                        actionSearch()
                         true
                     }
                     else -> {
@@ -142,56 +145,50 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             searchAdapter.notifyDataSetChanged()
             checkSearchTextData()
         }
+
+
     }
 
     /**
      * observe
      */
     private fun initObserve() {
+        //블로그 요청의 결과 값 옵저버
         viewModel.blogResultSearchArraylist.observe(this) {
             if (!viewModel.blogMoreLoad) {
-                viewModel.requestCafe(query)
                 if (it.allItems.size > 0) {
                     checkViewpagerViewFragment = true
                 }
+                viewModel.requestCafe(query)
             }
         }
+
+        //카페 요청의 결과 값 옵저버
         viewModel.cafeResultSearchArraylist.observe(this) {
 
-
             if (!viewModel.cafeMoreLoad) {
-
+//                it.allItems.isNotEmpty()
                 if (it.allItems.size > 0) {
                     checkViewpagerViewFragment = true
-                }
-                if (checkViewpagerViewFragment) {
-                    checkViewpagerAllFragment = true
-//                adapter.addFragment("VIEW", ViewFragment())
                 }
                 viewModel.requestDictionary(query)
             }
         }
+
+        //백과사전 요청의 결과 값 옵저버
         viewModel.dictionaryResultSearchArraylist.observe(this) {
             if (!viewModel.dicMoreLoad) {
                 if (it.allItems.size > 0) {
-                    checkViewpagerAllFragment = true
                     checkViewpagerDicFragment = true
-//                adapter.addFragment("백과사전", DictionaryFragment())
                 }
                 dicEndcheck = true
                 if (dicEndcheck && imgEndcehck) {
-//                    Log.e("cyc", "================================================================")
-//                    Log.e("cyc", "dic----checkViewpagerAllFragment-->${checkViewpagerAllFragment}")
-//                    Log.e("cyc", "dic----checkViewpagerViewFragment-->${checkViewpagerViewFragment}")
-//                    Log.e("cyc", "dic----checkViewpagerDicFragment-->${checkViewpagerDicFragment}")
-//                    Log.e("cyc", "dic----checkViewpagerImgFragment-->${checkViewpagerImgFragment}")
-//                    Log.e("cyc", "================================================================")
+
                     viewPagerSetting()
-                    chcekViewpager()
-//                    endSearchFlag = true
                 }
             }
         }
+        //이미지 요청의 결과 값 옵저버
         viewModel.imgResultSearchArraylist.observe(this) {
             if (!viewModel.imgMoreLoad) {
                 imgEndcehck = true
@@ -199,19 +196,12 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
                     checkViewpagerImgFragment = true
                 }
                 if (dicEndcheck && imgEndcehck) {
-//                    Log.e("cyc", "================================================================")
-//                    Log.e("cyc", "img----checkViewpagerAllFragment-->${checkViewpagerAllFragment}")
-//                    Log.e("cyc", "img----checkViewpagerViewFragment-->${checkViewpagerViewFragment}")
-//                    Log.e("cyc", "img----checkViewpagerDicFragment-->${checkViewpagerDicFragment}")
-//                    Log.e("cyc", "img----checkViewpagerImgFragment-->${checkViewpagerImgFragment}")
-//                    Log.e("cyc", "================================================================")
                     viewPagerSetting()
-                    chcekViewpager()
-//                    endSearchFlag = true
                 }
             }
         }
 
+        //성인 검색어 체크 옵저버
         viewModel.checkAdultWord.observe(this) {
             if (it == Constants.MISSWORD) {
                 AdultWarningDialogFragment().show(supportFragmentManager, "AdultWarningDialog")
@@ -220,6 +210,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
                 viewModel.requestCheckMissWord(query)
             }
         }
+        //오타 검색어 체크 옵저버
         viewModel.checkMissWord.observe(this) {
             if (it.isEmpty()) {
                 actionSearch()
@@ -233,7 +224,6 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
                 actionSearch()
             }
         }
-
     }
 
     /**
@@ -245,38 +235,31 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         } else {
             binding.tvSearchEmpty.visibility = View.VISIBLE
         }
+
+//        binding.tvSearchEmpty.visibility = if (searchAdapter.itemCount > 0) View.INVISIBLE else View.VISIBLE
     }
+
 
     /**
      * 최근 검색어에 저장
      */
     private fun saveSearchData(searchTerm: String) {
-        val indexListToRemove = ArrayList<Int>()
 
-        this.searchDataList.forEachIndexed { index, searchDataItem ->
-
-            if (searchDataItem.searchText == searchTerm) {
-                indexListToRemove.add(index)
-            }
-        }
-
-        indexListToRemove.forEach {
-            this.searchDataList.removeAt(it)
+        searchDataList.removeIf {
+            it.searchText==searchTerm
         }
 
         // 새 아이템 넣기
-        val newSearchData = SearchData(searchText = searchTerm, searchTime = Date().toDateString())
+        val newSearchData =
+            SearchData(searchText = searchTerm, searchTime = System.currentTimeMillis().toString())
         this.searchDataList.add(newSearchData)
-//        searchDataList.sortBy {
-//            it.searchTime
-//        }
-        if(searchDataList.size>10){
+
+        if (searchDataList.size > 10) {
             searchDataList.removeAt(0)
         }
 
         // 기존 데이터에 덮어쓰기
         pref.saveSearchList(this.searchDataList)
-
     }
 
     /**
@@ -316,24 +299,62 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      * 뷰페이저 세팅
      */
     private fun viewPagerSetting() {
-        if (checkViewpagerAllFragment) {
-            adapter.addFragment("통합", AllFragment())
-        }
+        viewPagerAdapter = ViewpagerFragmentAdapter(this)
         if (checkViewpagerViewFragment) {
-            adapter.addFragment("VIEW", ViewFragment())
+            fragments.add(ViewFragment())
+            titles.add("VIEW")
         }
+
         if (checkViewpagerDicFragment) {
-            adapter.addFragment("백과사전", DictionaryFragment())
+            fragments.add(DictionaryFragment())
+            titles.add("백과사전")
         }
+
         if (checkViewpagerImgFragment) {
-            adapter.addFragment("이미지", ImgFragment())
+            fragments.add(ImgFragment())
+            titles.add("이미지")
         }
+
+        if (fragments.size > 0 && fragments[0] !is ImgFragment) {
+            fragments.add(0, AllFragment())
+            titles.add(0, "통합")
+        }
+
         binding.vp2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER  //뷰페이저 오버스크롤 없애기
-        binding.vp2.adapter = adapter
+        viewPagerAdapter.setFragment(fragments)
+        binding.vp2.apply {
+            adapter=viewPagerAdapter
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    if(position==0){
+
+                    }
+                    Log.e("cyc","Page-->${position}")
+                }
+            })
+        }
+//        binding.vp2.adapter = adapter
         TabLayoutMediator(binding.tlMenu, binding.vp2) { tab, postion ->
-//            tab.text = tabTitle[postion]
-            tab.text = adapter.getTitleList(postion)
+            tab.text = titles[postion]
         }.attach()
+
+        //어댑터의 아이템 갯수에 따른 화면 보여주기
+        if (fragments.size > 0) {
+            binding.tvNoSee.visibility = View.INVISIBLE
+            binding.clSearchResult.visibility = View.VISIBLE
+            saveSearchData(query)
+            searchAdapter.notifyDataSetChanged()
+
+
+        } else {
+            binding.clSearchResult.visibility = View.INVISIBLE
+            binding.tvNoSee.visibility = View.VISIBLE
+        }
+
+        loadingProgressDialog?.let {
+            it.dismiss()
+        }
     }
 
     /**
@@ -352,6 +373,84 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      * 검색 버튼 클리시 활동
      */
     private fun actionSearch() {
+
+        initViewPagerFragmentFlag()
+        loadingProgressDialog?.let {
+            it.show()
+        }
+        dicEndcheck = false
+        imgEndcehck = false
+        hideKeyboard()
+        viewModel.requestBlog(query = query)
+        viewModel.requestImg(query = query)
+        viewModel.query = query
+//        adapter.notifyDataSetChanged()
+        binding.clSearch.visibility = View.INVISIBLE
+        binding.clSearchResult.visibility = View.VISIBLE
+        binding.etSearch.clearFocus()
+    }
+
+
+    /**
+     * 성인 검색어 체크
+     */
+    private fun checkAdultWord() {
+        query = binding.etSearch.text.toString()
+        if (preQuery != query && !query.isNullOrBlank()) {
+            preQuery = query
+            viewModel.requestCheckAdultWord(query)
+        }
+    }
+
+    /**
+     * 뷰페이저 관련 프래그먼트 및 체크 초기화
+     */
+    private fun initViewPagerFragmentFlag() {
+        checkViewpagerViewFragment = false
+        checkViewpagerDicFragment = false
+        checkViewpagerImgFragment = false
+        fragments.clear()
+        titles.clear()
+    }
+
+
+    /**
+     * 뒤로 가기 버튼 클릭
+     */
+    override fun onBackPressed() {
+        if (binding.clSearchResult.isVisible or binding.tvNoSee.isVisible) {
+            binding.clSearchResult.visibility = View.INVISIBLE
+            binding.clSearch.visibility = View.VISIBLE
+            binding.tvNoSee.visibility = View.INVISIBLE
+            binding.etSearch.text.clear()
+            preQuery = ""
+            checkSearchTextData()
+        } else {
+            if (System.currentTimeMillis() - waitTime >= 1500) {
+                waitTime = System.currentTimeMillis()
+                Toast.makeText(this, "뒤로가기 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                finish() // 액티비티 종료
+            }
+        }
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //        if (endSearchFlag) {
 //            initViewPagerFragmentCheck()
 //            endSearchFlag = false
@@ -373,89 +472,58 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
 //            binding.etSearch.clearFocus()
 //
 //        }
-        initViewPagerFragmentCheck()
-        endSearchFlag = false
-        dicEndcheck = false
-        imgEndcehck = false
-        adapter = ViewpagerFragmentAdapter(this)
-        hideKeyboard()
-        if (!query.isNullOrBlank()) {
-            saveSearchData(query)
-        }
-//        binding.btnSearch.isEnabled=false
-        viewModel.requestBlog(query = query)
-        viewModel.requestImg(query = query)
-        viewModel.query = query
-        searchAdapter.notifyDataSetChanged()
-//        adapter.notifyDataSetChanged()
-        binding.clSearch.visibility = View.INVISIBLE
-        binding.clSearchResult.visibility = View.VISIBLE
-        binding.etSearch.clearFocus()
-    }
-
-    private fun checkAdultWord() {
-        query = binding.etSearch.text.toString()
-        if (preQuery != query && !query.isNullOrBlank()) {
-            preQuery = query
-            viewModel.requestCheckAdultWord(query)
-        }
-    }
-
-    private fun initViewPagerFragmentCheck() {
-        checkViewpagerAllFragment = false
-        checkViewpagerViewFragment = false
-        checkViewpagerDicFragment = false
-        checkViewpagerImgFragment = false
-    }
-
-    private fun chcekViewpager() {
-        if (!(checkViewpagerAllFragment && checkViewpagerViewFragment)) {
-            binding.clSearchResult.visibility = View.INVISIBLE
-            binding.tvNoSee.visibility = View.VISIBLE
-        } else {
-            binding.tvNoSee.visibility = View.INVISIBLE
-            binding.clSearchResult.visibility = View.VISIBLE
-        }
-    }
-
-    override fun onBackPressed() {
-        if (binding.clSearchResult.isVisible or binding.tvNoSee.isVisible) {
-            binding.clSearchResult.visibility = View.INVISIBLE
-            binding.clSearch.visibility = View.VISIBLE
-            binding.tvNoSee.visibility = View.INVISIBLE
-            binding.etSearch.text.clear()
-            checkSearchTextData()
-        } else {
-            if (System.currentTimeMillis() - waitTime >= 1500) {
-                waitTime = System.currentTimeMillis()
-                Toast.makeText(this, "뒤로가기 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
-            } else {
-                finish() // 액티비티 종료
-            }
-        }
-    }
-    /*
-    * ui
-    *   main
-    *     MainActivity
-    *     fragment
-    *     all
-    *     - AllFragment
-    *     - viewmodel
-    *     - adapter
-    *     - holder
-    *     view
-    *     - ViewFragment
-    *     - viewmodel
-    *     - adapter
-    *     - holder
-    *     adapter
-    *     viewmodel
-    *   setting
-    *
-    * */
-}
 
 
 
+//    private fun chcekViewpager() {
+//        if (!(checkViewpagerAllFragment && checkViewpagerViewFragment)) {
+//            binding.clSearchResult.visibility = View.INVISIBLE
+//            binding.tvNoSee.visibility = View.VISIBLE
+//        } else {
+//            binding.tvNoSee.visibility = View.INVISIBLE
+//            binding.clSearchResult.visibility = View.VISIBLE
+//        }
+//    }
+
+
+// list 검색단어 포함여부 체크
+// 검색단어 포함 YES
+// --> 검색단어 삭제
+// --> 최상단 추가
+// 검색단어 포함 NO
+// --> 최상단 추가
+
+
+
+/*
+* ui
+*   main
+*     MainActivity
+*     fragment
+*     all
+*     - AllFragment
+*     - viewmodel
+*     - adapter
+*     - holder
+*     view
+*     - ViewFragment
+*     - viewmodel
+*     - adapter
+*     - holder
+*     adapter
+*     viewmodel
+*   setting
+*
+* */
+
+
+/*
+* blog -> cafe -> dic -> img
+* blog = size > 0 add
+* cafe = b_size <= 0 && size > 0 add
+* dic = size > 0 add
+* img = size > 0 add
+* All = !frag.isEmpty = add(index=0)
+*
+* */
 

@@ -8,7 +8,7 @@ import com.example.searchstudy.network.models.response.ImgItems
 
 class ImgAdapter : RecyclerView.Adapter<ImgViewHolder>() {
 
-    var imgItems = mutableListOf<ImgItems>()
+    private val imgItems = mutableListOf<ImgItems>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImgViewHolder {
 
@@ -26,11 +26,17 @@ class ImgAdapter : RecyclerView.Adapter<ImgViewHolder>() {
     }
 
     fun setData(data: ArrayList<ImgItems>) {
-        imgItems = data
+        data?.let {
+            imgItems.addAll(it)
+        }
+//        imgItems.addAll(data)
         notifyDataSetChanged()
     }
     fun addData(data: ArrayList<ImgItems>){
-        imgItems.addAll(data)
+        data?.let {
+            imgItems.addAll(it)
+        }
+//        imgItems.addAll(data)
         notifyDataSetChanged()
     }
 

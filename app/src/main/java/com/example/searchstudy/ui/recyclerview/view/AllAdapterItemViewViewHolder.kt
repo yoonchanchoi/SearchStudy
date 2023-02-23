@@ -12,11 +12,6 @@ class AllAdapterItemViewViewHolder(private val binding: AllRecyclerviewItemViewB
 
     fun bind(allItems: AllItem) {
         binding.tvTitle.text = Html.fromHtml(allItems.title, Html.FROM_HTML_MODE_LEGACY)
-        Log.e("cyc","")
-        Log.e("cyc","-----------------------------------------------------------------")
-        Log.e("cyc","AllItemsadapter-------allItems--->${allItems}")
-        Log.e("cyc","-----------------------------------------------------------------")
-        Log.e("cyc","")
         if(allItems.postdate.isEmpty()){
             binding.tvCatagory.text = "카페"
             binding.tvName.text = allItems.cafename

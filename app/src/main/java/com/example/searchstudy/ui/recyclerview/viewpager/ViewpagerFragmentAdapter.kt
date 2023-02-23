@@ -15,7 +15,6 @@ class ViewpagerFragmentAdapter(fragmentActivity: FragmentActivity): FragmentStat
 
 //    private val fragmentList = listOf(AllFragment(), ViewFragment(), DictionaryFragment(), ImgFragment())
     private val fragmentList = arrayListOf<Fragment>()
-    private val titleList = arrayListOf<String>()
 
 
     /**
@@ -31,15 +30,8 @@ class ViewpagerFragmentAdapter(fragmentActivity: FragmentActivity): FragmentStat
     override fun createFragment(position: Int): Fragment {
         return fragmentList[position]
     }
-    fun addFragment(title: String, frag : Fragment){
-        fragmentList.add(frag)
-        titleList.add(title)
+    fun setFragment(frag : ArrayList<Fragment>){
+        fragmentList.addAll(frag)
     }
-    fun getTitleList(position: Int): String{
-        return titleList[position]
-    }
-    fun clear(){
-        fragmentList.clear()
-        titleList.clear()
-    }
+
 }

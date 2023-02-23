@@ -13,7 +13,7 @@ import com.example.searchstudy.util.Util
 class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //view의 arraylsit 아이템
-    var viewItems = mutableListOf<AllItem>()
+    private val viewItems = mutableListOf<AllItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         //viewItems의 타입에 따른 통합, View 뷰홀더 바인딩 구성
@@ -69,12 +69,12 @@ class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 //    }
 
     fun setData(data: ArrayList<AllItem>) {
-        viewItems = data
+
+        viewItems.addAll(data)
         notifyDataSetChanged()
     }
 
     fun addData(data: ArrayList<AllItem>){
-
         viewItems.addAll(data)
         notifyDataSetChanged()
     }
