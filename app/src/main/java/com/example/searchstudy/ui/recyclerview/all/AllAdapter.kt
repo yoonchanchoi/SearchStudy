@@ -9,6 +9,8 @@ import kotlin.collections.ArrayList
 
 class AllAdapter : RecyclerView.Adapter<AllAdapterViewHolder>() {
 
+
+
     private val arrayResultSearchAllData = mutableListOf<ResultSearchAll>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllAdapterViewHolder {
         val itemBinding =

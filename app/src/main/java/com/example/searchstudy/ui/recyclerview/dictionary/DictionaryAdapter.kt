@@ -10,45 +10,48 @@ import com.example.searchstudy.databinding.DictionaryRecyclerviewItemBinding
 import com.example.searchstudy.network.models.response.AllItem
 import com.example.searchstudy.util.Constants
 
-class DictionaryAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DictionaryAdapter : RecyclerView.Adapter<DictionaryViewHolder>() {
 
     private val dictionaryItems = mutableListOf<AllItem>()
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DictionaryViewHolder {
         //dictionary의 타입에 따른 통합, 백과사전 뷰홀더 바인딩 구성
-        return when (viewType) {
-            Constants.ITEMS -> {
-                val dictionaryRecyclerviewItemBinding = DictionaryRecyclerviewItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-                DictionaryViewHolder(dictionaryRecyclerviewItemBinding)
-            }
-            else -> {
-                val allRecyclerviewItemDictionaryBinding =
-                    AllRecyclerviewItemDictionaryBinding.inflate(
-                        LayoutInflater.from(parent.context),
-                        parent,
-                        false
-                    )
-                AllAdapterItemDictionaryViewHolder(allRecyclerviewItemDictionaryBinding)
-            }
-        }
+        val dictionaryRecyclerviewItemBinding = DictionaryRecyclerviewItemBinding.inflate(
+            LayoutInflater.from(parent.context),parent,false)
+        return DictionaryViewHolder(dictionaryRecyclerviewItemBinding)
+//        return when (viewType) {
+//            Constants.ITEMS -> {
+//                val dictionaryRecyclerviewItemBinding = DictionaryRecyclerviewItemBinding.inflate(
+//                    LayoutInflater.from(parent.context),
+//                    parent,
+//                    false
+//                )
+//                DictionaryViewHolder(dictionaryRecyclerviewItemBinding)
+//            }Z
+//            else -> {
+//                val allRecyclerviewItemDictionaryBinding =
+//                    AllRecyclerviewItemDictionaryBinding.inflate(
+//                        LayoutInflater.from(parent.context),
+//                        parent,
+//                        false
+//                    )
+//                AllAdapterItemDictionaryViewHolder(allRecyclerviewItemDictionaryBinding)
+//            }
+//        }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: DictionaryViewHolder, position: Int) {
         //dictionary의 타입에 따른 통합, 백과사전 뷰홀더 구성
-
-        when (dictionaryItems[position].type) {
-            Constants.ITEMS -> {
-                (holder as DictionaryViewHolder).bind(dictionaryItems[position])
-                holder.setIsRecyclable(false)
-            }
-            else -> {
-                (holder as AllAdapterItemDictionaryViewHolder).bind(dictionaryItems[position])
-                holder.setIsRecyclable(false)
-            }
-        }
+        holder.bind(dictionaryItems[position])
+//        when (dictionaryItems[position].type) {
+//            Constants.ITEMS -> {
+//                (holder as DictionaryViewHolder).bind(dictionaryItems[position])
+//                holder.setIsRecyclable(false)
+//            }
+//            else -> {
+//                (holder as AllAdapterItemDictionaryViewHolder).bind(dictionaryItems[position])
+//                holder.setIsRecyclable(false)
+//            }
+//        }
     }
 
     override fun getItemCount(): Int {

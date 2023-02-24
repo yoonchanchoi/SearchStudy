@@ -20,11 +20,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class ImgFragment : Fragment() {
 
     private val viewModel: MainActivityViewModel by activityViewModels()
-    private var resImgTotalCount = 0
+
     private lateinit var binding: FragmentImgBinding
+
     private lateinit var imgAdapter: ImgAdapter
+
     private lateinit var progressBar: LoadingProgressDialog
 
+    private var resImgTotalCount = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,17 +52,16 @@ class ImgFragment : Fragment() {
         binding.rvImg.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                val itemTotalCount = recyclerView.layoutManager?.let {
-                    it.itemCount
-                }
-                val lastVisibleItemPositions =recyclerView.layoutManager?.let {
+                val layoutManager = recyclerView.layoutManager
+                val itemTotalCount = layoutManager?.itemCount ?: 0
+                val lastVisibleItemPositions = layoutManager?.let {
                     (it as StaggeredGridLayoutManager).findLastVisibleItemPositions(null)
                 }
                 val lastVisibleItemPosition = getLastVisibleItem(lastVisibleItemPositions!!);
 
-                if(resImgTotalCount>itemTotalCount!!){
+                if (resImgTotalCount > itemTotalCount) {
                     if (binding.rvImg.canScrollVertically(1) && lastVisibleItemPosition + 1 == itemTotalCount) {
-                        viewModel.requestImg(viewModel.query, itemTotalCount+1, true)
+                        viewModel.requestImg(viewModel.query, itemTotalCount + 1, true)
                         viewModel.lastImgItemPoint = itemTotalCount
                         progressBar.show()
                     }
@@ -67,6 +69,7 @@ class ImgFragment : Fragment() {
             }
         })
     }
+
     /**
      * 옵저버세팅
      */
@@ -75,7 +78,7 @@ class ImgFragment : Fragment() {
             resImgTotalCount = it.total
             if (!viewModel.imgMoreLoad) {
                 imgAdapter.setData(it.imgItems)
-            }else{
+            } else {
                 imgAdapter.addData(it.imgItems)
             }
             progressBar.dismiss()
@@ -95,7 +98,7 @@ class ImgFragment : Fragment() {
         binding.rvImg.apply {
             layoutManager = imgLayoutManager
             adapter = imgAdapter
-            smoothScrollBy(1,100)
+            smoothScrollBy(1, 100)
         }
     }
 

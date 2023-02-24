@@ -20,5 +20,4 @@ class SearchAdapter(private val searchRecyclerListener: SearchRecyclerListener, 
     override fun getItemCount(): Int {
         return searchData.size
     }
-
 }

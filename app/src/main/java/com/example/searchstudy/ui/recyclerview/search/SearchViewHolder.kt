@@ -27,10 +27,11 @@ class SearchViewHolder(private val binding: RecentSearchRecyclerviewItemBinding)
             }
         binding.btnDeletItem.setOnClickListener {
             searchRecyclerListener.onItemDelete(
-                adapterPosition
+                bindingAdapterPosition
+//                        adapterPosition
             )
         }
-        binding.clSearchItem.setOnClickListener { searchRecyclerListener.onItemClick(adapterPosition) }
+        binding.clSearchItem.setOnClickListener { searchRecyclerListener.onItemClick(bindingAdapterPosition) }
     }
 
 

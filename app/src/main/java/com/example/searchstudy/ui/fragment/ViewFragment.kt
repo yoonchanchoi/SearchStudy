@@ -21,15 +21,20 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ViewFragment : Fragment() {
+
+    companion object {
+        private const val PAGE_COUNT = 10
+    }
+
     private val viewModel: MainActivityViewModel by activityViewModels()
     private var viewAdapter = ViewAdapter()
     private val tempViewItems = ArrayList<AllItem>()
     private val tempViewScrollItems = ArrayList<AllItem>()
     private var resCafeTotalCount = 0
     private var resBlogTotalCount = 0
-    private var blogCount = 0
+    private var blogCount = 0   // ...
     private var firstBlogCount = 0
-    private var cafeCount = 0
+    private var cafeCount = 0   //
     private lateinit var binding: FragmentViewBinding
     private lateinit var progressBar: LoadingProgressDialog
 
@@ -59,29 +64,47 @@ class ViewFragment : Fragment() {
         binding.rvView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                var display = firstBlogCount
+
                 val lastVisibleItemPosition =
                     (recyclerView.layoutManager as LinearLayoutManager?)?.let {
                         it.findLastCompletelyVisibleItemPosition()
                     }
+
                 val itemTotalCount = recyclerView.adapter?.let {
                     it.itemCount
                 } // 어댑터에 등록된 아이템의 총 개수 -1
 
                 if (!binding.rvView.canScrollVertically(1) && lastVisibleItemPosition!! + 1 == itemTotalCount) {
-                    if(blogCount+firstBlogCount>resBlogTotalCount){
-                        display = resBlogTotalCount-blogCount-1
+                    var display = PAGE_COUNT
+
+                    // .....
+                    if (blogCount + PAGE_COUNT > resBlogTotalCount) {
+                        display = resBlogTotalCount - blogCount - 1
                     }
                     tempViewScrollItems.clear()
-                    if (resBlogTotalCount-1 > blogCount && resCafeTotalCount > cafeCount) {
-                        viewModel.requestBlog(viewModel.query, display= display, start = blogCount + 1, checkMoreLoad = true)
+
+                    // ....
+                    val count = resBlogTotalCount - 1
+
+                    if (count > blogCount && resCafeTotalCount > cafeCount) {
+                        viewModel.requestBlog(
+                            viewModel.query,
+                            display = display,
+                            start = blogCount + 1,
+                            checkMoreLoad = true
+                        )
                         viewModel.viewMoreLoadState = Constants.VIEW_MORE_LOAD_BLOG_CAFE
                         progressBar.show()
-                    } else if (resBlogTotalCount-1 > blogCount && resCafeTotalCount <= cafeCount) {
-                        viewModel.requestBlog(viewModel.query, display= display, start = blogCount + 1, checkMoreLoad = true)
+                    } else if (count > blogCount && resCafeTotalCount <= cafeCount) {
+                        viewModel.requestBlog(
+                            viewModel.query,
+                            display = display,
+                            start = blogCount + 1,
+                            checkMoreLoad = true
+                        )
                         viewModel.viewMoreLoadState = Constants.VIEW_MORE_LOAD_BLOG
                         progressBar.show()
-                    } else if (resBlogTotalCount-1 <= blogCount && resCafeTotalCount > cafeCount) {
+                    } else if (count <= blogCount && resCafeTotalCount > cafeCount) {
                         viewModel.requestCafe(viewModel.query, cafeCount + 1, true)
                         progressBar.show()
                     }
@@ -97,12 +120,12 @@ class ViewFragment : Fragment() {
     private fun initObserve() {
         viewModel.blogResultSearchArraylist.observe(viewLifecycleOwner) {
             if (!viewModel.blogMoreLoad) {
-                blogCount = 0
-                firstBlogCount = 0
+//                blogCount = 0
+//                firstBlogCount = 0
                 tempViewItems.clear()
                 resBlogTotalCount = it.total
-                firstBlogCount = it.allItems.size
-                blogCount += it.allItems.size
+//                firstBlogCount = it.allItems.size
+                blogCount = it.allItems.size
                 it.allItems.map { allItems -> allItems.type = Constants.ITEMS }
                 tempViewItems.addAll(it.allItems)
             } else {
@@ -155,24 +178,6 @@ class ViewFragment : Fragment() {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //                if (resBlogTotalCount > blogCount || resCafeTotalCount > cafeCount) {

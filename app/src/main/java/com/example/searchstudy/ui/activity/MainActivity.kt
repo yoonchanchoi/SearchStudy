@@ -4,12 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +15,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.example.searchstudy.databinding.ActivityMainBinding
 import com.example.searchstudy.network.models.dto.searchDto.SearchData
 import com.example.searchstudy.ui.dialog.AdultWarningDialogFragment
@@ -33,8 +30,6 @@ import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
 import com.example.searchstudy.util.*
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.internal.notifyAll
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -54,6 +49,8 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     private var checkViewpagerDicFragment = false
     private var checkViewpagerImgFragment = false
     private var waitTime = 0L
+    private val fragments: ArrayList<Fragment> = arrayListOf()
+    private val titles: ArrayList<String> = arrayListOf()
 
     private lateinit var loadingProgressDialog: LoadingProgressDialog
     private lateinit var binding: ActivityMainBinding
@@ -61,11 +58,11 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     private lateinit var searchAdapter: SearchAdapter
     private lateinit var viewPagerAdapter: ViewpagerFragmentAdapter
 
-    private val fragments: ArrayList<Fragment> = arrayListOf()
-    private val titles: ArrayList<String> = arrayListOf()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //data 바인도 있음(현재는 뷰 바인딩)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -156,7 +153,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         //블로그 요청의 결과 값 옵저버
         viewModel.blogResultSearchArraylist.observe(this) {
             if (!viewModel.blogMoreLoad) {
-                if (it.allItems.size > 0) {
+                if (it.allItems.isNotEmpty()) {
                     checkViewpagerViewFragment = true
                 }
                 viewModel.requestCafe(query)
@@ -168,7 +165,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
 
             if (!viewModel.cafeMoreLoad) {
 //                it.allItems.isNotEmpty()
-                if (it.allItems.size > 0) {
+                if (it.allItems.isNotEmpty()) {
                     checkViewpagerViewFragment = true
                 }
                 viewModel.requestDictionary(query)
@@ -178,7 +175,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         //백과사전 요청의 결과 값 옵저버
         viewModel.dictionaryResultSearchArraylist.observe(this) {
             if (!viewModel.dicMoreLoad) {
-                if (it.allItems.size > 0) {
+                if (it.allItems.isNotEmpty()) {
                     checkViewpagerDicFragment = true
                 }
                 dicEndcheck = true
@@ -192,7 +189,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         viewModel.imgResultSearchArraylist.observe(this) {
             if (!viewModel.imgMoreLoad) {
                 imgEndcehck = true
-                if (it.imgItems.size > 0) {
+                if (it.imgItems.isNotEmpty()) {
                     checkViewpagerImgFragment = true
                 }
                 if (dicEndcheck && imgEndcehck) {
@@ -230,13 +227,14 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      * 최근 검색어에 데이터의 유무에 따른 뷰 보여주기
      */
     private fun checkSearchTextData() {
-        if (searchAdapter.itemCount > 0) {
-            binding.tvSearchEmpty.visibility = View.INVISIBLE
-        } else {
-            binding.tvSearchEmpty.visibility = View.VISIBLE
-        }
+        binding.tvSearchEmpty.visibility = if (searchAdapter.itemCount > 0) View.INVISIBLE else View.VISIBLE
 
-//        binding.tvSearchEmpty.visibility = if (searchAdapter.itemCount > 0) View.INVISIBLE else View.VISIBLE
+//      해당 아래 코드가 위처럼 줄일 수 있음
+//        if (searchAdapter.itemCount > 0) {
+//            binding.tvSearchEmpty.visibility = View.INVISIBLE
+//        } else {
+//            binding.tvSearchEmpty.visibility = View.VISIBLE
+//        }
     }
 
 
@@ -334,8 +332,6 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             binding.clSearchResult.visibility = View.VISIBLE
             saveSearchData(query)
             searchAdapter.notifyDataSetChanged()
-
-
         } else {
             binding.clSearchResult.visibility = View.INVISIBLE
             binding.tvNoSee.visibility = View.VISIBLE

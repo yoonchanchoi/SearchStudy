@@ -5,54 +5,59 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.AllRecyclerviewItemViewBinding
+import com.example.searchstudy.databinding.DictionaryRecyclerviewItemBinding
 import com.example.searchstudy.databinding.ViewRecyclerviewItemBinding
 import com.example.searchstudy.network.models.response.AllItem
+import com.example.searchstudy.ui.recyclerview.dictionary.DictionaryViewHolder
 import com.example.searchstudy.util.Constants
 import com.example.searchstudy.util.Util
 
-class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ViewAdapter() : RecyclerView.Adapter<ViewViewHolder>() {
 
     //view의 arraylsit 아이템
     private val viewItems = mutableListOf<AllItem>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewViewHolder {
+        val viewRecyclerviewItemBinding = ViewRecyclerviewItemBinding.inflate(
+            LayoutInflater.from(parent.context),parent,false)
+        return ViewViewHolder(viewRecyclerviewItemBinding)
         //viewItems의 타입에 따른 통합, View 뷰홀더 바인딩 구성
-        return when (viewType) {
-            Constants.ITEMS -> {
-                //뷰 탭의 view뷰홀더 레이아웃
-                val viewRecyclerviewItemBinding = ViewRecyclerviewItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-                ViewViewHolder(viewRecyclerviewItemBinding)
-            }
-            //통합 탭의 allview뷰홀더 레이아웃
-            else -> {
-                val allRecyclerviewItemDictionaryBinding = AllRecyclerviewItemViewBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-                AllAdapterItemViewViewHolder(allRecyclerviewItemDictionaryBinding)
-            }
-        }
+//        return when (viewType) {
+//            Constants.ITEMS -> {
+//                //뷰 탭의 view뷰홀더 레이아웃
+//                val viewRecyclerviewItemBinding = ViewRecyclerviewItemBinding.inflate(
+//                    LayoutInflater.from(parent.context),
+//                    parent,
+//                    false
+//                )
+//                ViewViewHolder(viewRecyclerviewItemBinding)
+//            }
+//            //통합 탭의 allview뷰홀더 레이아웃
+//            else -> {
+//                val allRecyclerviewItemDictionaryBinding = AllRecyclerviewItemViewBinding.inflate(
+//                    LayoutInflater.from(parent.context),
+//                    parent,
+//                    false
+//                )
+//                AllAdapterItemViewViewHolder(allRecyclerviewItemDictionaryBinding)
+//            }
+//        }
 
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewViewHolder, position: Int) {
+        holder.bind(viewItems[position])
         //viewItems의 타입에 따른 통합, View 뷰홀더 구성
-        when ( viewItems[position].type) {
-            Constants.ITEMS -> {
-                (holder as ViewViewHolder).bind(viewItems[position])
-                holder.setIsRecyclable(false)
-            }
-            else -> {
-                (holder as AllAdapterItemViewViewHolder).bind(viewItems[position])
-                holder.setIsRecyclable(false)
-            }
-
-        }
+//        when ( viewItems[position].type) {
+//            Constants.ITEMS -> {
+//                (holder as ViewViewHolder).bind(viewItems[position])
+//                holder.setIsRecyclable(false)
+//            }
+//            else -> {
+//                (holder as AllAdapterItemViewViewHolder).bind(viewItems[position])
+//                holder.setIsRecyclable(false)
+//            }
+//        }
     }
 
     override fun getItemCount(): Int {
@@ -66,7 +71,6 @@ class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun setData(data: ArrayList<AllItem>) {
         data?.let {
             viewItems.addAll(it)
-
         }
         notifyDataSetChanged()
     }

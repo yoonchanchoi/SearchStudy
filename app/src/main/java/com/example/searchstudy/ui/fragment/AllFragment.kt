@@ -49,6 +49,7 @@ class AllFragment : Fragment() {
     private fun init() {
         adapterSetting()
         initObserve()
+//        allAdapter.set
     }
 
     /**
@@ -62,7 +63,7 @@ class AllFragment : Fragment() {
                 tempAllViewItems.clear()
                 tempResultSearchAll.clear()
                 it.allItems.map { allItems ->
-                    allItems.type = Constants.ALLITEMS
+                    allItems.type = Constants.ITEMS
                 }
                 tempAllViewItems.addAll(it.allItems)
             }
@@ -73,7 +74,7 @@ class AllFragment : Fragment() {
                 if (!viewModel.cafeMoreLoad) {
 
                     it.allItems.map { allItems ->
-                        allItems.type = Constants.ALLITEMS
+                        allItems.type = Constants.ITEMS
                     }
 
                     tempAllViewItems.addAll(it.allItems)
