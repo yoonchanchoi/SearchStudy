@@ -70,5 +70,4 @@ data class AllItem(
     var type: Int = Constants.ITEMS
 //    var type: Int = Constants.ITEMS
 
-
 )

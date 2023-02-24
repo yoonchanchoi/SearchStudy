@@ -63,19 +63,18 @@ class ViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return viewItems[position].type
     }
 
-//    fun removeAll() {
-//        viewItems.clear()
-//        notifyDataSetChanged()
-//    }
-
     fun setData(data: ArrayList<AllItem>) {
+        data?.let {
+            viewItems.addAll(it)
 
-        viewItems.addAll(data)
+        }
         notifyDataSetChanged()
     }
 
     fun addData(data: ArrayList<AllItem>){
-        viewItems.addAll(data)
+        data?.let {
+            viewItems.addAll(it)
+        }
         notifyDataSetChanged()
     }
 }

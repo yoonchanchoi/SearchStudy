@@ -42,11 +42,11 @@ class DictionaryAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         when (dictionaryItems[position].type) {
             Constants.ITEMS -> {
                 (holder as DictionaryViewHolder).bind(dictionaryItems[position])
-                holder.setIsRecyclable(true)
+                holder.setIsRecyclable(false)
             }
             else -> {
                 (holder as AllAdapterItemDictionaryViewHolder).bind(dictionaryItems[position])
-                holder.setIsRecyclable(true)
+                holder.setIsRecyclable(false)
             }
         }
     }

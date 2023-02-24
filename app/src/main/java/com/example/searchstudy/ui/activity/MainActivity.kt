@@ -322,18 +322,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
 
         binding.vp2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER  //뷰페이저 오버스크롤 없애기
         viewPagerAdapter.setFragment(fragments)
-        binding.vp2.apply {
-            adapter=viewPagerAdapter
-            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    if(position==0){
-
-                    }
-                    Log.e("cyc","Page-->${position}")
-                }
-            })
-        }
+        binding.vp2.adapter=viewPagerAdapter
 //        binding.vp2.adapter = adapter
         TabLayoutMediator(binding.tlMenu, binding.vp2) { tab, postion ->
             tab.text = titles[postion]
