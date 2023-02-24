@@ -27,7 +27,7 @@ class ImgFragment : Fragment() {
 
     private lateinit var progressBar: LoadingProgressDialog
 
-    private var resImgTotalCount = 0
+    private var resImgTotalCount = 0 //이미지 api의 총 반환 갯수
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +52,7 @@ class ImgFragment : Fragment() {
         binding.rvImg.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
+
                 val layoutManager = recyclerView.layoutManager
                 val itemTotalCount = layoutManager?.itemCount ?: 0
                 val lastVisibleItemPositions = layoutManager?.let {
@@ -90,11 +91,13 @@ class ImgFragment : Fragment() {
      */
     private fun settingAdapter() {
         imgAdapter = ImgAdapter()
+
         val imgLayoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL).apply {
                 //아이템간의 마진의 따른 이상한 배치 방지
                 gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
             }
+
         binding.rvImg.apply {
             layoutManager = imgLayoutManager
             adapter = imgAdapter

@@ -13,7 +13,6 @@ class LoadingProgressDialog(context: Context) : Dialog(context) {
 
     private var binding: DialogProgressbarBinding= DialogProgressbarBinding.inflate(layoutInflater)
 
-
     init {
         // 다이얼 로그 제목을 안보이게...
         binding.pb.isIndeterminate = true
@@ -23,7 +22,5 @@ class LoadingProgressDialog(context: Context) : Dialog(context) {
         setContentView(binding.root)
 
     }
-
-
 
 }

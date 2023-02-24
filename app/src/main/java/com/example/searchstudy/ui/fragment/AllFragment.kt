@@ -21,20 +21,19 @@ import dagger.hilt.android.AndroidEntryPoint
 class AllFragment : Fragment() {
 
     private val viewModel: MainActivityViewModel by activityViewModels()
-    private var allAdapter = AllAdapter()
-    private val tempResultSearchAll = ArrayList<ResultSearchAll>()
-    private val tempAllViewItems = ArrayList<AllItem>()
+
     private lateinit var binding: FragmentAllBinding
 
+    private val tempResultSearchAll = ArrayList<ResultSearchAll>()// 임시 통합 아이템
 
+    private val tempAllViewItems = ArrayList<AllItem>() // 임시 VEIW 아이템
+
+    private var allAdapter = AllAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.e("cyc","")
-        Log.e("cyc","onCreateView")
-        Log.e("cyc","")
         // Inflate the layout for this fragment
         binding = FragmentAllBinding.inflate(inflater, container, false)
         return binding.root
@@ -63,18 +62,18 @@ class AllFragment : Fragment() {
                 tempAllViewItems.clear()
                 tempResultSearchAll.clear()
                 it.allItems.map { allItems ->
-                    allItems.type = Constants.ITEMS
+                    allItems.type = Constants.VIEW
                 }
                 tempAllViewItems.addAll(it.allItems)
             }
         }
         viewModel.cafeResultSearchArraylist.observe(viewLifecycleOwner) {
 
-            if(it.allItems.size>0){
+            if (it.allItems.size > 0) {
                 if (!viewModel.cafeMoreLoad) {
 
                     it.allItems.map { allItems ->
-                        allItems.type = Constants.ITEMS
+                        allItems.type = Constants.VIEW
                     }
 
                     tempAllViewItems.addAll(it.allItems)
@@ -90,23 +89,22 @@ class AllFragment : Fragment() {
         }
         viewModel.dictionaryResultSearchArraylist.observe(viewLifecycleOwner) {
 
-                if (!viewModel.dicMoreLoad) {
+            if (!viewModel.dicMoreLoad) {
 
-                    it.allItems.map { allItems ->
-                        allItems.type = Constants.ALLITEMS
-                    }
-                    if(it.allItems.size>0) {
-                        Util.dataSort(it.allItems)
-                        tempResultSearchAll.add(
-                            ResultSearchAll(
-                                category = "백과사전",
-                                allItems = Util.dataExtraction(it.allItems)
-                            )
-                        )
-                    }
-
-                    allAdapter.setData(tempResultSearchAll)
+                it.allItems.map { allItems ->
+                    allItems.type = Constants.DICTIONARY
                 }
+                if (it.allItems.size > 0) {
+                    Util.dataSort(it.allItems)
+                    tempResultSearchAll.add(
+                        ResultSearchAll(
+                            category = "백과사전",
+                            allItems = Util.dataExtraction(it.allItems)
+                        )
+                    )
+                }
+                allAdapter.setData(tempResultSearchAll)
+            }
         }
     }
 

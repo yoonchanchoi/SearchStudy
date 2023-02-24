@@ -16,8 +16,8 @@ object Constants {
                             //예를 들어 1: 정상,  2: 오타 처럼
                             // 또한 constant는 다양한 곳에서 쓰는것만 표시 할거 나머지는 각각의 컴포넌트에 선언해주는 것이 좋음
                             // 대게 constant에는 URL, PREF, request 코드 등등
-    const val ITEMS = 1
-    const val ALLITEMS = 2
+    const val VIEW = 1
+    const val DICTIONARY = 2
 
     const val VIEW_MORE_LOAD_BLOG_CAFE = 1
     const val VIEW_MORE_LOAD_BLOG = 2

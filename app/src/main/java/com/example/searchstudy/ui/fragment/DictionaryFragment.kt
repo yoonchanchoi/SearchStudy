@@ -20,10 +20,15 @@ import dagger.hilt.android.AndroidEntryPoint
 class DictionaryFragment : Fragment() {
 
     private val viewModel: MainActivityViewModel by activityViewModels()
-    private var resDicTotalCount = 0
+
     private lateinit var binding: FragmentDictionaryBinding
+
     private lateinit var dictionaryAdapter: DictionaryAdapter
+
     private lateinit var progressBar: LoadingProgressDialog
+
+    private var resDicTotalCount = 0  //백과사전 api의 총 반환 갯수
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,16 +56,12 @@ class DictionaryFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
 
                 val lastVisibleItemPosition =
-                    (recyclerView.layoutManager as LinearLayoutManager?)?.let {
-                        it.findLastCompletelyVisibleItemPosition() + 1
-                    }
-                val itemTotalCount = recyclerView.adapter?.let {
-                    it.itemCount
-                } // 어댑터에 등록된 아이템의 총 개수 -1
+                    (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition() + 1
+                val itemTotalCount = recyclerView.adapter?.itemCount ?: 0 // 어댑터에 등록된 아이템의 총 개수 -1
 
-                if (resDicTotalCount > itemTotalCount!!) {
+                if (resDicTotalCount > itemTotalCount) {
                     if (!binding.rvDictionary.canScrollVertically(1) && lastVisibleItemPosition == itemTotalCount) {
-                        viewModel.requestDictionary(viewModel.query, itemTotalCount!! + 1, true)
+                        viewModel.requestDictionary(viewModel.query, itemTotalCount + 1, true)
                         viewModel.lastDicItemPoint = itemTotalCount + 1
                         progressBar.show()
                     }
@@ -75,7 +76,7 @@ class DictionaryFragment : Fragment() {
     private fun initObserve() {
         viewModel.dictionaryResultSearchArraylist.observe(viewLifecycleOwner) { it ->
             resDicTotalCount = it.total
-            it.allItems.map { allItem -> allItem.type = Constants.ITEMS }
+//            it.allItems.map { allItem -> allItem.type = Constants.ITEMS }
             Util.dataSort(it.allItems)
 
             if (!viewModel.dicMoreLoad) {

@@ -21,7 +21,7 @@ class AllItemAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         //dictionary의 타입에 따른 통합, 백과사전 뷰홀더 바인딩 구성
         return when (viewType) {
-            Constants.ITEMS -> {
+            Constants.VIEW -> {
                 val allRecyclerviewItemDictionaryBinding = AllRecyclerviewItemViewBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -47,7 +47,7 @@ class AllItemAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         //dictionary의 타입에 따른 통합, 백과사전 뷰홀더 구성
 
         when (AllItems[position].type) {
-            Constants.ITEMS -> {
+            Constants.VIEW -> {
                 (holder as AllAdapterItemViewViewHolder).bind(AllItems[position], allItemRecyclerListener)
                 holder.setIsRecyclable(false)
             }

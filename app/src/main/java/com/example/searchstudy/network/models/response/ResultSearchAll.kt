@@ -27,7 +27,6 @@ data class ResultSearchAll(
 
     var category: String = ""
 
-
 )
 
 data class AllItem(

@@ -27,16 +27,25 @@ class ViewFragment : Fragment() {
     }
 
     private val viewModel: MainActivityViewModel by activityViewModels()
-    private var viewAdapter = ViewAdapter()
-    private val tempViewItems = ArrayList<AllItem>()
-    private val tempViewScrollItems = ArrayList<AllItem>()
-    private var resCafeTotalCount = 0
-    private var resBlogTotalCount = 0
-    private var blogCount = 0   // ...
-    private var firstBlogCount = 0
-    private var cafeCount = 0   //
+
     private lateinit var binding: FragmentViewBinding
+
     private lateinit var progressBar: LoadingProgressDialog
+
+    private var viewAdapter = ViewAdapter()
+
+    private val tempViewItems = ArrayList<AllItem>()
+
+    private val tempViewScrollItems = ArrayList<AllItem>()
+
+    private var resCafeTotalCount = 0 //카페 api의 총 반환 갯수
+
+    private var resBlogTotalCount = 0 //블로그 api의 총 반환 갯수
+
+    private var blogCount = 0   // 누적 블로그 아이템 갯수
+
+    private var cafeCount = 0   // 누적 카페 아이템 갯수
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,24 +75,25 @@ class ViewFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
 
                 val lastVisibleItemPosition =
-                    (recyclerView.layoutManager as LinearLayoutManager?)?.let {
-                        it.findLastCompletelyVisibleItemPosition()
-                    }
+                    (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
 
+                // 어댑터에 등록된 아이템의 총 개수 -1
                 val itemTotalCount = recyclerView.adapter?.let {
                     it.itemCount
-                } // 어댑터에 등록된 아이템의 총 개수 -1
+                }
 
-                if (!binding.rvView.canScrollVertically(1) && lastVisibleItemPosition!! + 1 == itemTotalCount) {
+                if (!binding.rvView.canScrollVertically(1) && lastVisibleItemPosition + 1 == itemTotalCount) {
                     var display = PAGE_COUNT
 
-                    // .....
+                    // api의 반환 결과 값이 총갯수를 넘어갈때 원래는 해당 남은 갯수만 가져와야 되지만
+                    // 해당 api 오류로 인한 다른 값으로 변경되어 호출되므로
+                    // 강제적으로 해당 총 반환값에 직전에 추가 호출시 호출(display)값을 지정해주기 위해서 바로 아래 if를 작성
                     if (blogCount + PAGE_COUNT > resBlogTotalCount) {
                         display = resBlogTotalCount - blogCount - 1
                     }
-                    tempViewScrollItems.clear()
 
-                    // ....
+                    tempViewScrollItems.clear()
+                    // 해당 총 갯수 반환을 넘어갈 때 생기는 오류로 인해서 그 총갯수 직전 -1 갯수까지 반환하기 위한 count
                     val count = resBlogTotalCount - 1
 
                     if (count > blogCount && resCafeTotalCount > cafeCount) {
@@ -120,14 +130,11 @@ class ViewFragment : Fragment() {
     private fun initObserve() {
         viewModel.blogResultSearchArraylist.observe(viewLifecycleOwner) {
             if (!viewModel.blogMoreLoad) {
-//                blogCount = 0
-//                firstBlogCount = 0
                 tempViewItems.clear()
                 resBlogTotalCount = it.total
-//                firstBlogCount = it.allItems.size
                 blogCount = it.allItems.size
-                it.allItems.map { allItems -> allItems.type = Constants.ITEMS }
-                tempViewItems.addAll(it.allItems)
+//                it.allItems.map { allItems -> allItems.type = Constants.ITEMS }
+//                tempViewItems.addAll(it.allItems)
             } else {
                 when (viewModel.viewMoreLoadState) {
                     Constants.VIEW_MORE_LOAD_BLOG_CAFE -> {
@@ -148,10 +155,9 @@ class ViewFragment : Fragment() {
         }
         viewModel.cafeResultSearchArraylist.observe(viewLifecycleOwner) {
             if (!viewModel.cafeMoreLoad) {
-                cafeCount = 0
                 resCafeTotalCount = it.total
-                cafeCount += it.allItems.size
-                it.allItems.map { allItems -> allItems.type = Constants.ITEMS }
+                cafeCount = it.allItems.size
+//                it.allItems.map { allItems -> allItems.type = Constants.ITEMS }
                 tempViewItems.addAll(it.allItems)
                 Util.dataSort(tempViewItems)
                 viewAdapter.setData(tempViewItems)

@@ -40,24 +40,25 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     @Inject
     lateinit var pref: Pref
 
+    private val viewModel: MainActivityViewModel by viewModels()
+
+    private lateinit var binding: ActivityMainBinding
+
+    private lateinit var searchDataList: ArrayList<SearchData>
+    private lateinit var searchAdapter: SearchAdapter
+    private lateinit var viewPagerAdapter: ViewpagerFragmentAdapter
+    private lateinit var loadingProgressDialog: LoadingProgressDialog
+
     private var query = ""  // 검색어
     private var preQuery = "" // 이전 검색어
     private var dicEndcheck = false
     private var imgEndcehck = false
-    private val viewModel: MainActivityViewModel by viewModels()
     private var checkViewpagerViewFragment = false
     private var checkViewpagerDicFragment = false
     private var checkViewpagerImgFragment = false
     private var waitTime = 0L
     private val fragments: ArrayList<Fragment> = arrayListOf()
     private val titles: ArrayList<String> = arrayListOf()
-
-    private lateinit var loadingProgressDialog: LoadingProgressDialog
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var searchDataList: ArrayList<SearchData>
-    private lateinit var searchAdapter: SearchAdapter
-    private lateinit var viewPagerAdapter: ViewpagerFragmentAdapter
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -227,7 +228,8 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      * 최근 검색어에 데이터의 유무에 따른 뷰 보여주기
      */
     private fun checkSearchTextData() {
-        binding.tvSearchEmpty.visibility = if (searchAdapter.itemCount > 0) View.INVISIBLE else View.VISIBLE
+        binding.tvSearchEmpty.visibility =
+            if (searchAdapter.itemCount > 0) View.INVISIBLE else View.VISIBLE
 
 //      해당 아래 코드가 위처럼 줄일 수 있음
 //        if (searchAdapter.itemCount > 0) {
@@ -244,7 +246,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     private fun saveSearchData(searchTerm: String) {
 
         searchDataList.removeIf {
-            it.searchText==searchTerm
+            it.searchText == searchTerm
         }
 
         // 새 아이템 넣기
@@ -320,7 +322,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
 
         binding.vp2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER  //뷰페이저 오버스크롤 없애기
         viewPagerAdapter.setFragment(fragments)
-        binding.vp2.adapter=viewPagerAdapter
+        binding.vp2.adapter = viewPagerAdapter
 //        binding.vp2.adapter = adapter
         TabLayoutMediator(binding.tlMenu, binding.vp2) { tab, postion ->
             tab.text = titles[postion]
@@ -336,10 +338,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             binding.clSearchResult.visibility = View.INVISIBLE
             binding.tvNoSee.visibility = View.VISIBLE
         }
-
-        loadingProgressDialog?.let {
-            it.dismiss()
-        }
+        loadingProgressDialog.dismiss()
     }
 
     /**
@@ -360,9 +359,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     private fun actionSearch() {
 
         initViewPagerFragmentFlag()
-        loadingProgressDialog?.let {
-            it.show()
-        }
+        loadingProgressDialog.show()
         dicEndcheck = false
         imgEndcehck = false
         hideKeyboard()
@@ -423,19 +420,6 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 //        if (endSearchFlag) {
 //            initViewPagerFragmentCheck()
 //            endSearchFlag = false
@@ -459,7 +443,6 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
 //        }
 
 
-
 //    private fun chcekViewpager() {
 //        if (!(checkViewpagerAllFragment && checkViewpagerViewFragment)) {
 //            binding.clSearchResult.visibility = View.INVISIBLE
@@ -477,7 +460,6 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
 // --> 최상단 추가
 // 검색단어 포함 NO
 // --> 최상단 추가
-
 
 
 /*
