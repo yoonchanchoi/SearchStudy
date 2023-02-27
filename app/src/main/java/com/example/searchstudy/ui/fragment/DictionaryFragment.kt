@@ -1,5 +1,6 @@
 package com.example.searchstudy.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.FragmentDictionaryBinding
+import com.example.searchstudy.network.models.response.AllItem
+import com.example.searchstudy.network.models.response.ResultSearchAll
+import com.example.searchstudy.ui.activity.WebViewActivity
 import com.example.searchstudy.ui.dialog.LoadingProgressDialog
 import com.example.searchstudy.ui.recyclerview.dictionary.DictionaryAdapter
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
@@ -29,6 +33,7 @@ class DictionaryFragment : Fragment() {
 
     private var resDicTotalCount = 0  //백과사전 api의 총 반환 갯수
 
+//    private lateinit var dicItems : ArrayList<AllItem>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +54,18 @@ class DictionaryFragment : Fragment() {
         settingAdapter()
         initObserve()
 
+
+        dictionaryAdapter.setItemClickListener(object : DictionaryAdapter.DicItemRecyclerListener {
+            override fun onItemClick(link: String) {
+                val intent = Intent(requireContext(), WebViewActivity::class.java)
+                intent.putExtra(
+                    Constants.DITAIL_WEB_LOAD_URL,
+                    link
+                )
+                startActivity(intent)
+            }
+        })
+
         //스크롤 리스너
         progressBar = LoadingProgressDialog(requireContext())
         binding.rvDictionary.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -62,7 +79,7 @@ class DictionaryFragment : Fragment() {
                 if (resDicTotalCount > itemTotalCount) {
                     if (!binding.rvDictionary.canScrollVertically(1) && lastVisibleItemPosition == itemTotalCount) {
                         viewModel.requestDictionary(viewModel.query, itemTotalCount + 1, true)
-                        viewModel.lastDicItemPoint = itemTotalCount + 1
+//                        viewModel.lastDicItemPoint = itemTotalCount + 1
                         progressBar.show()
                     }
                 }
@@ -80,8 +97,10 @@ class DictionaryFragment : Fragment() {
             Util.dataSort(it.allItems)
 
             if (!viewModel.dicMoreLoad) {
+//                dicItems=it.allItems
                 dictionaryAdapter.setData(it.allItems)
             } else {
+//                dicItems.addAll(it.allItems)
                 dictionaryAdapter.addData(it.allItems)
             }
             progressBar.dismiss()

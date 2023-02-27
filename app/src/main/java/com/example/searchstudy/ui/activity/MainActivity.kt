@@ -15,6 +15,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.searchstudy.R
 import com.example.searchstudy.databinding.ActivityMainBinding
 import com.example.searchstudy.network.models.dto.searchDto.SearchData
 import com.example.searchstudy.ui.dialog.AdultWarningDialogFragment
@@ -213,7 +214,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             if (it.isEmpty()) {
                 actionSearch()
             } else {
-                Toast.makeText(this, "오타를 수정했습니다.", Toast.LENGTH_SHORT).apply {
+                Toast.makeText(this, getString(R.string.miss_word_correction), Toast.LENGTH_SHORT).apply {
                     this.setGravity(Gravity.BOTTOM, 0, 100)
                     this.show()
                 }
@@ -295,6 +296,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         checkAdultWord()
     }
 
+
     /**
      * 뷰페이저 세팅
      */
@@ -302,22 +304,22 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         viewPagerAdapter = ViewpagerFragmentAdapter(this)
         if (checkViewpagerViewFragment) {
             fragments.add(ViewFragment())
-            titles.add("VIEW")
+            titles.add(getString(R.string.tab_title_view))
         }
 
         if (checkViewpagerDicFragment) {
             fragments.add(DictionaryFragment())
-            titles.add("백과사전")
+            titles.add(getString(R.string.tab_title_dictionary))
         }
 
         if (checkViewpagerImgFragment) {
             fragments.add(ImgFragment())
-            titles.add("이미지")
+            titles.add(getString(R.string.tab_title_img))
         }
 
         if (fragments.size > 0 && fragments[0] !is ImgFragment) {
             fragments.add(0, AllFragment())
-            titles.add(0, "통합")
+            titles.add(0, getString(R.string.tab_title_all))
         }
 
         binding.vp2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER  //뷰페이저 오버스크롤 없애기
@@ -410,7 +412,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         } else {
             if (System.currentTimeMillis() - waitTime >= 1500) {
                 waitTime = System.currentTimeMillis()
-                Toast.makeText(this, "뒤로가기 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.app_finish_toast), Toast.LENGTH_SHORT).show()
             } else {
                 finish() // 액티비티 종료
             }

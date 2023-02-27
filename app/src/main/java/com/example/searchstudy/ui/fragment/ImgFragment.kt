@@ -63,7 +63,7 @@ class ImgFragment : Fragment() {
                 if (resImgTotalCount > itemTotalCount) {
                     if (binding.rvImg.canScrollVertically(1) && lastVisibleItemPosition + 1 == itemTotalCount) {
                         viewModel.requestImg(viewModel.query, itemTotalCount + 1, true)
-                        viewModel.lastImgItemPoint = itemTotalCount
+//                        viewModel.lastImgItemPoint = itemTotalCount
                         progressBar.show()
                     }
                 }
@@ -85,6 +85,8 @@ class ImgFragment : Fragment() {
             progressBar.dismiss()
         }
     }
+
+
 
     /**
      * 어댑터 세팅

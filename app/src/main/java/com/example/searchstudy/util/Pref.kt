@@ -15,13 +15,13 @@ class Pref @Inject constructor(private val pref: SharedPreferences) {
     fun saveSearchList(searchList: MutableList<SearchData>) {
         val searchListString: String = Gson().toJson(searchList)
         val editor: SharedPreferences.Editor = pref.edit()
-        editor.putString(Constants.KEY_SEARCH, searchListString)
+        editor.putString(Constants.PREF_KEY_SEARCH, searchListString)
         editor.apply()
     }
 
     fun getSearchList(): MutableList<SearchData> {
         var saveSearchList = ArrayList<SearchData>()
-        pref.getString(Constants.KEY_SEARCH, "")?.let {
+        pref.getString(Constants.PREF_KEY_SEARCH, "")?.let {
             if (it.isNotEmpty()) {
                 saveSearchList = Gson().fromJson(it, Array<SearchData>::class.java)
                     .toMutableList() as ArrayList<SearchData>

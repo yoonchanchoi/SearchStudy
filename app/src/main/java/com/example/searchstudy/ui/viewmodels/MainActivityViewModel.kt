@@ -19,64 +19,47 @@ class MainActivityViewModel @Inject constructor(
     private val searchManager: SearchManager
 ) : ViewModel() {
 
+    //블로그 api response
     private val _blogResultSearchArraylist = MutableLiveData<ResultSearchAll>()
     val blogResultSearchArraylist: LiveData<ResultSearchAll>
         get() = _blogResultSearchArraylist
-
+    //카페 api response
     private val _cafeResultSearchArraylist = MutableLiveData<ResultSearchAll>()
     val cafeResultSearchArraylist: LiveData<ResultSearchAll>
         get() = _cafeResultSearchArraylist
-
+    //백과사전 api response
     private val _dictionaryResultSearchArraylist = MutableLiveData<ResultSearchAll>()
     val dictionaryResultSearchArraylist: LiveData<ResultSearchAll>
         get() = _dictionaryResultSearchArraylist
-
+    //이미지 api response
     private val _imgResultSearchArraylist = MutableLiveData<ResultSearchImg>()
     val imgResultSearchArraylist: LiveData<ResultSearchImg>
         get() = _imgResultSearchArraylist
-
+    //성인검색 단언 api response
     private val _checkAdultWord = MutableLiveData<Int>()
     val checkAdultWord: LiveData<Int>
         get() = _checkAdultWord
-
+    //오타 api response
     private val _checkMissWord = MutableLiveData<String>()
     val checkMissWord: LiveData<String>
         get() = _checkMissWord
 
-//    private val _blogTotalItems = MutableLiveData<Int>()
-//    val blogTotalItems: LiveData<Int>
-//        get() = _blogTotalItems
-//
-//    private val _cafeTotalItems = MutableLiveData<Int>()
-//    val cafeTotalItems: LiveData<Int>
-//        get() = _cafeTotalItems
-//
-//    private val _dicTotalItems = MutableLiveData<Int>()
-//    val dicTotalItems: LiveData<Int>
-//        get() = _dicTotalItems
-//
-//    private val _imgTotalItems = MutableLiveData<Int>()
-//    val imgTotalItems: LiveData<Int>
-//        get() = _imgTotalItems
 
-    //검색 입력값
-    var query = ""
-    var viewMoreLoadState = 0
-    var lastDicItemPoint = 0
-    var lastImgItemPoint = 0
+    var query = ""                  //검색 입력값
+    var viewMoreLoadState = 0       //뷰 더보기 flag
     var blogMoreLoad = false
     var cafeMoreLoad = false
     var dicMoreLoad = false
     var imgMoreLoad = false
+//    var lastDicItemPoint = 0
+//    var lastImgItemPoint = 0
 
 
     /**
      * 블로그 검색 api 통신
      */
     fun requestBlog(query: String, display: Int = 10, start: Int = 1, checkMoreLoad: Boolean = false) {
-//        Log.e("cyc","")
-//        Log.e("cyc","==viewmodel=display---------------------->${display}")
-//        Log.e("cyc","")
+
         val result = searchManager.requestBlog(query = query, display = display, start = start)
         result.enqueue(object : Callback<ResultSearchAll> {
             override fun onResponse(

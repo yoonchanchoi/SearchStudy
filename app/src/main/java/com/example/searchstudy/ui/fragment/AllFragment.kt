@@ -1,24 +1,27 @@
 package com.example.searchstudy.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.searchstudy.R
 import com.example.searchstudy.databinding.FragmentAllBinding
 import com.example.searchstudy.network.models.response.AllItem
 import com.example.searchstudy.network.models.response.ResultSearchAll
-import com.example.searchstudy.ui.recyclerview.all.AllAdapter
+import com.example.searchstudy.ui.activity.WebViewActivity
+import com.example.searchstudy.ui.recyclerview.all.AllItemsAdapter
+import com.example.searchstudy.ui.recyclerview.all.child.AllChildRecyclerListener
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
 import com.example.searchstudy.util.Constants
 import com.example.searchstudy.util.Util
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AllFragment : Fragment() {
+class AllFragment : Fragment(), AllChildRecyclerListener {
 
     private val viewModel: MainActivityViewModel by activityViewModels()
 
@@ -28,7 +31,7 @@ class AllFragment : Fragment() {
 
     private val tempAllViewItems = ArrayList<AllItem>() // 임시 VEIW 아이템
 
-    private var allAdapter = AllAdapter()
+    private lateinit var allItemsAdapter: AllItemsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,7 +83,7 @@ class AllFragment : Fragment() {
                     Util.dataSort(tempAllViewItems)
                     tempResultSearchAll.add(
                         ResultSearchAll(
-                            category = "VIEW",
+                            category = getString(R.string.tab_title_view),
                             allItems = Util.dataExtraction(tempAllViewItems)
                         )
                     )
@@ -98,12 +101,12 @@ class AllFragment : Fragment() {
                     Util.dataSort(it.allItems)
                     tempResultSearchAll.add(
                         ResultSearchAll(
-                            category = "백과사전",
+                            category = getString(R.string.tab_title_dictionary),
                             allItems = Util.dataExtraction(it.allItems)
                         )
                     )
                 }
-                allAdapter.setData(tempResultSearchAll)
+                allItemsAdapter.setData(tempResultSearchAll)
             }
         }
     }
@@ -112,33 +115,52 @@ class AllFragment : Fragment() {
      * 어댑터 세팅
      */
     private fun adapterSetting() {
+        allItemsAdapter = AllItemsAdapter(requireContext(),this)
         val allLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvOutAll.apply {
             layoutManager = allLayoutManager
-            adapter = allAdapter
+            adapter = allItemsAdapter
         }
     }
 
-//    override fun onResume() {
-////        Log.e("cyc","")
-////        Log.e("cyc","onResume")
-////        Log.e("cyc","")
-////        for(i in tempResultSearchAll){
-////            tempResultSearchAll.map {
-////                it.allItems.map {
-////                    it.type=Constants.ALLITEMS
-////                }
-////            }
-////        }
-//        for(i in tempResultSearchAll.indices){
-//            Log.e("cyc","tempResultSearchAll--->${tempResultSearchAll[i]}")
-//        }
-//        allAdapter.setData(tempResultSearchAll)
-//
-//
-//
-//        super.onResume()
-//
-//    }
+    override fun onItemClick(link: String) {
+        // 클릭했을 때 행동이 무엇인가?
+        // -> WebActivity 띄우기
+        //    -> WebActivity를 띄우기 위해서 필요한 것?
+        //       -> link가 필요함
+        //
+
+        val intent = Intent(requireContext(),WebViewActivity::class.java)
+        intent.putExtra(Constants.DITAIL_WEB_LOAD_URL,link)
+        startActivity(intent)
+    }
+
+
+
+//    inline fun listener(String)
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+//override fun onItemClick(category: Int, position: Int) {
+//        // 클릭했을 때 행동이 무엇인가?
+//        // -> WebActivity 띄우기
+//        //    -> WebActivity를 띄우기 위해서 필요한 것?
+//        //       -> link가 필요함
+//        //
+//        val intent = Intent(requireContext(),WebViewActivity::class.java)
+////        intent.putExtra(Constants.DITAIL_WEB_LOAD_URL,tempResultSearchAll[])
+//    }

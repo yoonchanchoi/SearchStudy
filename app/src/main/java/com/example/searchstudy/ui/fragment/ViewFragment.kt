@@ -1,6 +1,7 @@
 package com.example.searchstudy.ui.fragment
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.FragmentViewBinding
 import com.example.searchstudy.network.models.response.AllItem
+import com.example.searchstudy.ui.activity.WebViewActivity
 import com.example.searchstudy.ui.dialog.LoadingProgressDialog
 import com.example.searchstudy.ui.recyclerview.view.ViewAdapter
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
@@ -32,7 +34,7 @@ class ViewFragment : Fragment() {
 
     private lateinit var progressBar: LoadingProgressDialog
 
-    private var viewAdapter = ViewAdapter()
+    private lateinit var viewAdapter: ViewAdapter
 
     private val tempViewItems = ArrayList<AllItem>()
 
@@ -68,6 +70,14 @@ class ViewFragment : Fragment() {
         viewAdapterSetting()
         initObserve()
         progressBar = LoadingProgressDialog(requireContext())
+
+        viewAdapter.setItemClickListener(object : ViewAdapter.ViewItemRecyclerListener{
+            override fun onItemClick(link:String) {
+                val intent = Intent(requireContext(), WebViewActivity::class.java)
+                intent.putExtra(Constants.DITAIL_WEB_LOAD_URL,link)
+                startActivity(intent)
+            }
+        })
 
 //        일단 스크롤 제외
         binding.rvView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -175,7 +185,7 @@ class ViewFragment : Fragment() {
      * 어댑터 세팅
      */
     private fun viewAdapterSetting() {
-        viewAdapter = ViewAdapter()
+        viewAdapter = ViewAdapter(requireContext())
         val rvViewLayoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvView.apply {

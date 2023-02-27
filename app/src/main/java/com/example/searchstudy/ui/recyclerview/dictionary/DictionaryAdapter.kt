@@ -12,7 +12,15 @@ import com.example.searchstudy.util.Constants
 
 class DictionaryAdapter : RecyclerView.Adapter<DictionaryViewHolder>() {
 
+
+    interface DicItemRecyclerListener {
+        fun onItemClick(link: String)
+    }
+
+    private lateinit var dicItemRecyclerListener: DicItemRecyclerListener
     private val dictionaryItems = mutableListOf<AllItem>()
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DictionaryViewHolder {
         //dictionary의 타입에 따른 통합, 백과사전 뷰홀더 바인딩 구성
         val dictionaryRecyclerviewItemBinding = DictionaryRecyclerviewItemBinding.inflate(
@@ -41,7 +49,7 @@ class DictionaryAdapter : RecyclerView.Adapter<DictionaryViewHolder>() {
 
     override fun onBindViewHolder(holder: DictionaryViewHolder, position: Int) {
         //dictionary의 타입에 따른 통합, 백과사전 뷰홀더 구성
-        holder.bind(dictionaryItems[position])
+        holder.bind(dictionaryItems[position],dicItemRecyclerListener)
 //        when (dictionaryItems[position].type) {
 //            Constants.ITEMS -> {
 //                (holder as DictionaryViewHolder).bind(dictionaryItems[position])
@@ -74,6 +82,13 @@ class DictionaryAdapter : RecyclerView.Adapter<DictionaryViewHolder>() {
             dictionaryItems.addAll(it)
         }
         notifyDataSetChanged()
+    }
+    fun getItem(): ArrayList<AllItem>{
+        return dictionaryItems as ArrayList<AllItem>
+    }
+
+    fun setItemClickListener(dicItemRecyclerListener: DicItemRecyclerListener) {
+        this.dicItemRecyclerListener = dicItemRecyclerListener
     }
 
 }

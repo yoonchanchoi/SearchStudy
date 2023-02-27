@@ -2,4 +2,12 @@
     <string name="app_name">SearchStudy</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="miss_word_correction">오타를 수정했습니다.</string>
+    <string name="app_finish_toast">뒤로가기 버튼을 한번 더 누르면 종료됩니다.</string>
+    <string name="tab_title_view">VIEW</string>
+    <string name="tab_title_dictionary">백과사전</string>
+    <string name="tab_title_img">이미지</string>
+    <string name="tab_title_all">통합</string>
+    <string name="catagory_cafa">카페</string>
+    <string name="catagory_blog">블로그</string>
 </resources>

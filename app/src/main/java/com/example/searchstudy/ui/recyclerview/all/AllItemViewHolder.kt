@@ -1,17 +1,20 @@
 package com.example.searchstudy.ui.recyclerview.all
 
+import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.searchstudy.R
 import com.example.searchstudy.databinding.AllRecyclerviewItemBinding
 import com.example.searchstudy.network.models.response.ResultSearchAll
+import com.example.searchstudy.ui.recyclerview.all.child.AllChildItemAdapter
+import com.example.searchstudy.ui.recyclerview.all.child.AllChildRecyclerListener
 
 
-
-class AllAdapterViewHolder(private val binding: AllRecyclerviewItemBinding) :
+class AllItemViewHolder(private val context: Context, private val binding: AllRecyclerviewItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(resultSearchAll: ResultSearchAll) {
-        if (resultSearchAll.category == "VIEW") {
+    fun bind(resultSearchAll: ResultSearchAll, allChildRecyclerListener:AllChildRecyclerListener) {
+        if (resultSearchAll.category == context.getString(R.string.tab_title_view)) {
             binding.tvCatagory.text = resultSearchAll.category
         } else {
             binding.tvCatagory.text = resultSearchAll.category
@@ -19,7 +22,7 @@ class AllAdapterViewHolder(private val binding: AllRecyclerviewItemBinding) :
         binding.rvIn.apply {
             this.addItemDecoration(DividerItemDecorator(context.resources.getDrawable(com.example.searchstudy.R.drawable.all_item_stroke,null)))
             layoutManager = LinearLayoutManager(binding.root.context)
-            this.adapter = AllItemAdapter().apply {
+            this.adapter = AllChildItemAdapter(context,allChildRecyclerListener).apply {
                 setData(resultSearchAll.allItems)
             }
         }

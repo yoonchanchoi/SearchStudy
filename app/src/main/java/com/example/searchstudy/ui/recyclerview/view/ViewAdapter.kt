@@ -1,6 +1,7 @@
 package com.example.searchstudy.ui.recyclerview.view
 
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -12,15 +13,23 @@ import com.example.searchstudy.ui.recyclerview.dictionary.DictionaryViewHolder
 import com.example.searchstudy.util.Constants
 import com.example.searchstudy.util.Util
 
-class ViewAdapter() : RecyclerView.Adapter<ViewViewHolder>() {
+class ViewAdapter(private val context: Context) : RecyclerView.Adapter<ViewViewHolder>() {
 
+
+    interface ViewItemRecyclerListener{
+        fun onItemClick(link: String)
+    }
+
+
+    private lateinit var viewItemRecyclerListener: ViewItemRecyclerListener
     //view의 arraylsit 아이템
     private val viewItems = mutableListOf<AllItem>()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewViewHolder {
         val viewRecyclerviewItemBinding = ViewRecyclerviewItemBinding.inflate(
             LayoutInflater.from(parent.context),parent,false)
-        return ViewViewHolder(viewRecyclerviewItemBinding)
+        return ViewViewHolder(context,viewRecyclerviewItemBinding)
         //viewItems의 타입에 따른 통합, View 뷰홀더 바인딩 구성
 //        return when (viewType) {
 //            Constants.ITEMS -> {
@@ -46,7 +55,7 @@ class ViewAdapter() : RecyclerView.Adapter<ViewViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewViewHolder, position: Int) {
-        holder.bind(viewItems[position])
+        holder.bind(viewItems[position],viewItemRecyclerListener)
         //viewItems의 타입에 따른 통합, View 뷰홀더 구성
 //        when ( viewItems[position].type) {
 //            Constants.ITEMS -> {
@@ -81,12 +90,47 @@ class ViewAdapter() : RecyclerView.Adapter<ViewViewHolder>() {
         }
         notifyDataSetChanged()
     }
+    fun getItem(): ArrayList<AllItem>{
+        return viewItems as ArrayList<AllItem>
+    }
+
+    fun setItemClickListener(viewItemRecyclerListener: ViewItemRecyclerListener){
+        this.viewItemRecyclerListener = viewItemRecyclerListener
+    }
 }
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//-----------------------------------------------------------------------------------------------------------------
 
 
 

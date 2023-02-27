@@ -66,7 +66,7 @@ data class AllItem(
     @Expose
     val cafeurl: String = "",
 
-    var type: Int = Constants.ITEMS
+    var type: Int = Constants.VIEW
 //    var type: Int = Constants.ITEMS
 
 )
