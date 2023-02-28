@@ -214,15 +214,25 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             if (it.isEmpty()) {
                 actionSearch()
             } else {
-                Toast.makeText(this, getString(R.string.miss_word_correction), Toast.LENGTH_SHORT).apply {
-                    this.setGravity(Gravity.BOTTOM, 0, 100)
-                    this.show()
-                }
+                Toast.makeText(this, getString(R.string.miss_word_correction), Toast.LENGTH_SHORT)
+                    .apply {
+                        this.setGravity(Gravity.BOTTOM, 0, 100)
+                        this.show()
+                    }
                 binding.etSearch.setText(it)
                 query = it
                 actionSearch()
             }
         }
+        viewModel.nationalLanguageResult.observe(this){
+            if(it.langCode==getString(R.string.korean)) {
+                viewModel.requestPapago(getString(R.string.korean), getString(R.string.english), query.replace(getString(R.string.translation), ""))
+            }else{
+                viewModel.requestPapago(getString(R.string.english),getString(R.string.korean),query.replace(getString(R.string.translation),""))
+            }
+        }
+
+
     }
 
     /**
@@ -362,6 +372,10 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
 
         initViewPagerFragmentFlag()
         loadingProgressDialog.show()
+        if(checkPapago(query)){
+            viewModel.requestNationalLanguage(query)
+        }
+
         dicEndcheck = false
         imgEndcehck = false
         hideKeyboard()
@@ -412,11 +426,23 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         } else {
             if (System.currentTimeMillis() - waitTime >= 1500) {
                 waitTime = System.currentTimeMillis()
-                Toast.makeText(this, getString(R.string.app_finish_toast), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.app_finish_toast), Toast.LENGTH_SHORT)
+                    .show()
             } else {
                 finish() // 액티비티 종료
             }
         }
+    }
+
+    private fun checkPapago(query: String) : Boolean {
+        if (query.length >= 3) {
+            if (query.contains(getString(R.string.translation))) {
+                if (query.substring(0, 1) == getString(R.string.translation) || query.substring(query.length - 2, query.length - 1) == getString(R.string.translation)) {
+                    return true
+                }
+            }
+        }
+        return false
     }
 
 }

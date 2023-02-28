@@ -1,9 +1,9 @@
 package com.example.searchstudy.network.services
 
+import com.example.searchstudy.network.models.request.RequestPapago
 import com.example.searchstudy.network.models.response.*
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface SearchService {
     @GET("/v1/search/blog.json")
@@ -48,5 +48,12 @@ interface SearchService {
     fun requestCheckMissWord(
         @Query(value = "query", encoded = true) query: String): Call<ResultMisspelledWord>
 
+
+    @POST("/v1/papago/n2mt")
+    fun requestPapago(@Body requestPapago: RequestPapago): Call<ResultPapago>
+
+
+    @POST("/v1/papago/detectLangs")
+    fun requestNationalLanguage(@Body query: String) : Call<ResultNationalLanguage>
 
 }

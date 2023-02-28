@@ -90,9 +90,6 @@ class ViewAdapter(private val context: Context) : RecyclerView.Adapter<ViewViewH
         }
         notifyDataSetChanged()
     }
-    fun getItem(): ArrayList<AllItem>{
-        return viewItems as ArrayList<AllItem>
-    }
 
     fun setItemClickListener(viewItemRecyclerListener: ViewItemRecyclerListener){
         this.viewItemRecyclerListener = viewItemRecyclerListener

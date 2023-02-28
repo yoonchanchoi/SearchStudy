@@ -1,5 +1,6 @@
 package com.example.searchstudy.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,9 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.searchstudy.databinding.FragmentImgBinding
 import com.example.searchstudy.network.models.response.ImgItems
+import com.example.searchstudy.ui.activity.WebViewActivity
+import com.example.searchstudy.ui.dialog.AdultWarningDialogFragment
+import com.example.searchstudy.ui.dialog.ImgDialogFragment
 import com.example.searchstudy.ui.dialog.LoadingProgressDialog
+import com.example.searchstudy.ui.recyclerview.dictionary.DictionaryAdapter
 import com.example.searchstudy.ui.recyclerview.img.ImgAdapter
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
+import com.example.searchstudy.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -46,6 +52,23 @@ class ImgFragment : Fragment() {
     private fun init() {
         settingAdapter()
         initObserve()
+
+        //이미지 아이템 클릭 리스너
+        imgAdapter.setItemClickListener(object : ImgAdapter.ImgItemRecyclerListener {
+            override fun onItemClick(link: String) {
+                Log.e("cyc","ImgItemRecyclerListener-----onItemClick")
+
+                val imgDialogFragment = ImgDialogFragment()
+                val bundle = Bundle()
+                bundle.putString(Constants.DITAIL_IMG_LOAD_URL, link)
+                imgDialogFragment.arguments = bundle
+                activity?.let { imgDialogFragment.show(it.supportFragmentManager, "imgDialogFragment") }
+//                viewModel.setDitailLoadUrl(link)
+//                activity?.let { ImgDialogFragment().show(it.supportFragmentManager, "ImgDialog") }
+
+
+            }
+        })
 
         //스크롤 세팅
         progressBar = LoadingProgressDialog(requireContext())
@@ -87,7 +110,6 @@ class ImgFragment : Fragment() {
     }
 
 
-
     /**
      * 어댑터 세팅
      */
@@ -103,7 +125,7 @@ class ImgFragment : Fragment() {
         binding.rvImg.apply {
             layoutManager = imgLayoutManager
             adapter = imgAdapter
-            smoothScrollBy(1, 100)
+//            smoothScrollBy(1, 100)
         }
     }
 

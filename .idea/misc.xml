@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.2601851851851852" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1955" />
         <entry key="app/src/main/res/drawable/all_item_stroke.xml" value="0.265" />
         <entry key="app/src/main/res/drawable/dialog_progressbar.xml" value="0.1385" />
@@ -34,11 +35,13 @@
         <entry key="app/src/main/res/layout/fragment_all.xml" value="0.2062780269058296" />
         <entry key="app/src/main/res/layout/fragment_dictionary.xml" value="0.15602836879432624" />
         <entry key="app/src/main/res/layout/fragment_img.xml" value="0.15602836879432624" />
+        <entry key="app/src/main/res/layout/fragment_img_dialog.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_recent.xml" value="0.27717391304347827" />
         <entry key="app/src/main/res/layout/fragment_view.xml" value="0.2222222222222222" />
         <entry key="app/src/main/res/layout/holder_recyclerview_in.xml" value="0.22239583333333332" />
         <entry key="app/src/main/res/layout/holder_recyclerview_out.xml" value="0.22239583333333332" />
         <entry key="app/src/main/res/layout/image_recyclerview_item.xml" value="0.14463019250253292" />
+        <entry key="app/src/main/res/layout/img_dialog.xml" value="0.1852355072463768" />
         <entry key="app/src/main/res/layout/img_recyclerview_item.xml" value="0.13903985507246377" />
         <entry key="app/src/main/res/layout/item_loading.xml" value="0.30480072463768115" />
         <entry key="app/src/main/res/layout/item_row.xml" value="0.30480072463768115" />

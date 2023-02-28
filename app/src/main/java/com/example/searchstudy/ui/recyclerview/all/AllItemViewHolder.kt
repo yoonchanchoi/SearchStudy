@@ -7,13 +7,13 @@ import com.example.searchstudy.R
 import com.example.searchstudy.databinding.AllRecyclerviewItemBinding
 import com.example.searchstudy.network.models.response.ResultSearchAll
 import com.example.searchstudy.ui.recyclerview.all.child.AllChildItemAdapter
-import com.example.searchstudy.ui.recyclerview.all.child.AllChildRecyclerListener
 
 
 class AllItemViewHolder(private val context: Context, private val binding: AllRecyclerviewItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(resultSearchAll: ResultSearchAll, allChildRecyclerListener:AllChildRecyclerListener) {
+    fun bind(resultSearchAll: ResultSearchAll, listener: (link: String) -> Unit) {
+//    fun bind(resultSearchAll: ResultSearchAll, allChildRecyclerListener:AllChildRecyclerListener) {
         if (resultSearchAll.category == context.getString(R.string.tab_title_view)) {
             binding.tvCatagory.text = resultSearchAll.category
         } else {
@@ -22,7 +22,8 @@ class AllItemViewHolder(private val context: Context, private val binding: AllRe
         binding.rvIn.apply {
             this.addItemDecoration(DividerItemDecorator(context.resources.getDrawable(com.example.searchstudy.R.drawable.all_item_stroke,null)))
             layoutManager = LinearLayoutManager(binding.root.context)
-            this.adapter = AllChildItemAdapter(context,allChildRecyclerListener).apply {
+//            this.adapter = AllChildItemAdapter(context,allChildRecyclerListener).apply {
+            this.adapter = AllChildItemAdapter(context,listener).apply {
                 setData(resultSearchAll.allItems)
             }
         }

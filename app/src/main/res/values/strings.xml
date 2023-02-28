@@ -10,4 +10,7 @@
     <string name="tab_title_all">통합</string>
     <string name="catagory_cafa">카페</string>
     <string name="catagory_blog">블로그</string>
+    <string name="translation">번역</string>
+    <string name="korean">ko</string>
+    <string name="english">en</string>
 </resources>

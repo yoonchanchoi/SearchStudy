@@ -26,5 +26,5 @@ object Constants {
 
     //intent
     const val DITAIL_WEB_LOAD_URL = "ditailWebLoadUrl"
-
+    const val DITAIL_IMG_LOAD_URL = "ditailImgLoadUrl"
 }

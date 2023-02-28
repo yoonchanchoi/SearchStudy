@@ -1,6 +1,7 @@
 package com.example.searchstudy.network.managers
 
 import android.view.Display
+import com.example.searchstudy.network.models.request.RequestPapago
 import com.example.searchstudy.network.models.response.*
 import com.example.searchstudy.network.services.SearchService
 import retrofit2.Call
@@ -25,6 +26,11 @@ class SearchManagerImpl @Inject constructor(private val service: SearchService) 
     override fun requestCheckMissWord(query: String): Call<ResultMisspelledWord> =
         service.requestCheckMissWord(query)
 
+    override fun requestPapago(requestPapago: RequestPapago): Call<ResultPapago> =
+        service.requestPapago(requestPapago)
+
+    override fun requestNationalLanguage(query: String): Call<ResultNationalLanguage> =
+        service.requestNationalLanguage(query)
 
 }
 

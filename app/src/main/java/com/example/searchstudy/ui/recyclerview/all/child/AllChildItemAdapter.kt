@@ -9,7 +9,11 @@ import com.example.searchstudy.databinding.AllRecyclerviewItemViewBinding
 import com.example.searchstudy.network.models.response.AllItem
 import com.example.searchstudy.util.Constants
 
-class AllChildItemAdapter(private val context: Context,private val allChildRecyclerListener: AllChildRecyclerListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+//class AllChildItemAdapter(private val context: Context,private val allChildRecyclerListener: AllChildRecyclerListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AllChildItemAdapter(
+    private val context: Context,
+    private val listener: (link: String) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 //    interface AllItemRecyclerListener{
 //        fun onItemClick(position: Int)
@@ -29,7 +33,7 @@ class AllChildItemAdapter(private val context: Context,private val allChildRecyc
                     parent,
                     false
                 )
-                AllChildItemViewHolder(context,allRecyclerviewItemBinding)
+                AllChildItemViewHolder(context, allRecyclerviewItemBinding)
                 // AllItemViewHolder
                 // -> AllChildItemViewHolder
             }
@@ -58,14 +62,14 @@ class AllChildItemAdapter(private val context: Context,private val allChildRecyc
 
         when (allItems[position].type) {
             Constants.VIEW -> {
-                (holder as AllChildItemViewHolder).bind(allItems[position], allChildRecyclerListener)
+//                (holder as AllChildItemViewHolder).bind(allItems[position], allChildRecyclerListener)
+                (holder as AllChildItemViewHolder).bind(allItems[position], listener)
 
-//                (holder as AllChildItemViewHolder).bind(AllItems[position], allItemRecyclerListener)
                 holder.setIsRecyclable(false)
             }
             else -> {
-                (holder as AllChildItemDicViewHolder).bind(allItems[position], allChildRecyclerListener)
-//                (holder as AllChildItemDicViewHolder).bind(AllItems[position],allItemRecyclerListener)
+//                (holder as AllChildItemDicViewHolder).bind(allItems[position], allChildRecyclerListener)
+                (holder as AllChildItemDicViewHolder).bind(allItems[position], listener)
                 holder.setIsRecyclable(false)
             }
         }

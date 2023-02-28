@@ -8,8 +8,9 @@ import androidx.fragment.app.DialogFragment
 import com.example.searchstudy.R
 import com.example.searchstudy.databinding.FragmentAdultWarningDialogBinding
 import com.example.searchstudy.databinding.FragmentImgBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class AdultWarningDialogFragment : DialogFragment() {
 
     private lateinit var binding: FragmentAdultWarningDialogBinding

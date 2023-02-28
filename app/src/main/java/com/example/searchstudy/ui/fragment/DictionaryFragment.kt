@@ -53,8 +53,52 @@ class DictionaryFragment : Fragment() {
     private fun init() {
         settingAdapter()
         initObserve()
+        initListener()
 
 
+    }
+
+    /**
+     * 어댑터 세팅
+     */
+    private fun settingAdapter() {
+        dictionaryAdapter = DictionaryAdapter()
+        val dictionaryLayoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+//        dictionaryLayoutManager.stackFromEnd = true // 키보드 열릴시 recycclerview 스크롤 처리
+        binding.rvDictionary.apply {
+            layoutManager = dictionaryLayoutManager
+            adapter = dictionaryAdapter
+        }
+    }
+
+    /**
+     * 옵저버 세팅
+     */
+    private fun initObserve() {
+        viewModel.dictionaryResultSearchArraylist.observe(viewLifecycleOwner) { it ->
+            resDicTotalCount = it.total
+//            it.allItems.map { allItem -> allItem.type = Constants.ITEMS }
+            Util.dataSort(it.allItems)
+
+            if (!viewModel.dicMoreLoad) {
+//                dicItems=it.allItems
+                dictionaryAdapter.setData(it.allItems)
+            } else {
+//                dicItems.addAll(it.allItems)
+                dictionaryAdapter.addData(it.allItems)
+            }
+            progressBar.dismiss()
+        }
+    }
+
+
+    /**
+     * 리스너 세팅
+     */
+    private fun initListener(){
+
+        //백과사전 아이템 클릭 리스너
         dictionaryAdapter.setItemClickListener(object : DictionaryAdapter.DicItemRecyclerListener {
             override fun onItemClick(link: String) {
                 val intent = Intent(requireContext(), WebViewActivity::class.java)
@@ -85,39 +129,5 @@ class DictionaryFragment : Fragment() {
                 }
             }
         })
-    }
-
-    /**
-     * 옵저버 세팅
-     */
-    private fun initObserve() {
-        viewModel.dictionaryResultSearchArraylist.observe(viewLifecycleOwner) { it ->
-            resDicTotalCount = it.total
-//            it.allItems.map { allItem -> allItem.type = Constants.ITEMS }
-            Util.dataSort(it.allItems)
-
-            if (!viewModel.dicMoreLoad) {
-//                dicItems=it.allItems
-                dictionaryAdapter.setData(it.allItems)
-            } else {
-//                dicItems.addAll(it.allItems)
-                dictionaryAdapter.addData(it.allItems)
-            }
-            progressBar.dismiss()
-        }
-    }
-
-    /**
-     * 어댑터 세팅
-     */
-    private fun settingAdapter() {
-        dictionaryAdapter = DictionaryAdapter()
-        val dictionaryLayoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-//        dictionaryLayoutManager.stackFromEnd = true // 키보드 열릴시 recycclerview 스크롤 처리
-        binding.rvDictionary.apply {
-            layoutManager = dictionaryLayoutManager
-            adapter = dictionaryAdapter
-        }
     }
 }

@@ -37,11 +37,6 @@ class WebViewActivity : AppCompatActivity() {
     private fun init() {
         initData()
         webViewSettiong()
-//        val intent = Intent(this@Intent1,Intent2::class.java)
-//        intent.putExtra("num1",1) //데이터 넣기
-//        intent.putExtra("num2",2) //데이터 넣기
-//        startActivityForResult(intent,101)
-
     }
 
     private fun initData() {

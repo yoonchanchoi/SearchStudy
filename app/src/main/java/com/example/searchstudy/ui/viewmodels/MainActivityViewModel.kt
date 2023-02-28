@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.searchstudy.network.managers.SearchManager
+import com.example.searchstudy.network.models.request.RequestPapago
 import com.example.searchstudy.network.models.response.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
@@ -23,27 +24,41 @@ class MainActivityViewModel @Inject constructor(
     private val _blogResultSearchArraylist = MutableLiveData<ResultSearchAll>()
     val blogResultSearchArraylist: LiveData<ResultSearchAll>
         get() = _blogResultSearchArraylist
+
     //카페 api response
     private val _cafeResultSearchArraylist = MutableLiveData<ResultSearchAll>()
     val cafeResultSearchArraylist: LiveData<ResultSearchAll>
         get() = _cafeResultSearchArraylist
+
     //백과사전 api response
     private val _dictionaryResultSearchArraylist = MutableLiveData<ResultSearchAll>()
     val dictionaryResultSearchArraylist: LiveData<ResultSearchAll>
         get() = _dictionaryResultSearchArraylist
+
     //이미지 api response
     private val _imgResultSearchArraylist = MutableLiveData<ResultSearchImg>()
     val imgResultSearchArraylist: LiveData<ResultSearchImg>
         get() = _imgResultSearchArraylist
+
     //성인검색 단언 api response
     private val _checkAdultWord = MutableLiveData<Int>()
     val checkAdultWord: LiveData<Int>
         get() = _checkAdultWord
+
     //오타 api response
     private val _checkMissWord = MutableLiveData<String>()
     val checkMissWord: LiveData<String>
         get() = _checkMissWord
 
+    //번역결과 값에 대한 response
+    private val _papagoResult = MutableLiveData<ResultPapago>()
+    val papagoResult: LiveData<ResultPapago>
+        get() = _papagoResult
+
+    //나라언어 구별 값에 대한 response
+    private val _nationalLanguageResult = MutableLiveData<ResultNationalLanguage>()
+    val nationalLanguageResult: LiveData<ResultNationalLanguage>
+        get() = _nationalLanguageResult
 
     var query = ""                  //검색 입력값
     var viewMoreLoadState = 0       //뷰 더보기 flag
@@ -51,6 +66,7 @@ class MainActivityViewModel @Inject constructor(
     var cafeMoreLoad = false
     var dicMoreLoad = false
     var imgMoreLoad = false
+//    var ditailImgLoadUrl = ""
 //    var lastDicItemPoint = 0
 //    var lastImgItemPoint = 0
 
@@ -58,7 +74,12 @@ class MainActivityViewModel @Inject constructor(
     /**
      * 블로그 검색 api 통신
      */
-    fun requestBlog(query: String, display: Int = 10, start: Int = 1, checkMoreLoad: Boolean = false) {
+    fun requestBlog(
+        query: String,
+        display: Int = 10,
+        start: Int = 1,
+        checkMoreLoad: Boolean = false
+    ) {
 
         val result = searchManager.requestBlog(query = query, display = display, start = start)
         result.enqueue(object : Callback<ResultSearchAll> {
@@ -237,8 +258,55 @@ class MainActivityViewModel @Inject constructor(
                 Log.e("cyc", "성인-통신실패 (인터넷 연결의 문제, 예외발생)")
 
             }
+        })
+    }
+
+    /**
+     * 번역 api 통신
+     */
+    fun requestPapago(source: String, target: String, text: String) {
+        val result = searchManager.requestPapago(RequestPapago(source, target, text))
+        result.enqueue(object : Callback<ResultPapago> {
+            override fun onResponse(call: Call<ResultPapago>, response: Response<ResultPapago>) {
+                if (response.isSuccessful) {
+                    Log.e("cyc", "번역-통신-성공")
+                    response.body()?.let {
+                    }
+                } else {
+                    Log.e("cyc", "번역 통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<ResultPapago>, t: Throwable) {
+                Log.e("cyc", "번역-통신실패 (인터넷 연결의 문제, 예외발생)")
+            }
+        })
+    }
 
 
+    /**
+     * 언어 api 통신 나라
+     */
+    fun requestNationalLanguage(query: String) {
+        val result = searchManager.requestNationalLanguage(query)
+        result.enqueue(object : Callback<ResultNationalLanguage> {
+            override fun onResponse(
+                call: Call<ResultNationalLanguage>,
+                response: Response<ResultNationalLanguage>
+            ) {
+                if (response.isSuccessful) {
+                    Log.e("cyc", "번역-통신-성공")
+                    response.body()?.let {
+                        _nationalLanguageResult.value = it
+                    }
+                } else {
+                    Log.e("cyc", "번역 통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
+                }
+            }
+
+            override fun onFailure(call: Call<ResultNationalLanguage>, t: Throwable) {
+                Log.e("cyc", "번역-통신실패 (인터넷 연결의 문제, 예외발생)")
+            }
         })
     }
 }

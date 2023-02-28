@@ -83,9 +83,6 @@ class DictionaryAdapter : RecyclerView.Adapter<DictionaryViewHolder>() {
         }
         notifyDataSetChanged()
     }
-    fun getItem(): ArrayList<AllItem>{
-        return dictionaryItems as ArrayList<AllItem>
-    }
 
     fun setItemClickListener(dicItemRecyclerListener: DicItemRecyclerListener) {
         this.dicItemRecyclerListener = dicItemRecyclerListener

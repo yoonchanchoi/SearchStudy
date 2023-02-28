@@ -5,9 +5,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.ImgRecyclerviewItemBinding
 import com.example.searchstudy.network.models.response.ImgItems
+import com.example.searchstudy.ui.recyclerview.dictionary.DictionaryAdapter
 
 class ImgAdapter : RecyclerView.Adapter<ImgViewHolder>() {
 
+
+    interface ImgItemRecyclerListener{
+        fun onItemClick(link: String)
+    }
+
+    private lateinit var imgItemRecyclerListener : ImgItemRecyclerListener
     private val imgItems = mutableListOf<ImgItems>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImgViewHolder {
@@ -18,7 +25,7 @@ class ImgAdapter : RecyclerView.Adapter<ImgViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ImgViewHolder, position: Int) {
-        holder.bind(imgItems[position])
+        holder.bind(imgItems[position],imgItemRecyclerListener)
     }
 
     override fun getItemCount(): Int {
@@ -38,6 +45,11 @@ class ImgAdapter : RecyclerView.Adapter<ImgViewHolder>() {
         }
 //        imgItems.addAll(data)
         notifyDataSetChanged()
+    }
+
+
+    fun setItemClickListener(imgItemRecyclerListener: ImgItemRecyclerListener) {
+        this.imgItemRecyclerListener = imgItemRecyclerListener
     }
 
 }
