@@ -53,7 +53,6 @@ class ImgDialogFragment : DialogFragment() {
         Glide.with(requireContext())
             .load(imgDitailUrl)
             .into(binding.iv)
-
     }
 }
 

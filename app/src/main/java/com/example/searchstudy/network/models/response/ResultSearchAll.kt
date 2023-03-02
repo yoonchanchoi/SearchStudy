@@ -27,7 +27,8 @@ data class ResultSearchAll(
 
     var category: String = ""
 
-)
+) : ResultNaver()
+//ResultNaver()
 
 data class AllItem(
     @SerializedName("title")
@@ -70,3 +71,19 @@ data class AllItem(
 //    var type: Int = Constants.ITEMS
 
 )
+
+//data class ResultPapago(
+//    @SerializedName("srcLangType")
+//    @Expose
+//    val srcLangType: String,
+//
+//    @SerializedName("tarLangType")
+//    @Expose
+//    val tarLangType: String,
+//
+//    @SerializedName("translatedText")
+//    @Expose
+//    val translatedText: String,
+//
+//    var originText: String =""
+//)

@@ -2,6 +2,7 @@ package com.example.searchstudy.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.searchstudy.R
 import com.example.searchstudy.databinding.FragmentAllBinding
 import com.example.searchstudy.network.models.response.AllItem
+import com.example.searchstudy.network.models.response.ResultNaver
+import com.example.searchstudy.network.models.response.ResultPapago
 import com.example.searchstudy.network.models.response.ResultSearchAll
 import com.example.searchstudy.ui.activity.WebViewActivity
 import com.example.searchstudy.ui.recyclerview.all.AllItemsAdapter
@@ -25,15 +28,17 @@ import kotlin.collections.ArrayList
 class AllFragment : Fragment() {
 //class AllFragment : Fragment() {
 
-    private val viewModel: MainActivityViewModel by activityViewModels()
-
     private lateinit var binding: FragmentAllBinding
 
-    private val tempResultSearchAll = ArrayList<ResultSearchAll>()// 임시 통합 아이템
+    private lateinit var allItemsAdapter: AllItemsAdapter
+
+    private val viewModel: MainActivityViewModel by activityViewModels()
+
+    private val tempResultSearchAll = ArrayList<ResultNaver>()// 임시 통합 아이템
 
     private val tempAllViewItems = ArrayList<AllItem>() // 임시 VEIW 아이템
 
-    private lateinit var allItemsAdapter: AllItemsAdapter
+    private var testBoolean = false
 
 //
 
@@ -56,6 +61,7 @@ class AllFragment : Fragment() {
     private fun init() {
         adapterSetting()
         initObserve()
+
 //        allAdapter.set
     }
 
@@ -64,7 +70,6 @@ class AllFragment : Fragment() {
      */
     private fun initObserve() {
         viewModel.blogResultSearchArraylist.observe(viewLifecycleOwner) {
-
             if (!viewModel.blogMoreLoad) {
 
                 tempAllViewItems.clear()
@@ -95,9 +100,16 @@ class AllFragment : Fragment() {
                 }
             }
         }
+        /**
+         * 옵저버 세팅
+         */
         viewModel.dictionaryResultSearchArraylist.observe(viewLifecycleOwner) {
 
+            testBoolean = true
+
             if (!viewModel.dicMoreLoad) {
+
+                Log.e("cyc", "ResultSearch---it---->${it}")
 
                 it.allItems.map { allItems ->
                     allItems.type = Constants.DICTIONARY
@@ -114,10 +126,11 @@ class AllFragment : Fragment() {
                 allItemsAdapter.setData(tempResultSearchAll)
             }
         }
-        viewModel.papagoResult.observe(viewLifecycleOwner){
-            it.srcLangType
-            it.tarLangType
-            it.translatedText
+        viewModel.papagoResult.observe(viewLifecycleOwner) {
+            Log.e("cyc","---------------------------papagoResult---------------------------")
+            it.classType = Constants.TRANSLATION
+            allItemsAdapter.addData(it)
+
         }
     }
 
@@ -142,15 +155,6 @@ class AllFragment : Fragment() {
 }
 
 
-
-
-
-
-
-
-
-
-
 //override fun onItemClick(category: Int, position: Int) {
 //        // 클릭했을 때 행동이 무엇인가?
 //        // -> WebActivity 띄우기
@@ -160,8 +164,6 @@ class AllFragment : Fragment() {
 //        val intent = Intent(requireContext(),WebViewActivity::class.java)
 ////        intent.putExtra(Constants.DITAIL_WEB_LOAD_URL,tempResultSearchAll[])
 //    }
-
-
 
 
 //private var allChildRecyclerListener = object : AllChildRecyclerListener {

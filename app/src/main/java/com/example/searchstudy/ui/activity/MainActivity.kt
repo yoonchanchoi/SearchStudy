@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -224,15 +225,18 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
                 actionSearch()
             }
         }
-        viewModel.nationalLanguageResult.observe(this){
-            if(it.langCode==getString(R.string.korean)) {
-                viewModel.requestPapago(getString(R.string.korean), getString(R.string.english), query.replace(getString(R.string.translation), ""))
-            }else{
-                viewModel.requestPapago(getString(R.string.english),getString(R.string.korean),query.replace(getString(R.string.translation),""))
+        viewModel.nationalLanguageResult.observe(this) {
+            val keyword = query.replace(getString(R.string.translation), "")
+            var temp = getString(R.string.korean)
+            if (it.langCode == getString(R.string.korean)) {
+                temp = getString(R.string.english)
             }
+            Log.e("cyc","---------------------------nationalLanguageResult---------------------------")
+
+            viewModel.requestPapago(it.langCode, temp, keyword)
+
+
         }
-
-
     }
 
     /**
@@ -372,10 +376,28 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
 
         initViewPagerFragmentFlag()
         loadingProgressDialog.show()
-        if(checkPapago(query)){
-            viewModel.requestNationalLanguage(query)
-        }
+        Log.e("cyc","")
+        Log.e("cyc","----------------------------------------------------------------")
+        Log.e("cyc","checkPapago(query)-------action-------->${checkPapago(query)}")
+        Log.e("cyc","----------------------------------------------------------------")
+        Log.e("cyc","")
+        if (checkPapago(query)) {
+//            val tempStr = query.apply {
+//                this.replace(getString(R.string.translation), "")
+//                this.replace(" ","")
+//            }
+//            Log.e("cyc","tempStr ---> ${tempStr}")
+//            Log.e("cyc","query.replace(getString(R.string.translation)).trim()-->${query.replace(getString(R.string.translation), "").trim()}")
+//            Log.e("cyc","공백 제거-->${query.apply {
+//                this.replace(getString(R.string.translation), "")
+//                this.replace(" ","")
+//            }}")
 
+            viewModel.requestNationalLanguage(query.apply {
+                this.replace(getString(R.string.translation), "")
+                this.replace(" ","")
+            })
+        }
         dicEndcheck = false
         imgEndcehck = false
         hideKeyboard()
@@ -433,11 +455,38 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             }
         }
     }
-
-    private fun checkPapago(query: String) : Boolean {
+    /**
+     * 단어 번역 체크
+     */
+    private fun checkPapago(query: String): Boolean {
+        Log.e("cyc","")
+        Log.e("cyc","----------------------------------------------------------------")
+        Log.e("cyc","-----------------------checkPapago(query)-----------------------")
+        Log.e("cyc","query.length--->${query.length}")
+        Log.e("cyc","----------------------------------------------------------------")
+        Log.e("cyc","")
         if (query.length >= 3) {
+            Log.e("cyc","query.contains(getString(R.string.translation)--->${query.contains(getString(R.string.translation))}")
+
             if (query.contains(getString(R.string.translation))) {
-                if (query.substring(0, 1) == getString(R.string.translation) || query.substring(query.length - 2, query.length - 1) == getString(R.string.translation)) {
+                Log.e("cyc","")
+                Log.e("cyc","----------------------------------------------------------------")
+                Log.e("cyc","(query.substring(0, 2)--->${(query.substring(0, 2))}")
+
+                Log.e("cyc","(query.substring(0, 2) == getString(R.string.translation) )--->${(query.substring(0, 2) == getString(R.string.translation) )}")
+                Log.e("cyc","----------------------------------------------------------------")
+                Log.e("cyc","")
+
+                Log.e("cyc","=========================================================================")
+
+                Log.e("cyc","")
+                Log.e("cyc","----------------------------------------------------------------")
+                Log.e("cyc","(query.substring(query.length - 2, query.length))--->${(query.substring(query.length - 2, query.length))}")
+
+                Log.e("cyc","(query.substring(query.length - 2, query.length) == getString(R.string.translation))--->${(query.substring(query.length - 2, query.length) == getString(R.string.translation))}")
+                Log.e("cyc","----------------------------------------------------------------")
+                Log.e("cyc","")
+                if ((query.substring(0, 2) == getString(R.string.translation)) || (query.substring(query.length - 2, query.length) == getString(R.string.translation))) {
                     return true
                 }
             }

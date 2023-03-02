@@ -34,7 +34,7 @@ class DictionaryAdapter : RecyclerView.Adapter<DictionaryViewHolder>() {
 //                    false
 //                )
 //                DictionaryViewHolder(dictionaryRecyclerviewItemBinding)
-//            }Z
+//            }
 //            else -> {
 //                val allRecyclerviewItemDictionaryBinding =
 //                    AllRecyclerviewItemDictionaryBinding.inflate(

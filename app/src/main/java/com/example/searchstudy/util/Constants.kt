@@ -20,6 +20,10 @@ object Constants {
     const val VIEW = 1
     const val DICTIONARY = 2
 
+    //번역 및 일반 데이터 분기 flag
+    const val TRANSLATION = 0
+    const val SEARCH = 1
+
     //view 더보기 시 api 분기 호출 flag
     const val VIEW_MORE_LOAD_BLOG_CAFE = 1
     const val VIEW_MORE_LOAD_BLOG = 2

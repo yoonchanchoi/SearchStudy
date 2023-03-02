@@ -271,6 +271,9 @@ class MainActivityViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     Log.e("cyc", "번역-통신-성공")
                     response.body()?.let {
+//                        _papagoResult.postValue(it)
+                        Log.e("cyc","it.--->${it}")
+                        _papagoResult.postValue(it)
                     }
                 } else {
                     Log.e("cyc", "번역 통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
@@ -295,17 +298,17 @@ class MainActivityViewModel @Inject constructor(
                 response: Response<ResultNationalLanguage>
             ) {
                 if (response.isSuccessful) {
-                    Log.e("cyc", "번역-통신-성공")
+                    Log.e("cyc", "나라-통신-성공")
                     response.body()?.let {
-                        _nationalLanguageResult.value = it
+                        _nationalLanguageResult.postValue(it)
                     }
                 } else {
-                    Log.e("cyc", "번역 통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
+                    Log.e("cyc", "나라 통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
                 }
             }
 
             override fun onFailure(call: Call<ResultNationalLanguage>, t: Throwable) {
-                Log.e("cyc", "번역-통신실패 (인터넷 연결의 문제, 예외발생)")
+                Log.e("cyc", "나라-통신실패 (인터넷 연결의 문제, 예외발생)")
             }
         })
     }
