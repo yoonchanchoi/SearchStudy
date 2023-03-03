@@ -11,6 +11,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -35,6 +36,8 @@ class NetworkProviderModule {
     fun provideRetrofit(okHttpClient: OkHttpClient): SearchService {
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
+                //여기 수정
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build().create(SearchService::class.java)

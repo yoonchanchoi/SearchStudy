@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.*
+//import com.example.searchstudy.network.models.dto.searchDto.Papago.PapagoResult
 import com.example.searchstudy.network.models.response.ResultNaver
 import com.example.searchstudy.network.models.response.ResultPapago
 import com.example.searchstudy.network.models.response.ResultSearchAll
@@ -21,6 +22,8 @@ class AllItemsAdapter(private val context: Context, private val listener: (link:
     private val arrayResultNaver = mutableListOf<ResultNaver>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        Log.e("cyc","onCreateViewHolder()")
+        Log.e("cyc","viewType--->${viewType}")
         return when (viewType) {
             Constants.SEARCH -> {
                 val allRecyclerviewItemViewBinding = AllRecyclerviewItemBinding.inflate(
@@ -42,6 +45,8 @@ class AllItemsAdapter(private val context: Context, private val listener: (link:
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        Log.e("cyc","arrayResultNaver[position].classType--->${arrayResultNaver[position].classType}")
+
         when (arrayResultNaver[position].classType) {
             Constants.SEARCH -> {
                 (holder as AllItemViewHolder).bind(arrayResultNaver[position] as ResultSearchAll, listener)
@@ -59,25 +64,35 @@ class AllItemsAdapter(private val context: Context, private val listener: (link:
     }
 
     override fun getItemViewType(position: Int): Int {
-        return arrayResultNaver[position].classType
+        Log.e("cyc","getItemViewType()------------------------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        Log.e("cyc","arrayResultNaver[position]--->${arrayResultNaver[position]}")
+        Log.e("cyc","arrayResultNaver[position].classType--->${arrayResultNaver[position].classType}")
+//        return arrayResultNaver[position].classType
+        return 1
+
     }
 
     fun setData(arrayResultNaver: ArrayList<ResultNaver>) {
         arrayResultNaver?.let {
+
+            Log.e("cyc","AllitemAdapter----it-->${it}")
+            Log.e("cyc","it[0]----it-->${it[0]}")
+
+            Log.e("cyc","it[0].classType----it-->${it[0].classType}")
+            Log.e("cyc","it[1].classType----it-->${it[1].classType}")
+            Log.e("cyc","it[2].classType----it-->${it[2].classType}")
+
+
             arrayResultNaver.addAll(it)
         }
         notifyDataSetChanged()
     }
 
-    fun addData(resultNaver: ResultNaver) {
-        Log.e("cyc","")
-        Log.e("cyc","-----------------------------------")
-        Log.e("cyc","resultNaver--->${resultNaver}")
-        Log.e("cyc","-----------------------------------")
-        Log.e("cyc","")
-        arrayResultNaver.add(0, resultNaver)
-        notifyDataSetChanged()
-    }
+//    fun addData(resultNaver: ResultNaver) {
+//
+//        arrayResultNaver.add(0, resultNaver)
+//        notifyDataSetChanged()
+//    }
 }
 
 

@@ -382,21 +382,10 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         Log.e("cyc","----------------------------------------------------------------")
         Log.e("cyc","")
         if (checkPapago(query)) {
-//            val tempStr = query.apply {
-//                this.replace(getString(R.string.translation), "")
-//                this.replace(" ","")
-//            }
-//            Log.e("cyc","tempStr ---> ${tempStr}")
-//            Log.e("cyc","query.replace(getString(R.string.translation)).trim()-->${query.replace(getString(R.string.translation), "").trim()}")
-//            Log.e("cyc","공백 제거-->${query.apply {
-//                this.replace(getString(R.string.translation), "")
-//                this.replace(" ","")
-//            }}")
-
-            viewModel.requestNationalLanguage(query.apply {
-                this.replace(getString(R.string.translation), "")
-                this.replace(" ","")
-            })
+            Log.e("cyc","query.replace(getString(R.string.translation).trim())--->${query.replace(getString(R.string.translation), "").trim()}")
+            viewModel.requestNationalLanguage(query.replace(getString(R.string.translation), "").trim())
+        }else{
+            viewModel.requestPapago()
         }
         dicEndcheck = false
         imgEndcehck = false
@@ -459,33 +448,8 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      * 단어 번역 체크
      */
     private fun checkPapago(query: String): Boolean {
-        Log.e("cyc","")
-        Log.e("cyc","----------------------------------------------------------------")
-        Log.e("cyc","-----------------------checkPapago(query)-----------------------")
-        Log.e("cyc","query.length--->${query.length}")
-        Log.e("cyc","----------------------------------------------------------------")
-        Log.e("cyc","")
         if (query.length >= 3) {
-            Log.e("cyc","query.contains(getString(R.string.translation)--->${query.contains(getString(R.string.translation))}")
-
             if (query.contains(getString(R.string.translation))) {
-                Log.e("cyc","")
-                Log.e("cyc","----------------------------------------------------------------")
-                Log.e("cyc","(query.substring(0, 2)--->${(query.substring(0, 2))}")
-
-                Log.e("cyc","(query.substring(0, 2) == getString(R.string.translation) )--->${(query.substring(0, 2) == getString(R.string.translation) )}")
-                Log.e("cyc","----------------------------------------------------------------")
-                Log.e("cyc","")
-
-                Log.e("cyc","=========================================================================")
-
-                Log.e("cyc","")
-                Log.e("cyc","----------------------------------------------------------------")
-                Log.e("cyc","(query.substring(query.length - 2, query.length))--->${(query.substring(query.length - 2, query.length))}")
-
-                Log.e("cyc","(query.substring(query.length - 2, query.length) == getString(R.string.translation))--->${(query.substring(query.length - 2, query.length) == getString(R.string.translation))}")
-                Log.e("cyc","----------------------------------------------------------------")
-                Log.e("cyc","")
                 if ((query.substring(0, 2) == getString(R.string.translation)) || (query.substring(query.length - 2, query.length) == getString(R.string.translation))) {
                     return true
                 }
@@ -571,3 +535,20 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
 *
 * */
 
+//            viewModel.requestNationalLanguage("show")
+
+//            val tempStr = query.apply {
+//                this.replace(getString(R.string.translation), "")
+//                this.replace(" ","")
+//            }
+//            Log.e("cyc","tempStr ---> ${tempStr}")
+//            Log.e("cyc","query.replace(getString(R.string.translation)).trim()-->${query.replace(getString(R.string.translation), "").trim()}")
+//            Log.e("cyc","공백 제거-->${query.apply {
+//                this.replace(getString(R.string.translation), "")
+//                this.replace(" ","")
+//            }}")
+
+//            viewModel.requestNationalLanguage(query.apply {
+//                this.replace(getString(R.string.translation), "")
+//                this.replace(" ","")
+//            })

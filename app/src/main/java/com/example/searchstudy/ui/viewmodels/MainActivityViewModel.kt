@@ -8,7 +8,9 @@ import androidx.lifecycle.ViewModel
 import com.example.searchstudy.network.managers.SearchManager
 import com.example.searchstudy.network.models.request.RequestPapago
 import com.example.searchstudy.network.models.response.*
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -59,6 +61,10 @@ class MainActivityViewModel @Inject constructor(
     private val _nationalLanguageResult = MutableLiveData<ResultNationalLanguage>()
     val nationalLanguageResult: LiveData<ResultNationalLanguage>
         get() = _nationalLanguageResult
+
+//    private val _papagoResultToString = MutableLiveData<Resu>()
+//    val papagoResultToString: LiveData<String>
+//    get() = _papagoResultToString
 
     var query = ""                  //검색 입력값
     var viewMoreLoadState = 0       //뷰 더보기 flag
@@ -264,23 +270,31 @@ class MainActivityViewModel @Inject constructor(
     /**
      * 번역 api 통신
      */
-    fun requestPapago(source: String, target: String, text: String) {
+    fun requestPapago(source: String="", target: String="", text: String="") {
         val result = searchManager.requestPapago(RequestPapago(source, target, text))
-        result.enqueue(object : Callback<ResultPapago> {
-            override fun onResponse(call: Call<ResultPapago>, response: Response<ResultPapago>) {
+        result.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {
                     Log.e("cyc", "번역-통신-성공")
                     response.body()?.let {
 //                        _papagoResult.postValue(it)
-                        Log.e("cyc","it.--->${it}")
-                        _papagoResult.postValue(it)
+//                        val sResult = Gson().toJson(it)
+                        val tempResult = JSONObject(it).getJSONObject("message").getJSONObject("result")
+                        val tempPapagoResult = Gson().fromJson(tempResult.toString(),ResultPapago::class.java)
+                        _papagoResult.postValue(tempPapagoResult)
+
+                        Log.e("cyc","tempPapagoResult---->${tempPapagoResult}")
+//                        _papagoResult.postValue(it)
+                        Log.e("cyc","")
+                        Log.e("cyc", "viewmode_requestPapago_tempPapagoResult---${tempPapagoResult}")
+                        Log.e("cyc","")
                     }
                 } else {
                     Log.e("cyc", "번역 통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")
                 }
             }
 
-            override fun onFailure(call: Call<ResultPapago>, t: Throwable) {
+            override fun onFailure(call: Call<String>, t: Throwable) {
                 Log.e("cyc", "번역-통신실패 (인터넷 연결의 문제, 예외발생)")
             }
         })
@@ -291,7 +305,12 @@ class MainActivityViewModel @Inject constructor(
      * 언어 api 통신 나라
      */
     fun requestNationalLanguage(query: String) {
-        val result = searchManager.requestNationalLanguage(query)
+
+        val params = HashMap<String, String>()
+        params["query"] = query
+        val result = searchManager.requestNationalLanguage(params)
+
+//        val result = searchManager.requestNationalLanguage(query)
         result.enqueue(object : Callback<ResultNationalLanguage> {
             override fun onResponse(
                 call: Call<ResultNationalLanguage>,

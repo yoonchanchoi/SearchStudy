@@ -12,7 +12,7 @@ interface SearchManager {
     fun requestImg(query: String, start: Int): Call<ResultSearchImg>
     fun requestCheckAdultWord(query: String): Call<ResultCheckAdultWord>
     fun requestCheckMissWord(query: String): Call<ResultMisspelledWord>
-    fun requestPapago(requestPapago: RequestPapago): Call<ResultPapago>
-    fun requestNationalLanguage(query: String): Call<ResultNationalLanguage>
+    fun requestPapago(requestPapago: RequestPapago): Call<String>
+    fun requestNationalLanguage(params: HashMap<String, String>): Call<ResultNationalLanguage>
 
 }

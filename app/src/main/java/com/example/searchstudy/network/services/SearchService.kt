@@ -48,12 +48,11 @@ interface SearchService {
     fun requestCheckMissWord(
         @Query(value = "query", encoded = true) query: String): Call<ResultMisspelledWord>
 
-
     @POST("/v1/papago/n2mt")
-    fun requestPapago(@Body requestPapago: RequestPapago): Call<ResultPapago>
+    fun requestPapago(@Body requestPapago: RequestPapago): Call<String>
 
-
+    @FormUrlEncoded
     @POST("/v1/papago/detectLangs")
-    fun requestNationalLanguage(@Body query: String) : Call<ResultNationalLanguage>
+    fun requestNationalLanguage(@FieldMap params : HashMap<String, String>) : Call<ResultNationalLanguage>
 
 }

@@ -26,11 +26,11 @@ class SearchManagerImpl @Inject constructor(private val service: SearchService) 
     override fun requestCheckMissWord(query: String): Call<ResultMisspelledWord> =
         service.requestCheckMissWord(query)
 
-    override fun requestPapago(requestPapago: RequestPapago): Call<ResultPapago> =
+    override fun requestPapago(requestPapago: RequestPapago): Call<String> =
         service.requestPapago(requestPapago)
 
-    override fun requestNationalLanguage(query: String): Call<ResultNationalLanguage> =
-        service.requestNationalLanguage(query)
+    override fun requestNationalLanguage(params: HashMap<String, String>): Call<ResultNationalLanguage> =
+        service.requestNationalLanguage(params)
 
 }
 
