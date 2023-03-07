@@ -6,14 +6,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.RecentSearchRecyclerviewItemBinding
 import com.example.searchstudy.network.models.dto.searchDto.SearchData
 
-class SearchAdapter(private val searchRecyclerListener: SearchRecyclerListener, private val searchData: ArrayList<SearchData>) :  RecyclerView.Adapter<SearchViewHolder>(){
+class RecentSearchAdapter(private val searchRecyclerListener: RecentSearchRecyclerListener, private val searchData: ArrayList<SearchData>) :  RecyclerView.Adapter<RecentSearchViewHolder>(){
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentSearchViewHolder {
         val itemBinding = RecentSearchRecyclerviewItemBinding.inflate(LayoutInflater.from(parent.context), parent,false)
-        return SearchViewHolder(itemBinding)
+        return RecentSearchViewHolder(itemBinding)
     }
 
-    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecentSearchViewHolder, position: Int) {
         holder.bind(searchData[position], searchRecyclerListener)
     }
 

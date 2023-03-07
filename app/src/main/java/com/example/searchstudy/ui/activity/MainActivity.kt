@@ -25,8 +25,8 @@ import com.example.searchstudy.ui.fragment.AllFragment
 import com.example.searchstudy.ui.fragment.DictionaryFragment
 import com.example.searchstudy.ui.fragment.ImgFragment
 import com.example.searchstudy.ui.fragment.ViewFragment
-import com.example.searchstudy.ui.recyclerview.search.SearchAdapter
-import com.example.searchstudy.ui.recyclerview.search.SearchRecyclerListener
+import com.example.searchstudy.ui.recyclerview.search.RecentSearchAdapter
+import com.example.searchstudy.ui.recyclerview.search.RecentSearchRecyclerListener
 import com.example.searchstudy.ui.recyclerview.viewpager.ViewpagerFragmentAdapter
 import com.example.searchstudy.ui.viewmodels.MainActivityViewModel
 import com.example.searchstudy.util.*
@@ -37,7 +37,7 @@ import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), SearchRecyclerListener {
+class MainActivity : AppCompatActivity(), RecentSearchRecyclerListener {
 
     @Inject
     lateinit var pref: Pref
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var searchDataList: ArrayList<SearchData>
-    private lateinit var searchAdapter: SearchAdapter
+    private lateinit var RecentSearchAdapter: RecentSearchAdapter
     private lateinit var viewPagerAdapter: ViewpagerFragmentAdapter
     private lateinit var loadingProgressDialog: LoadingProgressDialog
 
@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
         binding.tvDeleteAll.setOnClickListener {
             searchDataList.clear()
             pref.clear()
-            searchAdapter.notifyDataSetChanged()
+            RecentSearchAdapter.notifyDataSetChanged()
             checkSearchTextData()
         }
 
@@ -231,12 +231,18 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             if (it.langCode == getString(R.string.korean)) {
                 temp = getString(R.string.english)
             }
-            Log.e("cyc","---------------------------nationalLanguageResult---------------------------")
+//            Log.e("cyc","---------------------------nationalLanguageResult---------------------------")
 
             viewModel.requestPapago(it.langCode, temp, keyword)
 
 
         }
+
+//        //여기 수정
+//        viewModel.papagoResult.observe(this){
+//            viewModel.requestBlog(query)
+//        }
+//        //중
     }
 
     /**
@@ -244,7 +250,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      */
     private fun checkSearchTextData() {
         binding.tvSearchEmpty.visibility =
-            if (searchAdapter.itemCount > 0) View.INVISIBLE else View.VISIBLE
+            if (RecentSearchAdapter.itemCount > 0) View.INVISIBLE else View.VISIBLE
 
 //      해당 아래 코드가 위처럼 줄일 수 있음
 //        if (searchAdapter.itemCount > 0) {
@@ -281,14 +287,14 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      * 최근 검색어 어댑터 세팅
      */
     private fun searchAdapterSetting(searchDataList: ArrayList<SearchData>) {
-        searchAdapter = SearchAdapter(this, searchDataList)
+        RecentSearchAdapter = RecentSearchAdapter(this, searchDataList)
         val searchLinearLayoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
         searchLinearLayoutManager.stackFromEnd = true // 키보드 열릴시 recycclerview 스크롤 처리
         binding.rvSearch.apply {
             layoutManager = searchLinearLayoutManager
 //            this.scrollToPosition(searchAdapter.itemCount - 1) // 해당 포지션으로 스크롤 이동
-            adapter = searchAdapter
+            adapter = RecentSearchAdapter
         }
     }
 
@@ -298,7 +304,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
     override fun onItemDelete(position: Int) {
         searchDataList.removeAt(position)
         pref.saveSearchList(searchDataList)
-        searchAdapter.notifyDataSetChanged()
+        RecentSearchAdapter.notifyDataSetChanged()
         checkSearchTextData()
     }
 
@@ -349,7 +355,7 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             binding.tvNoSee.visibility = View.INVISIBLE
             binding.clSearchResult.visibility = View.VISIBLE
             saveSearchData(query)
-            searchAdapter.notifyDataSetChanged()
+            RecentSearchAdapter.notifyDataSetChanged()
         } else {
             binding.clSearchResult.visibility = View.INVISIBLE
             binding.tvNoSee.visibility = View.VISIBLE
@@ -373,20 +379,25 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
      * 검색 버튼 클리시 활동
      */
     private fun actionSearch() {
-
+        viewModel.checkTranslation = false
         initViewPagerFragmentFlag()
         loadingProgressDialog.show()
-        Log.e("cyc","")
-        Log.e("cyc","----------------------------------------------------------------")
-        Log.e("cyc","checkPapago(query)-------action-------->${checkPapago(query)}")
-        Log.e("cyc","----------------------------------------------------------------")
-        Log.e("cyc","")
+        Log.e("cyc", "")
+        Log.e("cyc", "----------------------------------------------------------------")
+        Log.e("cyc", "checkPapago(query)---true--or--false--action-------->${checkPapago(query)}")
+        Log.e("cyc", "----------------------------------------------------------------")
+        Log.e("cyc", "")
         if (checkPapago(query)) {
-            Log.e("cyc","query.replace(getString(R.string.translation).trim())--->${query.replace(getString(R.string.translation), "").trim()}")
-            viewModel.requestNationalLanguage(query.replace(getString(R.string.translation), "").trim())
-        }else{
-            viewModel.requestPapago()
+            Log.e("cyc", "")
+            Log.e("cyc", "mainActivity---actionSearch-----checkPapago ->true")
+            Log.e("cyc", "")
+            viewModel.checkTranslation = true
+//            Log.e("cyc","query.replace(getString(R.string.translation).trim())--->${query.replace(getString(R.string.translation), "").trim()}")
+            viewModel.requestNationalLanguage(
+                query.replace(getString(R.string.translation), "").trim()
+            )
         }
+
         dicEndcheck = false
         imgEndcehck = false
         hideKeyboard()
@@ -444,13 +455,18 @@ class MainActivity : AppCompatActivity(), SearchRecyclerListener {
             }
         }
     }
+
     /**
      * 단어 번역 체크
      */
     private fun checkPapago(query: String): Boolean {
         if (query.length >= 3) {
             if (query.contains(getString(R.string.translation))) {
-                if ((query.substring(0, 2) == getString(R.string.translation)) || (query.substring(query.length - 2, query.length) == getString(R.string.translation))) {
+                if ((query.substring(0, 2) == getString(R.string.translation)) || (query.substring(
+                        query.length - 2,
+                        query.length
+                    ) == getString(R.string.translation))
+                ) {
                     return true
                 }
             }

@@ -15,7 +15,7 @@ class ImgAdapter : RecyclerView.Adapter<ImgViewHolder>() {
     }
 
     private lateinit var imgItemRecyclerListener : ImgItemRecyclerListener
-    private val imgItems = mutableListOf<ImgItems>()
+    private var imgItems = mutableListOf<ImgItems>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImgViewHolder {
 
@@ -34,7 +34,7 @@ class ImgAdapter : RecyclerView.Adapter<ImgViewHolder>() {
 
     fun setData(data: ArrayList<ImgItems>) {
         data?.let {
-            imgItems.addAll(it)
+            imgItems=it
         }
 //        imgItems.addAll(data)
         notifyDataSetChanged()

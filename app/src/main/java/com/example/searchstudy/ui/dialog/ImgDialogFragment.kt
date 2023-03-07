@@ -27,6 +27,9 @@ class ImgDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //다이털로그가 화면에 꽉 차게 설정
+
+        setStyle(STYLE_NO_FRAME,R.style.FullScreenDialog)
     }
 
     override fun onCreateView(
@@ -38,7 +41,7 @@ class ImgDialogFragment : DialogFragment() {
         binding = FragmentImgDialogBinding.inflate(inflater, container, false)
         arguments?.let {
             imgDitailUrl = it.getString(Constants.DITAIL_IMG_LOAD_URL).toString()
-            Log.e("cyc","imgDitailUrl--->${imgDitailUrl}")
+//            Log.e("cyc","imgDitailUrl--->${imgDitailUrl}")
         }
         return binding.root
     }
@@ -49,6 +52,10 @@ class ImgDialogFragment : DialogFragment() {
     }
 
     private fun init() {
+        //다이털로그가 화면에 꽉 차게 설정
+//        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT) 화면의 꽉찬 정도
+//        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))                             배경색 지정
+//        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)                              dim 배경의 불투명도 제거
 
         Glide.with(requireContext())
             .load(imgDitailUrl)

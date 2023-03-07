@@ -1,18 +1,15 @@
 package com.example.searchstudy.ui.recyclerview.search
 
-import android.provider.ContactsContract
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchstudy.databinding.RecentSearchRecyclerviewItemBinding
 import com.example.searchstudy.network.models.dto.searchDto.SearchData
 import java.text.SimpleDateFormat
-import java.util.*
 
-class SearchViewHolder(private val binding: RecentSearchRecyclerviewItemBinding) :
+class RecentSearchViewHolder(private val binding: RecentSearchRecyclerviewItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
 
-    fun bind(searchData: SearchData, searchRecyclerListener: SearchRecyclerListener) {
+    fun bind(searchData: SearchData, searchRecyclerListener: RecentSearchRecyclerListener) {
         val dateForm = SimpleDateFormat("YY.MM.dd")
         val timeForm = SimpleDateFormat("HH:mm:ss")
         val currentDate = System.currentTimeMillis()

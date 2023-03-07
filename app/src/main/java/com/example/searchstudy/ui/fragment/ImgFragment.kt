@@ -100,6 +100,12 @@ class ImgFragment : Fragment() {
     private fun initObserve() {
         viewModel.imgResultSearchArraylist.observe(viewLifecycleOwner) {
             resImgTotalCount = it.total
+            Log.e("cyc","")
+            for(i in it.imgItems.indices){
+                Log.e("cyc","이미지${i} --->${it.imgItems[i]}")
+            }
+            Log.e("cyc","")
+
             if (!viewModel.imgMoreLoad) {
                 imgAdapter.setData(it.imgItems)
             } else {

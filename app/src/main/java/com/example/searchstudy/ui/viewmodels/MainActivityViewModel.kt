@@ -72,6 +72,7 @@ class MainActivityViewModel @Inject constructor(
     var cafeMoreLoad = false
     var dicMoreLoad = false
     var imgMoreLoad = false
+    var checkTranslation = false
 //    var ditailImgLoadUrl = ""
 //    var lastDicItemPoint = 0
 //    var lastImgItemPoint = 0
@@ -270,13 +271,14 @@ class MainActivityViewModel @Inject constructor(
     /**
      * 번역 api 통신
      */
-    fun requestPapago(source: String="", target: String="", text: String="") {
+    fun requestPapago(source: String, target: String, text: String) {
         val result = searchManager.requestPapago(RequestPapago(source, target, text))
         result.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {
                     Log.e("cyc", "번역-통신-성공")
                     response.body()?.let {
+                        Log.e("cyc", ">>>>>>>>>>>>>>>>>> $it")
 //                        _papagoResult.postValue(it)
 //                        val sResult = Gson().toJson(it)
                         val tempResult = JSONObject(it).getJSONObject("message").getJSONObject("result")
@@ -285,9 +287,9 @@ class MainActivityViewModel @Inject constructor(
 
                         Log.e("cyc","tempPapagoResult---->${tempPapagoResult}")
 //                        _papagoResult.postValue(it)
-                        Log.e("cyc","")
-                        Log.e("cyc", "viewmode_requestPapago_tempPapagoResult---${tempPapagoResult}")
-                        Log.e("cyc","")
+//                        Log.e("cyc","")
+//                        Log.e("cyc", "viewmode_requestPapago_tempPapagoResult---${tempPapagoResult}")
+//                        Log.e("cyc","")
                     }
                 } else {
                     Log.e("cyc", "번역 통신은 성공했지만 해당 통신의 서버에서 내려준 값이 잘못되어 실패")

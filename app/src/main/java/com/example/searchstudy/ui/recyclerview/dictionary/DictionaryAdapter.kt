@@ -18,7 +18,7 @@ class DictionaryAdapter : RecyclerView.Adapter<DictionaryViewHolder>() {
     }
 
     private lateinit var dicItemRecyclerListener: DicItemRecyclerListener
-    private val dictionaryItems = mutableListOf<AllItem>()
+    private var dictionaryItems = mutableListOf<AllItem>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DictionaryViewHolder {
@@ -73,7 +73,7 @@ class DictionaryAdapter : RecyclerView.Adapter<DictionaryViewHolder>() {
 
     fun setData(data: ArrayList<AllItem>) {
         data?.let {
-            dictionaryItems.addAll(it)
+            dictionaryItems=it
         }
         notifyDataSetChanged()
     }

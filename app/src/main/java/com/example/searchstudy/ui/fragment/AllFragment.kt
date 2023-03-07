@@ -80,14 +80,20 @@ class AllFragment : Fragment() {
     private fun initObserve() {
         viewModel.blogResultSearchArraylist.observe(viewLifecycleOwner) {
             if (!viewModel.blogMoreLoad) {
+//                adapterSetting()
                 allFlag = false
                 papagoFlag = false
                 tempAllViewItems.clear()
+                Log.e("cyc","")
+                Log.e("cyc"," tempResultSearchAll.clear()" )
+                Log.e("cyc"," tempResultSearchAll--->${tempResultSearchAll}" )
+                Log.e("cyc","")
                 tempResultSearchAll.clear()
                 it.allItems.map { allItems ->
                     allItems.type = Constants.VIEW
                 }
                 tempAllViewItems.addAll(it.allItems)
+
             }
         }
         viewModel.cafeResultSearchArraylist.observe(viewLifecycleOwner) {
@@ -134,22 +140,44 @@ class AllFragment : Fragment() {
                     )
                     allFlag = true
                 }
-                if(allFlag&&papagoFlag){
-                    allItemsAdapter.setData(tempResultSearchAll)
-                }
+                Log.e("cyc","")
+                Log.e("cyc","AllFragment--통합 View 데이터--->${tempResultSearchAll}")
+                Log.e("cyc","")
+                allItemsAdapter.setData(tempResultSearchAll)
+
+//                if(viewModel.checkTranslation){
+//                    if (allFlag && papagoFlag) {
+//                        allItemsAdapter.setData(tempResultSearchAll)
+//                    }
+//                }else{
+//                    allItemsAdapter.setData(tempResultSearchAll)
+//                }
             }
         }
-        viewModel.papagoResult.observe(viewLifecycleOwner) {
-            Log.e("cyc","---------------------------papagoResult---------------------------")
-            it.classType = Constants.TRANSLATION
-            it.originText = viewModel.query.replace(getString(R.string.translation), "").trim()
-            tempResultSearchAll.add(0,it)
-            papagoFlag=true
 
-            if(allFlag&&papagoFlag){
+        viewModel.papagoResult.observe(viewLifecycleOwner) {
+            Log.e("cyc","ResultPapago--->${it}")
+            //여기 수정
+//            it.classType = Constants.TRANSLATION
+//            it.originText = viewModel.query.replace(getString(R.string.translation), "").trim()
+//            tempResultSearchAll.add(0, it)
+//            papagoFlag = true
+
+//            if (allFlag && papagoFlag) {
+//                allItemsAdapter.setData(tempResultSearchAll)
+//            }
+
+
+//            allItemsAdapter.addData(it)
+//          임시 방편
+            if (viewModel.query.contains(getString(R.string.translation))) {
+                val keyword = viewModel.query.replace(getString(R.string.translation), "").trim()
+                val item = ResultPapago(it.srcLangType, it.tarLangType, it.translatedText, keyword)
+                item.classType = Constants.TRANSLATION
+                tempResultSearchAll.add(0, item)
+
                 allItemsAdapter.setData(tempResultSearchAll)
             }
-//            allItemsAdapter.addData(it)
 
         }
 //        viewModel.papagoResultToString.observe(viewLifecycleOwner) {
@@ -192,7 +220,7 @@ class AllFragment : Fragment() {
      * 어댑터 세팅
      */
     private fun adapterSetting() {
-        Log.e("cyc","adapterSetting")
+        Log.e("cyc", "adapterSetting")
 //        allItemsAdapter = AllItemsAdapter(requireContext(),allChildRecyclerListener)
         allItemsAdapter = AllItemsAdapter(requireContext()) {
             val intent = Intent(requireContext(), WebViewActivity::class.java)

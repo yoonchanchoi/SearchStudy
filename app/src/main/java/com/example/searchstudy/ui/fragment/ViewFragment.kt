@@ -144,7 +144,7 @@ class ViewFragment : Fragment() {
                 resBlogTotalCount = it.total
                 blogCount = it.allItems.size
 //                it.allItems.map { allItems -> allItems.type = Constants.ITEMS }
-//                tempViewItems.addAll(it.allItems)
+                tempViewItems.addAll(it.allItems)
             } else {
                 when (viewModel.viewMoreLoadState) {
                     Constants.VIEW_MORE_LOAD_BLOG_CAFE -> {

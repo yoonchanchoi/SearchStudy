@@ -18,12 +18,11 @@ import kotlin.collections.ArrayList
 class AllItemsAdapter(private val context: Context, private val listener: (link: String) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-
-    private val arrayResultNaver = mutableListOf<ResultNaver>()
+    private var arrayResultNaver = mutableListOf<ResultNaver>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        Log.e("cyc","onCreateViewHolder()")
-        Log.e("cyc","viewType--->${viewType}")
+        Log.e("cyc", "통합---arrayResultNaver-onCreateViewHolder--->${arrayResultNaver}")
+
         return when (viewType) {
             Constants.SEARCH -> {
                 val allRecyclerviewItemViewBinding = AllRecyclerviewItemBinding.inflate(
@@ -45,8 +44,7 @@ class AllItemsAdapter(private val context: Context, private val listener: (link:
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.e("cyc","arrayResultNaver[position].classType--->${arrayResultNaver[position].classType}")
-
+        Log.e("cyc", "통합---arrayResultNaver-onBindViewHolder--->${arrayResultNaver}")
         when (arrayResultNaver[position].classType) {
             Constants.SEARCH -> {
                 (holder as AllItemViewHolder).bind(arrayResultNaver[position] as ResultSearchAll, listener)
@@ -64,35 +62,29 @@ class AllItemsAdapter(private val context: Context, private val listener: (link:
     }
 
     override fun getItemViewType(position: Int): Int {
-        Log.e("cyc","getItemViewType()------------------------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        Log.e("cyc","arrayResultNaver[position]--->${arrayResultNaver[position]}")
-        Log.e("cyc","arrayResultNaver[position].classType--->${arrayResultNaver[position].classType}")
-//        return arrayResultNaver[position].classType
-        return 1
-
+        return arrayResultNaver[position].classType
     }
 
     fun setData(arrayResultNaver: ArrayList<ResultNaver>) {
+//        this.arrayResultNaver.clear()
         arrayResultNaver?.let {
+            this.arrayResultNaver = it
+            it.forEach { item ->
+                Log.e("cyc","this.arrayResultNaver-item---${item}")
+            }
 
-            Log.e("cyc","AllitemAdapter----it-->${it}")
-            Log.e("cyc","it[0]----it-->${it[0]}")
-
-            Log.e("cyc","it[0].classType----it-->${it[0].classType}")
-            Log.e("cyc","it[1].classType----it-->${it[1].classType}")
-            Log.e("cyc","it[2].classType----it-->${it[2].classType}")
-
-
-            arrayResultNaver.addAll(it)
         }
         notifyDataSetChanged()
     }
 
-//    fun addData(resultNaver: ResultNaver) {
-//
-//        arrayResultNaver.add(0, resultNaver)
-//        notifyDataSetChanged()
-//    }
+
+    fun addData(resultNaver: ResultNaver) {
+        arrayResultNaver.clear()
+        resultNaver?.let {
+            this.arrayResultNaver.add(0, resultNaver)
+        }
+        notifyDataSetChanged()
+    }
 }
 
 

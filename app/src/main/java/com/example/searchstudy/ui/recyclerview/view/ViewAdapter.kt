@@ -23,7 +23,7 @@ class ViewAdapter(private val context: Context) : RecyclerView.Adapter<ViewViewH
 
     private lateinit var viewItemRecyclerListener: ViewItemRecyclerListener
     //view의 arraylsit 아이템
-    private val viewItems = mutableListOf<AllItem>()
+    private var viewItems = mutableListOf<AllItem>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewViewHolder {
@@ -79,7 +79,7 @@ class ViewAdapter(private val context: Context) : RecyclerView.Adapter<ViewViewH
 
     fun setData(data: ArrayList<AllItem>) {
         data?.let {
-            viewItems.addAll(it)
+            viewItems=it
         }
         notifyDataSetChanged()
     }
