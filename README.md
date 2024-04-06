@@ -21,6 +21,7 @@
 ---
 - 최근 검색 단어 저장 및 삭제
 - 최근 검색 단어를 통한 검색 기능
+
 </br>
 
 
@@ -107,3 +108,5 @@ class AllItemsAdapter(private val context: Context, private val listener: (link:
 
 ## 이미지
 ![1234](https://github.com/yoonchanchoi/SearchStudy/assets/74814647/840b6916-e3f9-479e-afe5-2c94b04f4d74)
+<img src="https://github.com/yoonchanchoi/SearchStudy/assets/74814647/20c60e4c-282e-47a2-9893-6f684ec7e21b" width="200" height="400">
+<img src="https://github.com/yoonchanchoi/SearchStudy/assets/74814647/3f85f767-c443-45a1-a41f-37454deae6c3" width="200" height="400">
